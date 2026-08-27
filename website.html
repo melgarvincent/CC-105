@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bakery Inventory System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-card">
+
+        <div class="bakery-logo">🥐</div>
+
+        <h1>BAKERY INVENTORY</h1>
+
+        <p>Bakery Store Management System</p>
+
+        <form id="loginForm">
+
+            <label>Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+            <p id="loginError" class="error"></p>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN SYSTEM ================= -->
+
+<div id="system" class="system hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🥐</div>
+
+            <h2>BAKERY</h2>
+
+            <span>INVENTORY SYSTEM</span>
+
+        </div>
+
+
+        <nav>
+
+            <button
+                class="nav-btn active"
+                onclick="showPage('dashboard', this)"
+            >
+                🏠 Dashboard
+            </button>
+
+
+            <button
+                class="nav-btn"
+                onclick="showPage('inventory', this)"
+            >
+                📦 Inventory
+            </button>
+
+
+            <button
+                class="nav-btn"
+                onclick="openProductModal()"
+            >
+                ➕ Add Product
+            </button>
+
+
+            <button
+                class="nav-btn"
+                onclick="showPage('activity', this)"
+            >
+                📝 Activity Logs
+            </button>
+
+
+            <button
+                class="nav-btn"
+                onclick="logout()"
+            >
+                🚪 Logout
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-user">
+
+            <strong>Admin User</strong>
+
+            <small>Administrator</small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+                <p>
+                    Welcome to your bakery inventory system
+                </p>
+
+            </div>
+
+            <div class="admin-badge">
+                🛡 ADMIN
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboardPage">
+
+            <div class="statistics">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📦
+                    </div>
+
+                    <div>
+                        <span>Total Products</span>
+
+                        <h2 id="totalProducts">
+                            0
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🥖
+                    </div>
+
+                    <div>
+                        <span>Total Stock</span>
+
+                        <h2 id="totalStock">
+                            0
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon warning">
+                        ⚠️
+                    </div>
+
+                    <div>
+                        <span>Low Stock</span>
+
+                        <h2 id="lowStock">
+                            0
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        💰
+                    </div>
+
+                    <div>
+                        <span>Inventory Value</span>
+
+                        <h2 id="inventoryValue">
+                            ₱0.00
+                        </h2>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <!-- LOW STOCK -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            ⚠️ Low Stock Products
+                        </h2>
+
+                    </div>
+
+                    <div id="lowStockList"></div>
+
+                </div>
+
+
+                <!-- RECENT ACTIVITY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            📝 Recent Activity
+                        </h2>
+
+                    </div>
+
+                    <div id="recentActivity"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= INVENTORY ================= -->
+
+        <section id="inventoryPage" class="hidden">
+
+            <div class="section-top">
+
+                <div>
+
+                    <h2>
+                        Bakery Products
+                    </h2>
+
+                    <p>
+                        Manage all bakery products and stock
+                    </p>
+
+                </div>
+
+                <button
+                    class="add-button"
+                    onclick="openProductModal()"
+                >
+                    + Add Product
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="filters">
+
+                    <input
+                        type="text"
+                        id="searchBox"
+                        placeholder="🔍 Search product or SKU..."
+                        oninput="renderInventory()"
+                    >
+
+
+                    <select
+                        id="categoryFilter"
+                        onchange="renderInventory()"
+                    >
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        <option value="Bread">
+                            Bread
+                        </option>
+
+                        <option value="Pastry">
+                            Pastry
+                        </option>
+
+                        <option value="Cake">
+                            Cake
+                        </option>
+
+                        <option value="Cookies">
+                            Cookies
+                        </option>
+
+                        <option value="Donuts">
+                            Donuts
+                        </option>
+
+                        <option value="Beverages">
+                            Beverages
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>SKU</th>
+
+                                <th>Product</th>
+
+                                <th>Category</th>
+
+                                <th>Stock</th>
+
+                                <th>Price</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="inventoryTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ACTIVITY ================= -->
+
+        <section id="activityPage" class="hidden">
+
+            <div class="section-top">
+
+                <div>
+
+                    <h2>
+                        Activity Logs
+                    </h2>
+
+                    <p>
+                        Track inventory activities
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div id="activityList">
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= PRODUCT MODAL ================= -->
+
+<div id="productModal" class="modal hidden">
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h2>
+                Add Bakery Product
+            </h2>
+
+            <button
+                class="close-button"
+                onclick="closeProductModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <label>
+                SKU
+            </label>
+
+            <input
+                id="productSKU"
+                placeholder="BR-001"
+                required
+            >
+
+
+            <label>
+                Product Name
+            </label>
+
+            <input
+                id="productName"
+                placeholder="Pandesal"
+                required
+            >
+
+
+            <label>
+                Category
+            </label>
+
+            <select id="productCategory" required>
+
+                <option value="">
+                    Select Category
+                </option>
+
+                <option>
+                    Bread
+                </option>
+
+                <option>
+                    Pastry
+                </option>
+
+                <option>
+                    Cake
+                </option>
+
+                <option>
+                    Cookies
+                </option>
+
+                <option>
+                    Donuts
+                </option>
+
+                <option>
+                    Beverages
+                </option>
+
+            </select>
+
+
+            <label>
+                Quantity
+            </label>
+
+            <input
+                type="number"
+                id="productQuantity"
+                min="0"
+                required
+            >
+
+
+            <label>
+                Price
+            </label>
+
+            <input
+                type="number"
+                id="productPrice"
+                min="0"
+                step="0.01"
+                required
+            >
+
+
+            <label>
+                Low Stock Threshold
+            </label>
+
+            <input
+                type="number"
+                id="productThreshold"
+                min="0"
+                value="5"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="save-button"
+            >
+                Save Product
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
