@@ -53,131 +53,84 @@ let activities = [];
    LOGIN
 ========================================== */
 
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", async function(event) {
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        const email =
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const error = document.getElementById("loginError");
+
+    error.textContent = "";
+
+    // Demo account
+    const correctEmail = "admin@bakery.com";
+    const correctPassword = "Bakery@123";
+
+    // Check login
+    if (email === correctEmail && password === correctPassword) {
+
+        try {
+
+            // Create new login record in Firebase
+            const loginRecord = push(
+                ref(db, "loginLogs")
+            );
+
+            await set(loginRecord, {
+                email: email,
+                action: "Login",
+                dateTime: new Date().toLocaleString()
+            });
+
+            // Save login session
+            sessionStorage.setItem(
+                "bakeryLoggedIn",
+                "true"
+            );
+
+            sessionStorage.setItem(
+                "userEmail",
+                email
+            );
+
+            // Hide login
             document
-                .getElementById("email")
-                .value
-                .trim();
+                .getElementById("loginPage")
+                .classList.add("hidden");
 
-        const password =
+            // Show system
             document
-                .getElementById("password")
-                .value;
+                .getElementById("system")
+                .classList.remove("hidden");
 
-        const error =
+            // Update dashboard
+            updateDashboard();
+
+            // Clear login form
             document
-                .getElementById("loginError");
+                .getElementById("loginForm")
+                .reset();
 
-        error.textContent = "";
+            console.log("Login successfully saved to Firebase.");
 
+        } catch (firebaseError) {
 
-        // DEMO ACCOUNT
-        const correctEmail = "admin@bakery.com";
-        const correctPassword = "Bakery@123";
-
-
-        // CHECK LOGIN
-        if (
-            email === correctEmail &&
-            password === correctPassword
-        ) {
-
-            try {
-
-                /* =========================
-                   SAVE LOGIN TO FIREBASE
-                ========================= */
-
-                const loginRef =
-                    push(
-                        ref(db, "loginLogs")
-                    );
-
-
-                await set(
-                    loginRef,
-                    {
-                        email: email,
-                        action: "Login",
-                        dateTime:
-                            new Date().toLocaleString()
-                    }
-                );
-
-
-                /* =========================
-                   SAVE SESSION
-                ========================= */
-
-                sessionStorage.setItem(
-                    "bakeryLoggedIn",
-                    "true"
-                );
-
-                sessionStorage.setItem(
-                    "userEmail",
-                    email
-                );
-
-
-                /* =========================
-                   SHOW SYSTEM
-                ========================= */
-
-                document
-                    .getElementById("loginPage")
-                    .classList.add("hidden");
-
-                document
-                    .getElementById("system")
-                    .classList.remove("hidden");
-
-
-                /* =========================
-                   UPDATE DASHBOARD
-                ========================= */
-
-                updateDashboard();
-
-
-                /* =========================
-                   CLEAR FORM
-                ========================= */
-
-                document
-                    .getElementById("loginForm")
-                    .reset();
-
-
-                console.log(
-                    "Login saved to Firebase."
-                );
-
-
-            } catch (firebaseError) {
-
-                console.error(
-                    "Firebase Error:",
-                    firebaseError
-                );
-
-                error.textContent =
-                    "Firebase Error: " +
-                    firebaseError.message;
-
-            }
-
-        } else {
+            console.error(
+                "Firebase Login Error:",
+                firebaseError
+            );
 
             error.textContent =
-                "Invalid email or password.";
-
+                "Login failed: " +
+                firebaseError.message;
         }
 
-    });
+    } else {
+
+        error.textContent =
+            "Invalid email or password.";
+
+    }
+
+});
