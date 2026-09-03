@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,46 +19,46 @@
 
     <div class="auth-card">
 
-        <div class="logo-circle">
-            🥐
-        </div>
+        <div class="logo-circle">🥐</div>
 
-        <h1>ARBEES BAKERY SHOP</h1>
+        <h1>ARBEES BAKERY</h1>
 
         <p class="subtitle">
-            Bakery Inventory Management System
+            Inventory Management System
         </p>
 
         <form id="loginForm">
 
-            <label for="loginEmail">Email</label>
+            <div class="form-group">
+                <label>Email</label>
 
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter your email"
-                required
-            >
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
 
-            <label for="loginPassword">Password</label>
+            <div class="form-group">
+                <label>Password</label>
 
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                required
-            >
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
 
             <button
                 type="submit"
-                class="primary-btn">
+                class="primary-btn"
+                id="loginBtn">
                 Login
             </button>
 
-            <p
-                id="loginError"
-                class="error-message">
-            </p>
+            <p id="loginError" class="error-message"></p>
 
         </form>
 
@@ -69,7 +68,7 @@
 
             <button
                 type="button"
-                onclick="showRegister()">
+                id="showRegisterBtn">
                 Register
             </button>
 
@@ -88,9 +87,7 @@
 
     <div class="auth-card">
 
-        <div class="logo-circle">
-            🧁
-        </div>
+        <div class="logo-circle">🧁</div>
 
         <h1>CREATE ACCOUNT</h1>
 
@@ -100,67 +97,74 @@
 
         <form id="registerForm">
 
-            <label for="registerName">
-                Full Name
-            </label>
+            <div class="form-group">
 
-            <input
-                type="text"
-                id="registerName"
-                placeholder="Enter your full name"
-                required
-            >
+                <label>Full Name</label>
 
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Enter your full name"
+                    required
+                >
 
-            <label for="registerEmail">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="registerEmail"
-                placeholder="Enter your email"
-                required
-            >
+            </div>
 
 
-            <label for="registerPassword">
-                Password
-            </label>
+            <div class="form-group">
 
-            <input
-                type="password"
-                id="registerPassword"
-                placeholder="Minimum 6 characters"
-                minlength="6"
-                required
-            >
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
 
 
-            <label for="confirmPassword">
-                Confirm Password
-            </label>
+            <div class="form-group">
 
-            <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                minlength="6"
-                required
-            >
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Minimum 6 characters"
+                    minlength="6"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm password"
+                    minlength="6"
+                    required
+                >
+
+            </div>
 
 
             <button
                 type="submit"
-                class="primary-btn">
-                Register
+                class="primary-btn"
+                id="registerBtn">
+
+                Create Account
+
             </button>
 
-
-            <p
-                id="registerError"
-                class="error-message">
-            </p>
+            <p id="registerError" class="error-message"></p>
 
         </form>
 
@@ -171,8 +175,10 @@
 
             <button
                 type="button"
-                onclick="showLogin()">
+                id="showLoginBtn">
+
                 Login
+
             </button>
 
         </div>
@@ -210,51 +216,51 @@
             <button
                 class="nav-btn active"
                 data-page="dashboard">
-                🏠 Dashboard
+                🏠
+                <span>Dashboard</span>
             </button>
 
 
             <button
                 class="nav-btn"
                 data-page="inventory">
-                📦 Inventory
+                📦
+                <span>Inventory</span>
             </button>
 
 
             <button
                 class="nav-btn"
                 data-page="addProduct">
-                ➕ Add Product
+                ➕
+                <span>Add Product</span>
             </button>
 
 
             <button
                 class="nav-btn"
                 data-page="activity">
-                📋 Activity Logs
+                📋
+                <span>Activity Logs</span>
             </button>
 
 
             <button
                 class="nav-btn"
                 data-page="users">
-                👥 Users
-            </button>
-
-
-            <button
-                class="nav-btn"
-                data-page="settings">
-                ⚙️ Settings
+                👤
+                <span>Users</span>
             </button>
 
         </nav>
 
 
         <button
-            id="logoutBtn"
-            class="logout-btn">
+            class="logout-btn"
+            id="logoutBtn">
+
             🚪 Logout
+
         </button>
 
     </aside>
@@ -267,7 +273,7 @@
 
         <!-- MOBILE HEADER -->
 
-        <div class="mobile-header">
+        <header class="mobile-header">
 
             <strong>
                 🥐 Arbees Bakery
@@ -277,7 +283,7 @@
                 🚪
             </button>
 
-        </div>
+        </header>
 
 
         <!-- =================================================
@@ -303,7 +309,7 @@
             </div>
 
 
-            <!-- USER -->
+            <!-- USER INFORMATION -->
 
             <div class="user-info">
 
@@ -314,7 +320,7 @@
                     </strong>
 
                     <small id="currentUserEmail">
-                        user@email.com
+                        -
                     </small>
 
                 </div>
@@ -330,7 +336,6 @@
 
             <div class="stats-grid">
 
-
                 <div class="stat-card">
 
                     <div class="stat-icon">
@@ -339,7 +344,9 @@
 
                     <div>
 
-                        <span>Total Products</span>
+                        <span>
+                            Total Products
+                        </span>
 
                         <strong id="totalProducts">
                             0
@@ -358,7 +365,9 @@
 
                     <div>
 
-                        <span>Total Stock</span>
+                        <span>
+                            Total Stock
+                        </span>
 
                         <strong id="totalStock">
                             0
@@ -371,13 +380,15 @@
 
                 <div class="stat-card">
 
-                    <div class="stat-icon">
+                    <div class="stat-icon warning">
                         ⚠️
                     </div>
 
                     <div>
 
-                        <span>Low Stock</span>
+                        <span>
+                            Low Stock
+                        </span>
 
                         <strong id="lowStock">
                             0
@@ -390,13 +401,15 @@
 
                 <div class="stat-card">
 
-                    <div class="stat-icon">
+                    <div class="stat-icon money">
                         💰
                     </div>
 
                     <div>
 
-                        <span>Estimated Value</span>
+                        <span>
+                            Estimated Value
+                        </span>
 
                         <strong id="estimatedValue">
                             ₱0.00
@@ -413,7 +426,6 @@
 
             <div class="dashboard-grid">
 
-
                 <div class="panel">
 
                     <div class="panel-header">
@@ -424,9 +436,7 @@
 
                     </div>
 
-                    <div
-                        id="lowStockList"
-                        class="low-stock-list">
+                    <div id="lowStockList">
 
                         <p class="empty-message">
                             No low stock products.
@@ -447,9 +457,7 @@
 
                     </div>
 
-                    <div
-                        id="recentActivity"
-                        class="activity-list">
+                    <div id="recentActivity">
 
                         <p class="empty-message">
                             No recent activity.
@@ -479,20 +487,23 @@
                     <h1>Inventory</h1>
 
                     <p>
-                        Manage bakery products and stock
+                        Manage bakery products
                     </p>
 
                 </div>
 
-
                 <button
                     class="primary-btn small-btn"
                     id="inventoryAddBtn">
+
                     + Add Product
+
                 </button>
 
             </div>
 
+
+            <!-- SEARCH -->
 
             <div class="toolbar">
 
@@ -534,6 +545,8 @@
             </div>
 
 
+            <!-- TABLE -->
+
             <div class="table-container">
 
                 <table>
@@ -553,7 +566,6 @@
                         </tr>
 
                     </thead>
-
 
                     <tbody id="inventoryTableBody">
 
@@ -593,7 +605,7 @@
                     <h1>Add Product</h1>
 
                     <p>
-                        Add a new bakery product
+                        Add a bakery product
                     </p>
 
                 </div>
@@ -617,7 +629,7 @@
                             <input
                                 type="text"
                                 id="productName"
-                                placeholder="Example: Chocolate Cake"
+                                placeholder="Example: Pandesal"
                                 required
                             >
 
@@ -633,7 +645,7 @@
                             <input
                                 type="text"
                                 id="productSKU"
-                                placeholder="Example: CAKE-001"
+                                placeholder="Example: BRD-001"
                                 required
                             >
 
@@ -689,7 +701,7 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
-                                placeholder="0"
+                                value="0"
                                 required
                             >
 
@@ -738,14 +750,18 @@
                         <button
                             type="reset"
                             class="secondary-btn">
+
                             Clear
+
                         </button>
 
 
                         <button
                             type="submit"
                             class="primary-btn">
+
                             Save Product
+
                         </button>
 
                     </div>
@@ -758,7 +774,7 @@
 
 
         <!-- =================================================
-             ACTIVITY
+             ACTIVITY LOGS
         ================================================= -->
 
         <section
@@ -788,7 +804,9 @@
 
                         <tr>
 
-                            <th>Activity</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Details</th>
                             <th>Date & Time</th>
 
                         </tr>
@@ -801,7 +819,7 @@
                         <tr>
 
                             <td
-                                colspan="2"
+                                colspan="4"
                                 class="empty-table">
 
                                 No activity logs.
@@ -831,10 +849,10 @@
 
                 <div>
 
-                    <h1>Users</h1>
+                    <h1>My Account</h1>
 
                     <p>
-                        User account information
+                        Account information
                     </p>
 
                 </div>
@@ -843,8 +861,6 @@
 
 
             <div class="panel">
-
-                <h2>Current User</h2>
 
                 <div class="user-profile">
 
@@ -874,111 +890,23 @@
 
         </section>
 
-
-        <!-- =================================================
-             SETTINGS
-        ================================================= -->
-
-        <section
-            id="settingsPage"
-            class="content-page hidden">
-
-            <div class="page-header">
-
-                <div>
-
-                    <h1>Settings</h1>
-
-                    <p>
-                        System settings
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <h2>
-                    System Information
-                </h2>
-
-                <p>
-                    <strong>System:</strong>
-                    Arbees Bakery Shop Inventory System
-                </p>
-
-                <p>
-                    <strong>Database:</strong>
-                    Firebase Realtime Database
-                </p>
-
-                <p>
-                    <strong>Authentication:</strong>
-                    Firebase Authentication
-                </p>
-
-                <p>
-                    <strong>Platform:</strong>
-                    Mobile Responsive Web Application
-                </p>
-
-            </div>
-
-        </section>
-
     </main>
+
+
+    <!-- MOBILE ADD BUTTON -->
+
+    <button
+        class="floating-add"
+        id="floatingAdd">
+
+        +
+
+    </button>
 
 </section>
 
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script>
-    function showRegister() {
-
-        const loginPage =
-            document.getElementById("loginPage");
-
-        const registerPage =
-            document.getElementById("registerPage");
-
-        if (loginPage && registerPage) {
-
-            loginPage.classList.add("hidden");
-
-            registerPage.classList.remove("hidden");
-
-        }
-    }
-
-
-    function showLogin() {
-
-        const loginPage =
-            document.getElementById("loginPage");
-
-        const registerPage =
-            document.getElementById("registerPage");
-
-        if (loginPage && registerPage) {
-
-            registerPage.classList.add("hidden");
-
-            loginPage.classList.remove("hidden");
-
-        }
-    }
-</script>
-
-
-<script
-    type="module"
-    src="script.js">
-</script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>
