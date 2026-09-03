@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -10,14 +9,10 @@
 
     <title>Arbees Bakery Shop</title>
 
-    <link rel="stylesheet"
-          href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      LOGIN PAGE
@@ -37,35 +32,37 @@
             Bakery Inventory Management System
         </p>
 
-
         <form id="loginForm">
 
-            <label>Email</label>
+            <label for="loginEmail">
+                Email
+            </label>
 
             <input
                 type="email"
                 id="loginEmail"
                 placeholder="Enter your email"
+                autocomplete="email"
                 required
             >
 
-
-            <label>Password</label>
+            <label for="loginPassword">
+                Password
+            </label>
 
             <input
                 type="password"
                 id="loginPassword"
                 placeholder="Enter your password"
+                autocomplete="current-password"
                 required
             >
-
 
             <button
                 type="submit"
                 class="primary-btn">
                 Login
             </button>
-
 
             <p
                 id="loginError"
@@ -74,14 +71,15 @@
 
         </form>
 
-
         <div class="register-link">
 
-            <span>Don't have an account?</span>
+            <span>
+                Don't have an account?
+            </span>
 
             <button
                 type="button"
-                onclick="showRegister()">
+                id="showRegisterBtn">
                 Register
             </button>
 
@@ -90,7 +88,6 @@
     </div>
 
 </section>
-
 
 
 <!-- =====================================================
@@ -112,58 +109,63 @@
             Arbees Bakery Shop
         </p>
 
-
         <form id="registerForm">
 
-
-            <label>Full Name</label>
+            <label for="registerName">
+                Full Name
+            </label>
 
             <input
                 type="text"
                 id="registerName"
                 placeholder="Enter your full name"
+                autocomplete="name"
                 required
             >
 
-
-            <label>Email</label>
+            <label for="registerEmail">
+                Email
+            </label>
 
             <input
                 type="email"
                 id="registerEmail"
                 placeholder="Enter your email"
+                autocomplete="email"
                 required
             >
 
-
-            <label>Password</label>
+            <label for="registerPassword">
+                Password
+            </label>
 
             <input
                 type="password"
                 id="registerPassword"
                 placeholder="Minimum 6 characters"
                 minlength="6"
+                autocomplete="new-password"
                 required
             >
 
-
-            <label>Confirm Password</label>
+            <label for="confirmPassword">
+                Confirm Password
+            </label>
 
             <input
                 type="password"
                 id="confirmPassword"
                 placeholder="Confirm your password"
                 minlength="6"
+                autocomplete="new-password"
                 required
             >
-
 
             <button
                 type="submit"
                 class="primary-btn">
                 Register
             </button>
-
 
             <p
                 id="registerError"
@@ -172,14 +174,15 @@
 
         </form>
 
-
         <div class="register-link">
 
-            <span>Already have an account?</span>
+            <span>
+                Already have an account?
+            </span>
 
             <button
                 type="button"
-                onclick="showLogin()">
+                id="showLoginBtn">
                 Login
             </button>
 
@@ -190,16 +193,16 @@
 </section>
 
 
-
 <!-- =====================================================
      MAIN SYSTEM
 ===================================================== -->
 
-<section id="systemPage"
+<section id="system"
          class="system-page hidden">
 
-
-    <!-- SIDEBAR -->
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
 
     <aside class="sidebar">
 
@@ -219,52 +222,51 @@
 
         </div>
 
-
         <nav>
 
             <button
                 class="nav-btn active"
                 data-page="dashboard">
-                🏠 Dashboard
+                🏠
+                <span>Dashboard</span>
             </button>
-
 
             <button
                 class="nav-btn"
                 data-page="inventory">
-                📦 Inventory
+                📦
+                <span>Inventory</span>
             </button>
-
 
             <button
                 class="nav-btn"
                 data-page="addProduct">
-                ➕ Add Product
+                ➕
+                <span>Add Product</span>
             </button>
-
 
             <button
                 class="nav-btn"
                 data-page="activity">
-                📋 Activity Logs
+                📋
+                <span>Activity Logs</span>
             </button>
-
 
             <button
                 class="nav-btn"
                 data-page="users">
-                👥 Users
+                👥
+                <span>Users</span>
             </button>
-
 
             <button
                 class="nav-btn"
                 data-page="settings">
-                ⚙️ Settings
+                ⚙️
+                <span>Settings</span>
             </button>
 
         </nav>
-
 
         <button
             id="logoutBtn"
@@ -275,28 +277,25 @@
     </aside>
 
 
-
-    <!-- MAIN CONTENT -->
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
 
     <main class="main-content">
-
 
         <!-- MOBILE HEADER -->
 
         <div class="mobile-header">
 
-            <div>
-                <strong>
-                    🥐 Arbees Bakery
-                </strong>
-            </div>
+            <strong>
+                🥐 Arbees Bakery
+            </strong>
 
             <button id="mobileLogout">
                 🚪
             </button>
 
         </div>
-
 
 
         <!-- =================================================
@@ -324,19 +323,27 @@
             </div>
 
 
-            <!-- USER -->
+            <!-- USER INFO -->
 
             <div class="user-info">
 
-                <div>
+                <div class="user-info-left">
 
-                    <strong id="currentUserName">
-                        User
-                    </strong>
+                    <div class="user-avatar">
+                        👤
+                    </div>
 
-                    <small id="currentUserEmail">
-                        user@email.com
-                    </small>
+                    <div>
+
+                        <strong id="currentUserName">
+                            User
+                        </strong>
+
+                        <small id="currentUserEmail">
+                            user@email.com
+                        </small>
+
+                    </div>
 
                 </div>
 
@@ -350,7 +357,6 @@
             <!-- STATISTICS -->
 
             <div class="stats-grid">
-
 
                 <div class="stat-card">
 
@@ -371,7 +377,6 @@
                     </div>
 
                 </div>
-
 
 
                 <div class="stat-card">
@@ -395,7 +400,6 @@
                 </div>
 
 
-
                 <div class="stat-card">
 
                     <div class="stat-icon">
@@ -415,7 +419,6 @@
                     </div>
 
                 </div>
-
 
 
                 <div class="stat-card">
@@ -441,11 +444,9 @@
             </div>
 
 
-
-            <!-- DASHBOARD PANELS -->
+            <!-- DASHBOARD GRID -->
 
             <div class="dashboard-grid">
-
 
                 <div class="panel">
 
@@ -468,7 +469,6 @@
                     </div>
 
                 </div>
-
 
 
                 <div class="panel">
@@ -498,7 +498,6 @@
         </section>
 
 
-
         <!-- =================================================
              INVENTORY
         ================================================= -->
@@ -506,7 +505,6 @@
         <section
             id="inventoryPage"
             class="content-page hidden">
-
 
             <div class="page-header">
 
@@ -522,7 +520,6 @@
 
                 </div>
 
-
                 <button
                     class="primary-btn small-btn"
                     id="inventoryAddBtn">
@@ -534,8 +531,6 @@
             </div>
 
 
-            <!-- SEARCH -->
-
             <div class="toolbar">
 
                 <input
@@ -543,7 +538,6 @@
                     id="searchProduct"
                     placeholder="🔎 Search product or SKU..."
                 >
-
 
                 <select id="categoryFilter">
 
@@ -576,9 +570,6 @@
             </div>
 
 
-
-            <!-- TABLE -->
-
             <div class="table-container">
 
                 <table>
@@ -588,26 +579,18 @@
                         <tr>
 
                             <th>Product</th>
-
                             <th>SKU</th>
-
                             <th>Category</th>
-
                             <th>Stock</th>
-
                             <th>Price</th>
-
                             <th>Status</th>
-
                             <th>Actions</th>
 
                         </tr>
 
                     </thead>
 
-
-                    <tbody
-                        id="inventoryTableBody">
+                    <tbody id="inventoryTableBody">
 
                         <tr>
 
@@ -630,7 +613,6 @@
         </section>
 
 
-
         <!-- =================================================
              ADD PRODUCT
         ================================================= -->
@@ -638,7 +620,6 @@
         <section
             id="addProductPage"
             class="content-page hidden">
-
 
             <div class="page-header">
 
@@ -659,16 +640,13 @@
 
             <div class="form-card">
 
-
                 <form id="productForm">
-
 
                     <div class="form-grid">
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="productName">
                                 Product Name
                             </label>
 
@@ -682,10 +660,9 @@
                         </div>
 
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="productSKU">
                                 SKU
                             </label>
 
@@ -699,10 +676,9 @@
                         </div>
 
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="productCategory">
                                 Category
                             </label>
 
@@ -739,10 +715,9 @@
                         </div>
 
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="productQuantity">
                                 Quantity
                             </label>
 
@@ -750,17 +725,16 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
-                                placeholder="0"
+                                value="0"
                                 required
                             >
 
                         </div>
 
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="productPrice">
                                 Price
                             </label>
 
@@ -769,17 +743,16 @@
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
-                                placeholder="0.00"
+                                value="0"
                                 required
                             >
 
                         </div>
 
 
-
                         <div class="form-group">
 
-                            <label>
+                            <label for="lowStockThreshold">
                                 Low Stock Threshold
                             </label>
 
@@ -792,7 +765,6 @@
                             >
 
                         </div>
-
 
                     </div>
 
@@ -807,7 +779,6 @@
 
                         </button>
 
-
                         <button
                             type="submit"
                             class="primary-btn">
@@ -818,13 +789,11 @@
 
                     </div>
 
-
                 </form>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
@@ -834,7 +803,6 @@
         <section
             id="activityPage"
             class="content-page hidden">
-
 
             <div class="page-header">
 
@@ -860,22 +828,15 @@
                     <thead>
 
                         <tr>
-
                             <th>Action</th>
-
                             <th>User</th>
-
                             <th>Details</th>
-
                             <th>Date & Time</th>
-
                         </tr>
 
                     </thead>
 
-
-                    <tbody
-                        id="activityTableBody">
+                    <tbody id="activityTableBody">
 
                         <tr>
 
@@ -898,7 +859,6 @@
         </section>
 
 
-
         <!-- =================================================
              USERS
         ================================================= -->
@@ -906,7 +866,6 @@
         <section
             id="usersPage"
             class="content-page hidden">
-
 
             <div class="page-header">
 
@@ -960,7 +919,6 @@
         </section>
 
 
-
         <!-- =================================================
              SETTINGS
         ================================================= -->
@@ -968,7 +926,6 @@
         <section
             id="settingsPage"
             class="content-page hidden">
-
 
             <div class="page-header">
 
@@ -994,87 +951,39 @@
                 </h2>
 
                 <p>
-                    <strong>
-                        System:
-                    </strong>
+                    <strong>System:</strong>
                     Arbees Bakery Shop Inventory System
                 </p>
 
                 <p>
-                    <strong>
-                        Database:
-                    </strong>
+                    <strong>Database:</strong>
                     Firebase Realtime Database
                 </p>
 
                 <p>
-                    <strong>
-                        Authentication:
-                    </strong>
+                    <strong>Authentication:</strong>
                     Firebase Authentication
                 </p>
 
                 <p>
-                    <strong>
-                        Platform:
-                    </strong>
-                    Mobile Responsive Web Application
+                    <strong>Platform:</strong>
+                    Responsive Web Application
                 </p>
 
             </div>
 
         </section>
 
-
     </main>
 
 </section>
 
 
-
 <!-- =====================================================
-     JAVASCRIPT
+     FIREBASE JAVASCRIPT
 ===================================================== -->
 
-<script>
-
-    // These functions are intentionally outside
-    // the Firebase module so the buttons ALWAYS work.
-
-    function showRegister() {
-
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.remove("hidden");
-
-    }
-
-
-    function showLogin() {
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("loginPage")
-            .classList.remove("hidden");
-
-    }
-
-</script>
-
-
-<script
-    type="module"
-    src="script.js">
-</script>
-
+<script type="module" src="script.js"></script>
 
 </body>
-
 </html>
