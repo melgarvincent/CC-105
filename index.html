@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -9,33 +10,37 @@
 
     <title>Arbees Bakery Shop</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet"
+          href="style.css">
+
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      LOGIN PAGE
 ===================================================== -->
 
-<section id="loginPage" class="login-page">
+<section id="loginPage" class="auth-page">
 
-    <div class="login-card">
+    <div class="auth-card">
 
-        <div class="bakery-logo">
+        <div class="logo-circle">
             🥐
         </div>
 
         <h1>ARBEES BAKERY SHOP</h1>
 
-        <p>Bakery Inventory Management System</p>
+        <p class="subtitle">
+            Bakery Inventory Management System
+        </p>
+
 
         <form id="loginForm">
 
-            <label for="loginEmail">
-                Email
-            </label>
+            <label>Email</label>
 
             <input
                 type="email"
@@ -44,9 +49,8 @@
                 required
             >
 
-            <label for="loginPassword">
-                Password
-            </label>
+
+            <label>Password</label>
 
             <input
                 type="password"
@@ -55,25 +59,29 @@
                 required
             >
 
+
             <button
                 type="submit"
-                class="login-btn">
+                class="primary-btn">
                 Login
             </button>
 
-            <div id="loginError" class="error"></div>
+
+            <p
+                id="loginError"
+                class="error-message">
+            </p>
 
         </form>
 
+
         <div class="register-link">
 
-            <span>
-                Don't have an account?
-            </span>
+            <span>Don't have an account?</span>
 
             <button
                 type="button"
-                id="showRegisterBtn">
+                onclick="showRegister()">
                 Register
             </button>
 
@@ -84,35 +92,31 @@
 </section>
 
 
+
 <!-- =====================================================
      REGISTER PAGE
 ===================================================== -->
 
 <section id="registerPage"
-         class="login-page hidden">
+         class="auth-page hidden">
 
-    <div class="login-card">
+    <div class="auth-card">
 
-        <div class="bakery-logo">
+        <div class="logo-circle">
             🧁
         </div>
 
-        <h1>
-            CREATE ACCOUNT
-        </h1>
+        <h1>CREATE ACCOUNT</h1>
 
-        <p>
+        <p class="subtitle">
             Arbees Bakery Shop
         </p>
 
 
         <form id="registerForm">
 
-            <!-- FULL NAME -->
 
-            <label for="registerName">
-                Full Name
-            </label>
+            <label>Full Name</label>
 
             <input
                 type="text"
@@ -122,11 +126,7 @@
             >
 
 
-            <!-- EMAIL -->
-
-            <label for="registerEmail">
-                Email
-            </label>
+            <label>Email</label>
 
             <input
                 type="email"
@@ -136,11 +136,7 @@
             >
 
 
-            <!-- PASSWORD -->
-
-            <label for="registerPassword">
-                Password
-            </label>
+            <label>Password</label>
 
             <input
                 type="password"
@@ -151,11 +147,7 @@
             >
 
 
-            <!-- CONFIRM PASSWORD -->
-
-            <label for="confirmPassword">
-                Confirm Password
-            </label>
+            <label>Confirm Password</label>
 
             <input
                 type="password"
@@ -168,27 +160,26 @@
 
             <button
                 type="submit"
-                class="login-btn">
+                class="primary-btn">
                 Register
             </button>
 
-            <div
+
+            <p
                 id="registerError"
-                class="error">
-            </div>
+                class="error-message">
+            </p>
 
         </form>
 
 
         <div class="register-link">
 
-            <span>
-                Already have an account?
-            </span>
+            <span>Already have an account?</span>
 
             <button
                 type="button"
-                id="showLoginBtn">
+                onclick="showLogin()">
                 Login
             </button>
 
@@ -205,21 +196,16 @@
 ===================================================== -->
 
 <section id="systemPage"
-         class="system hidden">
+         class="system-page hidden">
 
 
-    <!-- =================================================
-         SIDEBAR
-    ================================================== -->
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
-
-        <!-- BRAND -->
-
         <div class="brand">
 
-            <div class="brand-icon">
+            <div class="brand-logo">
                 🥐
             </div>
 
@@ -234,105 +220,94 @@
         </div>
 
 
-        <!-- NAVIGATION -->
-
         <nav>
-
-
-            <!-- DASHBOARD -->
 
             <button
                 class="nav-btn active"
                 data-page="dashboard">
-
                 🏠 Dashboard
-
             </button>
 
-
-            <!-- INVENTORY -->
 
             <button
                 class="nav-btn"
                 data-page="inventory">
-
                 📦 Inventory
-
             </button>
 
-
-            <!-- ADD PRODUCT -->
 
             <button
                 class="nav-btn"
                 data-page="addProduct">
-
                 ➕ Add Product
-
             </button>
 
-
-            <!-- ACTIVITY -->
 
             <button
                 class="nav-btn"
                 data-page="activity">
-
                 📋 Activity Logs
-
             </button>
 
 
-            <!-- LOGOUT -->
+            <button
+                class="nav-btn"
+                data-page="users">
+                👥 Users
+            </button>
+
 
             <button
                 class="nav-btn"
-                id="logoutBtn">
-
-                🚪 Logout
-
+                data-page="settings">
+                ⚙️ Settings
             </button>
 
         </nav>
 
 
-        <!-- USER -->
-
-        <div class="sidebar-user">
-
-            <strong id="currentUserName">
-                User
-            </strong>
-
-            <small id="currentUserEmail">
-                user@email.com
-            </small>
-
-        </div>
+        <button
+            id="logoutBtn"
+            class="logout-btn">
+            🚪 Logout
+        </button>
 
     </aside>
 
 
 
-    <!-- =================================================
-         MAIN CONTENT
-    ================================================== -->
+    <!-- MAIN CONTENT -->
 
-    <main class="main">
+    <main class="main-content">
 
 
-        <!-- =============================================
+        <!-- MOBILE HEADER -->
+
+        <div class="mobile-header">
+
+            <div>
+                <strong>
+                    🥐 Arbees Bakery
+                </strong>
+            </div>
+
+            <button id="mobileLogout">
+                🚪
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
              DASHBOARD
-        ============================================== -->
+        ================================================= -->
 
         <section
             id="dashboardPage"
             class="content-page">
 
-
-            <!-- HEADER -->
-
-            <div class="header">
+            <div class="page-header">
 
                 <div>
 
@@ -346,44 +321,36 @@
 
                 </div>
 
-                <div
-                    class="admin-badge"
-                    id="userRole">
-                    STAFF
+            </div>
+
+
+            <!-- USER -->
+
+            <div class="user-info">
+
+                <div>
+
+                    <strong id="currentUserName">
+                        User
+                    </strong>
+
+                    <small id="currentUserEmail">
+                        user@email.com
+                    </small>
+
                 </div>
+
+                <span id="userRole">
+                    STAFF
+                </span>
 
             </div>
 
 
             <!-- STATISTICS -->
 
-            <div class="statistics">
+            <div class="stats-grid">
 
-
-                <!-- TOTAL PRODUCTS -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        🥐
-                    </div>
-
-                    <div>
-
-                        <span>
-                            Total Products
-                        </span>
-
-                        <h2 id="totalProducts">
-                            0
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <!-- TOTAL STOCK -->
 
                 <div class="stat-card">
 
@@ -394,43 +361,62 @@
                     <div>
 
                         <span>
-                            Total Stock
+                            Total Products
                         </span>
 
-                        <h2 id="totalStock">
+                        <strong id="totalProducts">
                             0
-                        </h2>
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <!-- LOW STOCK -->
 
                 <div class="stat-card">
 
-                    <div
-                        class="stat-icon warning">
+                    <div class="stat-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Stock
+                        </span>
+
+                        <strong id="totalStock">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
                         ⚠️
                     </div>
 
                     <div>
 
                         <span>
-                            Low Stock Items
+                            Low Stock
                         </span>
 
-                        <h2 id="lowStock">
+                        <strong id="lowStock">
                             0
-                        </h2>
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <!-- ESTIMATED VALUE -->
 
                 <div class="stat-card">
 
@@ -444,9 +430,9 @@
                             Estimated Value
                         </span>
 
-                        <h2 id="estimatedValue">
+                        <strong id="estimatedValue">
                             ₱0.00
-                        </h2>
+                        </strong>
 
                     </div>
 
@@ -461,8 +447,6 @@
             <div class="dashboard-grid">
 
 
-                <!-- LOW STOCK PRODUCTS -->
-
                 <div class="panel">
 
                     <div class="panel-header">
@@ -473,27 +457,19 @@
 
                     </div>
 
-                    <div id="lowStockList">
+                    <div
+                        id="lowStockList"
+                        class="low-stock-list">
 
-                        <div class="stock-item">
-
-                            <strong>
-                                No low stock products
-                            </strong>
-
-                            <small>
-                                Everything is well stocked.
-                            </small>
-
-                        </div>
+                        <p class="empty-message">
+                            No low stock products.
+                        </p>
 
                     </div>
 
                 </div>
 
 
-
-                <!-- RECENT ACTIVITY -->
 
                 <div class="panel">
 
@@ -505,13 +481,13 @@
 
                     </div>
 
-                    <div id="recentActivity">
+                    <div
+                        id="recentActivity"
+                        class="activity-list">
 
-                        <div class="activity-item">
-
+                        <p class="empty-message">
                             No recent activity.
-
-                        </div>
+                        </p>
 
                     </div>
 
@@ -523,24 +499,22 @@
 
 
 
-        <!-- =============================================
-             INVENTORY PAGE
-        ============================================== -->
+        <!-- =================================================
+             INVENTORY
+        ================================================= -->
 
         <section
             id="inventoryPage"
             class="content-page hidden">
 
 
-            <!-- TOP -->
-
-            <div class="section-top">
+            <div class="page-header">
 
                 <div>
 
-                    <h2>
-                        Inventory Management
-                    </h2>
+                    <h1>
+                        Inventory
+                    </h1>
 
                     <p>
                         Manage bakery products and stock
@@ -550,25 +524,24 @@
 
 
                 <button
-                    class="add-button"
+                    class="primary-btn small-btn"
                     id="inventoryAddBtn">
 
-                    ➕ Add Product
+                    + Add Product
 
                 </button>
 
             </div>
 
 
+            <!-- SEARCH -->
 
-            <!-- SEARCH / FILTER -->
-
-            <div class="filters">
+            <div class="toolbar">
 
                 <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="🔍 Search product or SKU..."
+                    type="search"
+                    id="searchProduct"
+                    placeholder="🔎 Search product or SKU..."
                 >
 
 
@@ -582,20 +555,20 @@
                         Bread
                     </option>
 
-                    <option value="Pastry">
-                        Pastry
-                    </option>
-
                     <option value="Cake">
                         Cake
+                    </option>
+
+                    <option value="Pastry">
+                        Pastry
                     </option>
 
                     <option value="Cookies">
                         Cookies
                     </option>
 
-                    <option value="Other">
-                        Other
+                    <option value="Others">
+                        Others
                     </option>
 
                 </select>
@@ -606,67 +579,51 @@
 
             <!-- TABLE -->
 
-            <div class="panel">
+            <div class="table-container">
 
-                <div class="table-container">
+                <table>
 
-                    <table>
+                    <thead>
 
-                        <thead>
+                        <tr>
 
-                            <tr>
+                            <th>Product</th>
 
-                                <th>
-                                    Product
-                                </th>
+                            <th>SKU</th>
 
-                                <th>
-                                    SKU
-                                </th>
+                            <th>Category</th>
 
-                                <th>
-                                    Category
-                                </th>
+                            <th>Stock</th>
 
-                                <th>
-                                    Stock
-                                </th>
+                            <th>Price</th>
 
-                                <th>
-                                    Price
-                                </th>
+                            <th>Status</th>
 
-                                <th>
-                                    Status
-                                </th>
+                            <th>Actions</th>
 
-                                <th>
-                                    Actions
-                                </th>
+                        </tr>
 
-                            </tr>
-
-                        </thead>
+                    </thead>
 
 
-                        <tbody id="inventoryTableBody">
+                    <tbody
+                        id="inventoryTableBody">
 
-                            <tr>
+                        <tr>
 
-                                <td colspan="7"
-                                    style="text-align:center;">
+                            <td
+                                colspan="7"
+                                class="empty-table">
 
-                                    No products found.
+                                No products found.
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
-                        </tbody>
+                    </tbody>
 
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
@@ -674,22 +631,22 @@
 
 
 
-        <!-- =============================================
-             ADD PRODUCT PAGE
-        ============================================== -->
+        <!-- =================================================
+             ADD PRODUCT
+        ================================================= -->
 
         <section
             id="addProductPage"
             class="content-page hidden">
 
 
-            <div class="section-top">
+            <div class="page-header">
 
                 <div>
 
-                    <h2>
+                    <h1>
                         Add Product
-                    </h2>
+                    </h1>
 
                     <p>
                         Add a new bakery product
@@ -700,132 +657,166 @@
             </div>
 
 
-            <div class="panel">
+            <div class="form-card">
 
 
                 <form id="productForm">
 
 
-                    <!-- PRODUCT NAME -->
-
-                    <label for="productName">
-                        Product Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="productName"
-                        placeholder="Example: Chocolate Bread"
-                        required
-                    >
+                    <div class="form-grid">
 
 
-                    <!-- SKU -->
+                        <div class="form-group">
 
-                    <label for="productSKU">
-                        SKU
-                    </label>
+                            <label>
+                                Product Name
+                            </label>
 
-                    <input
-                        type="text"
-                        id="productSKU"
-                        placeholder="Example: BRD-001"
-                        required
-                    >
+                            <input
+                                type="text"
+                                id="productName"
+                                placeholder="Example: Chocolate Cake"
+                                required
+                            >
 
-
-                    <!-- CATEGORY -->
-
-                    <label for="productCategory">
-                        Category
-                    </label>
-
-                    <select
-                        id="productCategory"
-                        required>
-
-                        <option value="">
-                            Select Category
-                        </option>
-
-                        <option value="Bread">
-                            Bread
-                        </option>
-
-                        <option value="Pastry">
-                            Pastry
-                        </option>
-
-                        <option value="Cake">
-                            Cake
-                        </option>
-
-                        <option value="Cookies">
-                            Cookies
-                        </option>
-
-                        <option value="Other">
-                            Other
-                        </option>
-
-                    </select>
+                        </div>
 
 
-                    <!-- QUANTITY -->
 
-                    <label for="productQuantity">
-                        Quantity
-                    </label>
+                        <div class="form-group">
 
-                    <input
-                        type="number"
-                        id="productQuantity"
-                        min="0"
-                        placeholder="Enter quantity"
-                        required
-                    >
+                            <label>
+                                SKU
+                            </label>
 
+                            <input
+                                type="text"
+                                id="productSKU"
+                                placeholder="Example: CAKE-001"
+                                required
+                            >
 
-                    <!-- PRICE -->
-
-                    <label for="productPrice">
-                        Price
-                    </label>
-
-                    <input
-                        type="number"
-                        id="productPrice"
-                        min="0"
-                        step="0.01"
-                        placeholder="₱0.00"
-                        required
-                    >
+                        </div>
 
 
-                    <!-- LOW STOCK -->
 
-                    <label for="lowStockThreshold">
-                        Low Stock Threshold
-                    </label>
+                        <div class="form-group">
 
-                    <input
-                        type="number"
-                        id="lowStockThreshold"
-                        min="0"
-                        value="5"
-                        required
-                    >
+                            <label>
+                                Category
+                            </label>
+
+                            <select
+                                id="productCategory"
+                                required>
+
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                <option value="Bread">
+                                    Bread
+                                </option>
+
+                                <option value="Cake">
+                                    Cake
+                                </option>
+
+                                <option value="Pastry">
+                                    Pastry
+                                </option>
+
+                                <option value="Cookies">
+                                    Cookies
+                                </option>
+
+                                <option value="Others">
+                                    Others
+                                </option>
+
+                            </select>
+
+                        </div>
 
 
-                    <!-- SAVE -->
 
-                    <button
-                        type="submit"
-                        class="save-button">
+                        <div class="form-group">
 
-                        💾 Save Product
+                            <label>
+                                Quantity
+                            </label>
 
-                    </button>
+                            <input
+                                type="number"
+                                id="productQuantity"
+                                min="0"
+                                placeholder="0"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Price
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productPrice"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Low Stock Threshold
+                            </label>
+
+                            <input
+                                type="number"
+                                id="lowStockThreshold"
+                                min="0"
+                                value="5"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="reset"
+                            class="secondary-btn">
+
+                            Clear
+
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="primary-btn">
+
+                            Save Product
+
+                        </button>
+
+                    </div>
 
 
                 </form>
@@ -836,25 +827,97 @@
 
 
 
-        <!-- =============================================
+        <!-- =================================================
              ACTIVITY LOGS
-        ============================================== -->
+        ================================================= -->
 
         <section
             id="activityPage"
             class="content-page hidden">
 
 
-            <div class="section-top">
+            <div class="page-header">
 
                 <div>
 
-                    <h2>
+                    <h1>
                         Activity Logs
-                    </h2>
+                    </h1>
 
                     <p>
-                        Monitor system activities
+                        Track system activities
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Action</th>
+
+                            <th>User</th>
+
+                            <th>Details</th>
+
+                            <th>Date & Time</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="activityTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="empty-table">
+
+                                No activity logs.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             USERS
+        ================================================= -->
+
+        <section
+            id="usersPage"
+            class="content-page hidden">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Users
+                    </h1>
+
+                    <p>
+                        User account information
                     </p>
 
                 </div>
@@ -864,53 +927,99 @@
 
             <div class="panel">
 
-                <div class="table-container">
+                <h2>
+                    Current User
+                </h2>
 
-                    <table>
+                <div class="user-profile">
 
-                        <thead>
+                    <div class="profile-icon">
+                        👤
+                    </div>
 
-                            <tr>
+                    <div>
 
-                                <th>
-                                    Action
-                                </th>
+                        <strong id="profileName">
+                            User
+                        </strong>
 
-                                <th>
-                                    User
-                                </th>
+                        <p id="profileEmail">
+                            -
+                        </p>
 
-                                <th>
-                                    Details
-                                </th>
+                        <span id="profileRole">
+                            STAFF
+                        </span>
 
-                                <th>
-                                    Date / Time
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody id="activityTableBody">
-
-                            <tr>
-
-                                <td colspan="4"
-                                    style="text-align:center;">
-
-                                    No activity logs.
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
+                    </div>
 
                 </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SETTINGS
+        ================================================= -->
+
+        <section
+            id="settingsPage"
+            class="content-page hidden">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Settings
+                    </h1>
+
+                    <p>
+                        System settings
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2>
+                    System Information
+                </h2>
+
+                <p>
+                    <strong>
+                        System:
+                    </strong>
+                    Arbees Bakery Shop Inventory System
+                </p>
+
+                <p>
+                    <strong>
+                        Database:
+                    </strong>
+                    Firebase Realtime Database
+                </p>
+
+                <p>
+                    <strong>
+                        Authentication:
+                    </strong>
+                    Firebase Authentication
+                </p>
+
+                <p>
+                    <strong>
+                        Platform:
+                    </strong>
+                    Mobile Responsive Web Application
+                </p>
 
             </div>
 
@@ -924,169 +1033,47 @@
 
 
 <!-- =====================================================
-     EDIT PRODUCT MODAL
-===================================================== -->
-
-<div
-    id="editModal"
-    class="modal hidden">
-
-
-    <div class="modal-card">
-
-
-        <div class="modal-header">
-
-            <h2>
-                Edit Product
-            </h2>
-
-            <button
-                type="button"
-                class="close-button"
-                id="closeEditModal">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <form id="editProductForm">
-
-
-            <!-- HIDDEN PRODUCT ID -->
-
-            <input
-                type="hidden"
-                id="editProductId"
-            >
-
-
-            <!-- PRODUCT -->
-
-            <label for="editProductName">
-                Product Name
-            </label>
-
-            <input
-                type="text"
-                id="editProductName"
-                required
-            >
-
-
-            <!-- SKU -->
-
-            <label for="editProductSKU">
-                SKU
-            </label>
-
-            <input
-                type="text"
-                id="editProductSKU"
-                required
-            >
-
-
-            <!-- CATEGORY -->
-
-            <label for="editProductCategory">
-                Category
-            </label>
-
-            <select
-                id="editProductCategory"
-                required>
-
-                <option value="Bread">
-                    Bread
-                </option>
-
-                <option value="Pastry">
-                    Pastry
-                </option>
-
-                <option value="Cake">
-                    Cake
-                </option>
-
-                <option value="Cookies">
-                    Cookies
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-
-            <!-- QUANTITY -->
-
-            <label for="editProductQuantity">
-                Quantity
-            </label>
-
-            <input
-                type="number"
-                id="editProductQuantity"
-                min="0"
-                required
-            >
-
-
-            <!-- PRICE -->
-
-            <label for="editProductPrice">
-                Price
-            </label>
-
-            <input
-                type="number"
-                id="editProductPrice"
-                min="0"
-                step="0.01"
-                required
-            >
-
-
-            <!-- LOW STOCK -->
-
-            <label for="editLowStockThreshold">
-                Low Stock Threshold
-            </label>
-
-            <input
-                type="number"
-                id="editLowStockThreshold"
-                min="0"
-                required
-            >
-
-
-            <button
-                type="submit"
-                class="save-button">
-
-                💾 Update Product
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
 
-<script type="module" src="./script.js"></script>
+<script>
+
+    // These functions are intentionally outside
+    // the Firebase module so the buttons ALWAYS work.
+
+    function showRegister() {
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("registerPage")
+            .classList.remove("hidden");
+
+    }
+
+
+    function showLogin() {
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("loginPage")
+            .classList.remove("hidden");
+
+    }
+
+</script>
+
+
+<script
+    type="module"
+    src="script.js">
+</script>
+
 
 </body>
 
