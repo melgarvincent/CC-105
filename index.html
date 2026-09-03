@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Arbees Bakery Shop</title>
 
@@ -12,19 +14,23 @@
 
 <body>
 
-    <!-- ==============================
+    <!-- =========================================
          LOGIN PAGE
-    =============================== -->
+    ========================================== -->
 
     <div id="loginPage" class="login-page">
 
         <div class="login-card">
 
-            <div class="bakery-logo">🥐</div>
+            <div class="bakery-logo">
+                🥐
+            </div>
 
             <h1>ARBEES BAKERY SHOP</h1>
 
-            <p>Bakery Inventory Management System</p>
+            <p>
+                Bakery Inventory Management System
+            </p>
 
 
             <form id="loginForm">
@@ -90,9 +96,9 @@
 
 
 
-    <!-- ==============================
+    <!-- =========================================
          REGISTER PAGE
-    =============================== -->
+    ========================================== -->
 
     <div
         id="registerPage"
@@ -101,11 +107,15 @@
 
         <div class="login-card">
 
-            <div class="bakery-logo">🧁</div>
+            <div class="bakery-logo">
+                🧁
+            </div>
 
             <h1>CREATE ACCOUNT</h1>
 
-            <p>Arbees Bakery Shop</p>
+            <p>
+                Arbees Bakery Shop
+            </p>
 
 
             <form id="registerForm">
@@ -197,14 +207,16 @@
 
 
 
-    <!-- ==============================
+    <!-- =========================================
          MAIN SYSTEM
-    =============================== -->
+    ========================================== -->
 
     <div
         id="system"
         class="system hidden"
     >
+
+        <!-- SIDEBAR -->
 
         <aside class="sidebar">
 
@@ -276,7 +288,7 @@
                 </strong>
 
                 <small>
-                    Administrator
+                    Staff
                 </small>
 
             </div>
@@ -285,11 +297,11 @@
 
 
 
-        <!-- ==============================
-             MAIN CONTENT
-        =============================== -->
+        <!-- MAIN -->
 
         <main class="main">
+
+            <!-- HEADER -->
 
             <div class="header">
 
@@ -307,14 +319,16 @@
 
 
                 <span class="admin-badge">
-                    ADMIN
+                    USER
                 </span>
 
             </div>
 
 
 
-            <!-- DASHBOARD -->
+            <!-- =================================
+                 DASHBOARD
+            ================================== -->
 
             <section id="dashboardPage">
 
@@ -407,7 +421,11 @@
 
 
 
+                <!-- DASHBOARD PANELS -->
+
                 <div class="dashboard-grid">
+
+                    <!-- LOW STOCK -->
 
                     <div class="panel">
 
@@ -419,15 +437,19 @@
 
                         </div>
 
+
                         <div id="lowStockList">
+
                             <p>
                                 No low-stock products.
                             </p>
+
                         </div>
 
                     </div>
 
 
+                    <!-- RECENT ACTIVITY -->
 
                     <div class="panel">
 
@@ -439,10 +461,13 @@
 
                         </div>
 
+
                         <div id="recentActivity">
+
                             <p>
                                 No recent activity.
                             </p>
+
                         </div>
 
                     </div>
@@ -453,7 +478,9 @@
 
 
 
-            <!-- INVENTORY -->
+            <!-- =================================
+                 INVENTORY
+            ================================== -->
 
             <section
                 id="inventoryPage"
@@ -469,7 +496,7 @@
                         </h2>
 
                         <p>
-                            Manage your bakery products
+                            Manage bakery products
                         </p>
 
                     </div>
@@ -484,6 +511,9 @@
 
                 </div>
 
+
+
+                <!-- SEARCH AND FILTER -->
 
                 <div class="filters">
 
@@ -528,6 +558,9 @@
 
                 </div>
 
+
+
+                <!-- TABLE -->
 
                 <div class="panel">
 
@@ -586,7 +619,9 @@
 
 
 
-            <!-- ACTIVITY LOGS -->
+            <!-- =================================
+                 ACTIVITY LOGS
+            ================================== -->
 
             <section
                 id="activityPage"
@@ -630,9 +665,9 @@
 
 
 
-    <!-- ==============================
+    <!-- =========================================
          ADD PRODUCT MODAL
-    =============================== -->
+    ========================================== -->
 
     <div
         id="productModal"
@@ -647,7 +682,9 @@
                     Add Bakery Product
                 </h2>
 
+
                 <button
+                    type="button"
                     class="close-button"
                     onclick="closeProductModal()"
                 >
@@ -659,31 +696,31 @@
 
             <form id="productForm">
 
-                <label>
+                <label for="productName">
                     Product Name
                 </label>
 
                 <input
                     type="text"
                     id="productName"
-                    placeholder="e.g. Pandesal"
+                    placeholder="Example: Pandesal"
                     required
                 >
 
 
-                <label>
+                <label for="productSKU">
                     SKU
                 </label>
 
                 <input
                     type="text"
                     id="productSKU"
-                    placeholder="e.g. BR-001"
+                    placeholder="Example: BR-001"
                     required
                 >
 
 
-                <label>
+                <label for="productCategory">
                     Category
                 </label>
 
@@ -719,7 +756,7 @@
                 </select>
 
 
-                <label>
+                <label for="productQuantity">
                     Quantity
                 </label>
 
@@ -731,7 +768,7 @@
                 >
 
 
-                <label>
+                <label for="productPrice">
                     Price
                 </label>
 
@@ -744,7 +781,7 @@
                 >
 
 
-                <label>
+                <label for="productThreshold">
                     Low Stock Threshold
                 </label>
 
@@ -771,10 +808,15 @@
     </div>
 
 
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
     <script
         type="module"
-        src="script.js"
-    ></script>
+        src="script.js">
+    </script>
 
 </body>
 
