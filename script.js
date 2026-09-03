@@ -5,7 +5,7 @@
 ========================================================= */
 
 import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/";
 
 import {
     getAuth,
@@ -14,7 +14,7 @@ import {
     signOut,
     onAuthStateChanged
 } from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/";
 
 import {
     getDatabase,
@@ -25,7 +25,7 @@ import {
     remove,
     onValue
 } from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+    "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/";
 
 
 /* =========================================================
@@ -46,14 +46,14 @@ import {
 */
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "crudfirebase-b2a1f.firebaseapp.com",
-    databaseURL:
-        "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/",
-    projectId: "crudfirebase-b2a1f",
-    storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
+  authDomain: "crudfirebase-b2a1f.firebaseapp.com",
+  databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
+  projectId: "crudfirebase-b2a1f",
+  storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
+  messagingSenderId: "383674756572",
+  appId: "1:383674756572:web:0585f268fb2cc8f5a6b319",
+  measurementId: "G-QJXMR8ZQH8"
 };
 
 
