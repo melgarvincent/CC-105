@@ -1,12 +1,12 @@
-/* =========================================================
+/* =====================================================
    ARBEES BAKERY SHOP
-   WEB-BASED INVENTORY SYSTEM
-   Firebase Authentication + Realtime Database
-========================================================= */
+   FIREBASE INVENTORY SYSTEM
+===================================================== */
 
-/* =========================================================
+
+/* =====================================================
    FIREBASE IMPORTS
-========================================================= */
+===================================================== */
 
 import { initializeApp } from
     "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -32,560 +32,679 @@ import {
     "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-/* =========================================================
+/* =====================================================
    FIREBASE CONFIG
-========================================================= */
+===================================================== */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
-    authDomain: "crudfirebase-b2a1f.firebaseapp.com",
-    databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
-    projectId: "crudfirebase-b2a1f",
-    storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
-    messagingSenderId: "383674756572",
-    appId: "1:383674756572:web:0585f268fb2cc8f5a6b319",
-    measurementId: "G-QJXMR8ZQH8"
+
+    apiKey:
+        "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
+
+    authDomain:
+        "crudfirebase-b2a1f.firebaseapp.com",
+
+    databaseURL:
+        "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
+
+    projectId:
+        "crudfirebase-b2a1f",
+
+    storageBucket:
+        "crudfirebase-b2a1f.firebasestorage.app",
+
+    messagingSenderId:
+        "383674756572",
+
+    appId:
+        "1:383674756572:web:0585f268fb2cc8f5a6b319",
+
+    measurementId:
+        "G-QJXMR8ZQH8"
 };
 
 
-/* =========================================================
+/* =====================================================
    INITIALIZE FIREBASE
-========================================================= */
+===================================================== */
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
-const db = getDatabase(app);
+const db =
+    getDatabase(app);
 
 
-/* =========================================================
+/* =====================================================
    DATABASE REFERENCES
-========================================================= */
+===================================================== */
 
-const productsRef = ref(db, "bakeryProducts");
-const activityRef = ref(db, "activityLogs");
-const usersRef = ref(db, "users");
+const productsRef =
+    ref(db, "bakeryProducts");
+
+const activityRef =
+    ref(db, "activityLogs");
+
+const usersRef =
+    ref(db, "users");
 
 
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
+/* =====================================================
+   VARIABLES
+===================================================== */
 
 let products = [];
+
 let activities = [];
+
 let currentUser = null;
 
 
-/* =========================================================
-   HELPER - GET ELEMENT
-========================================================= */
+/* =====================================================
+   GET ELEMENTS
+===================================================== */
 
-function getElement(id) {
-    return document.getElementById(id);
-}
+const loginPage =
+    document.getElementById("loginPage");
 
+const registerPage =
+    document.getElementById("registerPage");
 
-/* =========================================================
-   LOGIN FORM
-========================================================= */
+const system =
+    document.getElementById("system");
 
-const loginForm = getElement("loginForm");
+const loginForm =
+    document.getElementById("loginForm");
 
-if (loginForm) {
+const registerForm =
+    document.getElementById("registerForm");
 
-    loginForm.addEventListener("submit", async function(event) {
+const productForm =
+    document.getElementById("productForm");
 
-        event.preventDefault();
 
-        const emailElement = getElement("loginEmail");
-        const passwordElement = getElement("loginPassword");
-        const errorElement = getElement("loginError");
-
-        if (!emailElement || !passwordElement) {
-            return;
-        }
-
-        const email = emailElement.value.trim();
-        const password = passwordElement.value;
-
-        if (errorElement) {
-            errorElement.textContent = "";
-        }
-
-        if (!email || !password) {
-
-            if (errorElement) {
-                errorElement.textContent =
-                    "Please enter your email and password.";
-            }
-
-            return;
-        }
-
-        try {
-
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
-        } catch (errorObject) {
-
-            console.error("Login error:", errorObject);
-
-            if (errorElement) {
-                errorElement.textContent =
-                    getFirebaseErrorMessage(errorObject);
-            }
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   REGISTER FORM
-========================================================= */
-
-const registerForm = getElement("registerForm");
-
-if (registerForm) {
-
-    registerForm.addEventListener("submit", async function(event) {
-
-        event.preventDefault();
-
-        const nameElement = getElement("registerName");
-        const emailElement = getElement("registerEmail");
-        const passwordElement = getElement("registerPassword");
-        const confirmElement = getElement("confirmPassword");
-        const errorElement = getElement("registerError");
-
-        if (
-            !nameElement ||
-            !emailElement ||
-            !passwordElement ||
-            !confirmElement
-        ) {
-            return;
-        }
-
-        const name = nameElement.value.trim();
-        const email = emailElement.value.trim();
-        const password = passwordElement.value;
-        const confirmPassword = confirmElement.value;
-
-        if (errorElement) {
-            errorElement.textContent = "";
-        }
-
-
-        /* Validate name */
-
-        if (!name) {
-
-            if (errorElement) {
-                errorElement.textContent =
-                    "Please enter your full name.";
-            }
-
-            return;
-        }
-
-
-        /* Validate email */
-
-        if (!email) {
-
-            if (errorElement) {
-                errorElement.textContent =
-                    "Please enter your email.";
-            }
-
-            return;
-        }
-
-
-        /* Validate password */
-
-        if (password.length < 6) {
-
-            if (errorElement) {
-                errorElement.textContent =
-                    "Password must be at least 6 characters.";
-            }
-
-            return;
-        }
-
-
-        /* Confirm password */
-
-        if (password !== confirmPassword) {
-
-            if (errorElement) {
-                errorElement.textContent =
-                    "Passwords do not match.";
-            }
-
-            return;
-        }
-
-
-        try {
-
-            /* Create Firebase Authentication account */
-
-            const userCredential =
-                await createUserWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-            const user = userCredential.user;
-
-
-            /* Save user information */
-
-            await set(
-                ref(db, "users/" + user.uid),
-                {
-                    name: name,
-                    email: email,
-                    role: "staff",
-                    createdAt: new Date().toLocaleString()
-                }
-            );
-
-
-            /* Save activity */
-
-            await addActivity(
-                "REGISTER",
-                email,
-                "New user registered"
-            );
-
-
-            /* Clear form */
-
-            registerForm.reset();
-
-
-            alert("Registration successful!");
-
-
-            /* Go back to login */
-
-            await signOut(auth);
-
-            showLogin();
-
-
-        } catch (errorObject) {
-
-            console.error(
-                "Registration error:",
-                errorObject
-            );
-
-            if (errorElement) {
-                errorElement.textContent =
-                    getFirebaseErrorMessage(errorObject);
-            }
-        }
-
-    });
-
-}
-
-
-/* =========================================================
+/* =====================================================
    SHOW LOGIN
-========================================================= */
+===================================================== */
 
-window.showLogin = function() {
-
-    const loginPage = getElement("loginPage");
-    const registerPage = getElement("registerPage");
+function showLogin() {
 
     if (registerPage) {
         registerPage.classList.add("hidden");
+    }
+
+    if (system) {
+        system.classList.add("hidden");
     }
 
     if (loginPage) {
         loginPage.classList.remove("hidden");
     }
 
-    const error = getElement("loginError");
+    const error =
+        document.getElementById("loginError");
 
     if (error) {
         error.textContent = "";
     }
+}
 
-};
 
-
-/* =========================================================
+/* =====================================================
    SHOW REGISTER
-========================================================= */
+===================================================== */
 
-window.showRegister = function() {
-
-    const loginPage = getElement("loginPage");
-    const registerPage = getElement("registerPage");
+function showRegister() {
 
     if (loginPage) {
         loginPage.classList.add("hidden");
+    }
+
+    if (system) {
+        system.classList.add("hidden");
     }
 
     if (registerPage) {
         registerPage.classList.remove("hidden");
     }
 
-    const error = getElement("registerError");
+    const error =
+        document.getElementById("registerError");
 
     if (error) {
         error.textContent = "";
     }
-
-};
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-onAuthStateChanged(auth, async function(user) {
-
-    currentUser = user;
-
-    const loginPage = getElement("loginPage");
-    const registerPage = getElement("registerPage");
-    const systemPage = getElement("systemPage");
-
-    if (user) {
-
-        /* Hide authentication pages */
-
-        if (loginPage) {
-            loginPage.classList.add("hidden");
-        }
-
-        if (registerPage) {
-            registerPage.classList.add("hidden");
-        }
-
-
-        /* Show main system */
-
-        if (systemPage) {
-            systemPage.classList.remove("hidden");
-        }
-
-
-        /* Load user information */
-
-        await loadCurrentUser();
-
-
-        /* Dashboard */
-
-        updateDashboard();
-
-    } else {
-
-        /* Hide system */
-
-        if (systemPage) {
-            systemPage.classList.add("hidden");
-        }
-
-
-        /* Hide register */
-
-        if (registerPage) {
-            registerPage.classList.add("hidden");
-        }
-
-
-        /* Show login */
-
-        if (loginPage) {
-            loginPage.classList.remove("hidden");
-        }
-
-    }
-
-});
-
-
-/* =========================================================
-   LOAD CURRENT USER
-========================================================= */
-
-async function loadCurrentUser() {
-
-    if (!currentUser) {
-        return;
-    }
-
-    const userId = currentUser.uid;
-
-    onValue(
-        ref(db, "users/" + userId),
-        function(snapshot) {
-
-            const data = snapshot.val();
-
-            const name =
-                data && data.name
-                    ? data.name
-                    : "User";
-
-            const email =
-                data && data.email
-                    ? data.email
-                    : currentUser.email;
-
-            const role =
-                data && data.role
-                    ? data.role.toUpperCase()
-                    : "STAFF";
-
-
-            /* Dashboard */
-
-            const currentUserName =
-                getElement("currentUserName");
-
-            const currentUserEmail =
-                getElement("currentUserEmail");
-
-            const userRole =
-                getElement("userRole");
-
-
-            if (currentUserName) {
-                currentUserName.textContent = name;
-            }
-
-            if (currentUserEmail) {
-                currentUserEmail.textContent = email;
-            }
-
-            if (userRole) {
-                userRole.textContent = role;
-            }
-
-
-            /* User profile */
-
-            const profileName =
-                getElement("profileName");
-
-            const profileEmail =
-                getElement("profileEmail");
-
-            const profileRole =
-                getElement("profileRole");
-
-
-            if (profileName) {
-                profileName.textContent = name;
-            }
-
-            if (profileEmail) {
-                profileEmail.textContent = email;
-            }
-
-            if (profileRole) {
-                profileRole.textContent = role;
-            }
-
-        },
-        function(errorObject) {
-
-            console.error(
-                "User information error:",
-                errorObject
-            );
-
-        }
-    );
-
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+/* =====================================================
+   REGISTER / LOGIN BUTTONS
+===================================================== */
 
-window.logout = async function() {
+const showRegisterBtn =
+    document.getElementById("showRegisterBtn");
+
+if (showRegisterBtn) {
+
+    showRegisterBtn.addEventListener(
+        "click",
+        showRegister
+    );
+}
+
+
+const showLoginBtn =
+    document.getElementById("showLoginBtn");
+
+if (showLoginBtn) {
+
+    showLoginBtn.addEventListener(
+        "click",
+        showLogin
+    );
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const email =
+                document
+                    .getElementById("loginEmail")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
+
+            const error =
+                document
+                    .getElementById("loginError");
+
+
+            if (error) {
+                error.textContent = "";
+            }
+
+
+            if (!email || !password) {
+
+                if (error) {
+                    error.textContent =
+                        "Please enter your email and password.";
+                }
+
+                return;
+            }
+
+
+            try {
+
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+                loginForm.reset();
+
+            }
+
+            catch (errorObject) {
+
+                console.error(
+                    "Login error:",
+                    errorObject
+                );
+
+                if (error) {
+
+                    error.textContent =
+                        getFirebaseErrorMessage(
+                            errorObject
+                        );
+                }
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+if (registerForm) {
+
+    registerForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("registerName")
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById("registerEmail")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("registerPassword")
+                    .value;
+
+            const confirmPassword =
+                document
+                    .getElementById("confirmPassword")
+                    .value;
+
+            const error =
+                document
+                    .getElementById("registerError");
+
+
+            if (error) {
+                error.textContent = "";
+            }
+
+
+            /* NAME */
+
+            if (!name) {
+
+                error.textContent =
+                    "Please enter your full name.";
+
+                return;
+            }
+
+
+            /* PASSWORD LENGTH */
+
+            if (password.length < 6) {
+
+                error.textContent =
+                    "Password must be at least 6 characters.";
+
+                return;
+            }
+
+
+            /* PASSWORD MATCH */
+
+            if (password !== confirmPassword) {
+
+                error.textContent =
+                    "Passwords do not match.";
+
+                return;
+            }
+
+
+            try {
+
+                /* CREATE FIREBASE ACCOUNT */
+
+                const userCredential =
+                    await createUserWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    userCredential.user;
+
+
+                /* SAVE USER */
+
+                await set(
+                    ref(
+                        db,
+                        "users/" + user.uid
+                    ),
+                    {
+
+                        name: name,
+
+                        email: email,
+
+                        role: "staff",
+
+                        createdAt:
+                            new Date().toISOString()
+
+                    }
+                );
+
+
+                /* ACTIVITY */
+
+                await addActivity(
+                    "New user registered: " +
+                    email
+                );
+
+
+                alert(
+                    "Registration successful!"
+                );
+
+
+                registerForm.reset();
+
+
+                /*
+                    Firebase automatically logs
+                    the new user in.
+
+                    We let onAuthStateChanged
+                    display the system.
+                */
+
+            }
+
+            catch (errorObject) {
+
+                console.error(
+                    "Registration error:",
+                    errorObject
+                );
+
+                error.textContent =
+                    getFirebaseErrorMessage(
+                        errorObject
+                    );
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+onAuthStateChanged(
+    auth,
+    async function(user) {
+
+        currentUser = user;
+
+
+        if (user) {
+
+            console.log(
+                "Logged in:",
+                user.email
+            );
+
+
+            /* HIDE AUTH */
+
+            if (loginPage) {
+                loginPage.classList.add("hidden");
+            }
+
+            if (registerPage) {
+                registerPage.classList.add("hidden");
+            }
+
+
+            /* SHOW SYSTEM */
+
+            if (system) {
+                system.classList.remove("hidden");
+            }
+
+
+            /* LOAD USER DATA */
+
+            await loadCurrentUser(
+                user.uid
+            );
+
+
+            updateDashboard();
+
+            renderInventory();
+
+            renderActivities();
+
+        }
+
+        else {
+
+            /* LOGGED OUT */
+
+            if (system) {
+                system.classList.add("hidden");
+            }
+
+            if (registerPage) {
+                registerPage.classList.add("hidden");
+            }
+
+            if (loginPage) {
+                loginPage.classList.remove("hidden");
+            }
+        }
+    }
+);
+
+
+/* =====================================================
+   LOAD CURRENT USER
+===================================================== */
+
+async function loadCurrentUser(uid) {
+
+    const userRef =
+        ref(
+            db,
+            "users/" + uid
+        );
+
+    onValue(
+        userRef,
+        function(snapshot) {
+
+            const data =
+                snapshot.val();
+
+            if (!data) {
+                return;
+            }
+
+
+            const name =
+                data.name || "User";
+
+            const email =
+                data.email ||
+                currentUser?.email ||
+                "";
+
+            const role =
+                data.role ||
+                "staff";
+
+
+            const currentUserName =
+                document.getElementById(
+                    "currentUserName"
+                );
+
+            const currentUserEmail =
+                document.getElementById(
+                    "currentUserEmail"
+                );
+
+            const userRole =
+                document.getElementById(
+                    "userRole"
+                );
+
+            const profileName =
+                document.getElementById(
+                    "profileName"
+                );
+
+            const profileEmail =
+                document.getElementById(
+                    "profileEmail"
+                );
+
+            const profileRole =
+                document.getElementById(
+                    "profileRole"
+                );
+
+
+            if (currentUserName) {
+                currentUserName.textContent =
+                    name;
+            }
+
+            if (currentUserEmail) {
+                currentUserEmail.textContent =
+                    email;
+            }
+
+            if (userRole) {
+                userRole.textContent =
+                    role.toUpperCase();
+            }
+
+            if (profileName) {
+                profileName.textContent =
+                    name;
+            }
+
+            if (profileEmail) {
+                profileEmail.textContent =
+                    email;
+            }
+
+            if (profileRole) {
+                profileRole.textContent =
+                    role.toUpperCase();
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logout() {
 
     try {
 
         if (currentUser) {
 
             await addActivity(
-                "LOGOUT",
-                currentUser.email,
-                "User logged out"
+                "User logged out: " +
+                currentUser.email
             );
-
         }
 
         await signOut(auth);
 
-    } catch (errorObject) {
+    }
+
+    catch (errorObject) {
 
         console.error(
             "Logout error:",
             errorObject
         );
 
-        alert("Unable to logout.");
-
+        alert(
+            "Unable to logout."
+        );
     }
+}
 
-};
 
-
-/* =========================================================
-   LOGOUT BUTTONS
-========================================================= */
-
-const logoutBtn = getElement("logoutBtn");
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 if (logoutBtn) {
 
-    logoutBtn.addEventListener("click", function() {
-        logout();
-    });
-
+    logoutBtn.addEventListener(
+        "click",
+        logout
+    );
 }
 
 
-const mobileLogout = getElement("mobileLogout");
+const mobileLogout =
+    document.getElementById("mobileLogout");
 
 if (mobileLogout) {
 
-    mobileLogout.addEventListener("click", function() {
-        logout();
-    });
-
+    mobileLogout.addEventListener(
+        "click",
+        logout
+    );
 }
 
 
-/* =========================================================
+/* =====================================================
    PAGE NAVIGATION
-========================================================= */
+===================================================== */
 
-window.showPage = function(page, button) {
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const page =
+                        button.dataset.page;
+
+                    showPage(
+                        page,
+                        button
+                    );
+                }
+            );
+        }
+    );
+
+
+function showPage(
+    page,
+    button
+) {
 
     const pages = [
         "dashboardPage",
@@ -597,48 +716,57 @@ window.showPage = function(page, button) {
     ];
 
 
-    /* Hide all pages */
+    pages.forEach(
+        function(pageID) {
 
-    pages.forEach(function(pageID) {
+            const element =
+                document.getElementById(
+                    pageID
+                );
 
-        const element = getElement(pageID);
+            if (element) {
 
-        if (element) {
-            element.classList.add("hidden");
+                element.classList.add(
+                    "hidden"
+                );
+            }
         }
+    );
 
-    });
-
-
-    /* Show selected page */
 
     const selectedPage =
-        getElement(page + "Page");
+        document.getElementById(
+            page + "Page"
+        );
+
 
     if (selectedPage) {
-        selectedPage.classList.remove("hidden");
+
+        selectedPage.classList.remove(
+            "hidden"
+        );
     }
 
-
-    /* Remove active */
 
     document
         .querySelectorAll(".nav-btn")
-        .forEach(function(btn) {
+        .forEach(
+            function(btn) {
 
-            btn.classList.remove("active");
+                btn.classList.remove(
+                    "active"
+                );
+            }
+        );
 
-        });
-
-
-    /* Add active */
 
     if (button) {
-        button.classList.add("active");
+
+        button.classList.add(
+            "active"
+        );
     }
 
-
-    /* Page-specific actions */
 
     if (page === "dashboard") {
 
@@ -646,49 +774,28 @@ window.showPage = function(page, button) {
 
     }
 
-    if (page === "inventory") {
+    else if (page === "inventory") {
 
         renderInventory();
 
     }
 
-    if (page === "activity") {
+    else if (page === "activity") {
 
         renderActivities();
 
     }
-
-};
-
-
-/* =========================================================
-   NAVIGATION BUTTON EVENTS
-========================================================= */
-
-document
-    .querySelectorAll(".nav-btn")
-    .forEach(function(button) {
-
-        button.addEventListener("click", function() {
-
-            const page =
-                button.getAttribute("data-page");
-
-            if (page) {
-                showPage(page, button);
-            }
-
-        });
-
-    });
+}
 
 
-/* =========================================================
+/* =====================================================
    INVENTORY ADD BUTTON
-========================================================= */
+===================================================== */
 
 const inventoryAddBtn =
-    getElement("inventoryAddBtn");
+    document.getElementById(
+        "inventoryAddBtn"
+    );
 
 if (inventoryAddBtn) {
 
@@ -696,162 +803,157 @@ if (inventoryAddBtn) {
         "click",
         function() {
 
+            const addButton =
+                document.querySelector(
+                    '[data-page="addProduct"]'
+                );
+
             showPage(
                 "addProduct",
-                document.querySelector(
-                    '.nav-btn[data-page="addProduct"]'
-                )
+                addButton
             );
-
         }
     );
-
 }
 
 
-/* =========================================================
-   FIREBASE - LOAD PRODUCTS
-========================================================= */
+/* =====================================================
+   LOAD PRODUCTS
+===================================================== */
 
 onValue(
     productsRef,
     function(snapshot) {
 
-        const data = snapshot.val();
+        const data =
+            snapshot.val();
 
         products = [];
 
 
         if (data) {
 
-            Object.keys(data).forEach(function(key) {
+            Object.keys(data)
+                .forEach(
+                    function(key) {
 
-                const item = data[key];
+                        products.push({
 
-                products.push({
+                            id: key,
 
-                    id: key,
+                            sku:
+                                data[key].sku ||
+                                "",
 
-                    sku:
-                        item.sku || "",
+                            name:
+                                data[key].name ||
+                                "",
 
-                    name:
-                        item.name || "",
+                            category:
+                                data[key].category ||
+                                "",
 
-                    category:
-                        item.category || "",
+                            quantity:
+                                Number(
+                                    data[key].quantity ||
+                                    0
+                                ),
 
-                    quantity:
-                        Number(item.quantity || 0),
+                            price:
+                                Number(
+                                    data[key].price ||
+                                    0
+                                ),
 
-                    price:
-                        Number(item.price || 0),
-
-                    threshold:
-                        Number(
-                            item.threshold ??
-                            item.lowStockThreshold ??
-                            5
-                        )
-
-                });
-
-            });
-
+                            threshold:
+                                Number(
+                                    data[key].threshold ||
+                                    5
+                                )
+                        });
+                    }
+                );
         }
 
 
         updateDashboard();
-        renderInventory();
 
+        renderInventory();
     },
+
     function(errorObject) {
 
         console.error(
-            "Products Firebase error:",
+            "Products error:",
             errorObject
         );
-
     }
 );
 
 
-/* =========================================================
-   FIREBASE - LOAD ACTIVITY
-========================================================= */
+/* =====================================================
+   LOAD ACTIVITY
+===================================================== */
 
 onValue(
     activityRef,
     function(snapshot) {
 
-        const data = snapshot.val();
+        const data =
+            snapshot.val();
 
         activities = [];
 
 
         if (data) {
 
-            Object.keys(data).forEach(function(key) {
+            Object.keys(data)
+                .forEach(
+                    function(key) {
 
-                const item = data[key];
+                        activities.push({
 
-                activities.push({
+                            id: key,
 
-                    id: key,
+                            message:
+                                data[key].message ||
+                                "",
 
-                    action:
-                        item.action || "ACTIVITY",
+                            user:
+                                data[key].user ||
+                                "",
 
-                    user:
-                        item.user || "",
+                            action:
+                                data[key].action ||
+                                "",
 
-                    details:
-                        item.details ||
-                        item.message ||
-                        "",
+                            details:
+                                data[key].details ||
+                                data[key].message ||
+                                "",
 
-                    message:
-                        item.message ||
-                        item.details ||
-                        "",
+                            time:
+                                data[key].time ||
+                                ""
 
-                    time:
-                        item.time || ""
-
-                });
-
-            });
-
+                        });
+                    }
+                );
         }
 
-
-        /* Newest first */
 
         activities.reverse();
 
         renderActivities();
-
-    },
-    function(errorObject) {
-
-        console.error(
-            "Activity Firebase error:",
-            errorObject
-        );
-
     }
 );
 
 
-/* =========================================================
+/* =====================================================
    ADD ACTIVITY
-========================================================= */
+===================================================== */
 
-async function addActivity(
-    action,
-    user,
-    details
-) {
+async function addActivity(message) {
 
     try {
 
@@ -862,100 +964,111 @@ async function addActivity(
             newActivity,
             {
 
-                action: action,
+                message: message,
 
-                user: user,
+                user:
+                    currentUser
+                        ? currentUser.email
+                        : "",
 
-                details: details,
+                action:
+                    message.split(":")[0] ||
+                    "Activity",
 
-                message: details,
+                details:
+                    message,
 
                 time:
-                    new Date().toLocaleString()
+                    new Date().toISOString()
 
             }
         );
 
-    } catch (errorObject) {
-
-        console.error(
-            "Activity log error:",
-            errorObject
-        );
-
     }
 
+    catch (errorObject) {
+
+        console.error(
+            "Activity error:",
+            errorObject
+        );
+    }
 }
 
 
-/* =========================================================
+/* =====================================================
    DASHBOARD
-========================================================= */
+===================================================== */
 
 function updateDashboard() {
 
     let totalStock = 0;
+
     let lowStock = 0;
+
     let totalValue = 0;
 
 
-    products.forEach(function(product) {
+    products.forEach(
+        function(product) {
 
-        totalStock += product.quantity;
+            totalStock +=
+                product.quantity;
 
-        totalValue +=
-            product.quantity *
-            product.price;
+            totalValue +=
+                product.quantity *
+                product.price;
 
 
-        if (
-            product.quantity <=
-            product.threshold
-        ) {
+            if (
+                product.quantity <=
+                product.threshold
+            ) {
 
-            lowStock++;
-
+                lowStock++;
+            }
         }
-
-    });
+    );
 
 
     const totalProducts =
-        getElement("totalProducts");
+        document.getElementById(
+            "totalProducts"
+        );
 
     const totalStockElement =
-        getElement("totalStock");
+        document.getElementById(
+            "totalStock"
+        );
 
     const lowStockElement =
-        getElement("lowStock");
+        document.getElementById(
+            "lowStock"
+        );
 
     const estimatedValue =
-        getElement("estimatedValue");
+        document.getElementById(
+            "estimatedValue"
+        );
 
 
     if (totalProducts) {
 
         totalProducts.textContent =
             products.length;
-
     }
-
 
     if (totalStockElement) {
 
         totalStockElement.textContent =
             totalStock;
-
     }
-
 
     if (lowStockElement) {
 
         lowStockElement.textContent =
             lowStock;
-
     }
-
 
     if (estimatedValue) {
 
@@ -965,26 +1078,28 @@ function updateDashboard() {
                 "en-PH",
                 {
                     minimumFractionDigits: 2,
+
                     maximumFractionDigits: 2
                 }
             );
-
     }
 
 
     renderLowStock();
-
 }
 
 
-/* =========================================================
+/* =====================================================
    LOW STOCK
-========================================================= */
+===================================================== */
 
 function renderLowStock() {
 
     const container =
-        getElement("lowStockList");
+        document.getElementById(
+            "lowStockList"
+        );
+
 
     if (!container) {
         return;
@@ -992,17 +1107,20 @@ function renderLowStock() {
 
 
     const lowProducts =
-        products.filter(function(product) {
+        products.filter(
+            function(product) {
 
-            return (
-                product.quantity <=
-                product.threshold
-            );
+                return (
+                    product.quantity <=
+                    product.threshold
+                );
+            }
+        );
 
-        });
 
-
-    if (lowProducts.length === 0) {
+    if (
+        lowProducts.length === 0
+    ) {
 
         container.innerHTML = `
             <p class="empty-message">
@@ -1011,47 +1129,57 @@ function renderLowStock() {
         `;
 
         return;
-
     }
 
 
     container.innerHTML =
-        lowProducts.map(function(product) {
+        lowProducts
+            .map(
+                function(product) {
 
-            return `
-                <div class="stock-item">
+                    return `
+                        <div class="stock-item">
 
-                    <strong>
-                        ${escapeHTML(product.name)}
-                    </strong>
+                            <strong>
+                                ${escapeHTML(
+                                    product.name
+                                )}
+                            </strong>
 
-                    <small>
-                        ${escapeHTML(product.category)}
-                        • SKU:
-                        ${escapeHTML(product.sku)}
-                    </small>
+                            <small>
+                                ${escapeHTML(
+                                    product.category
+                                )}
+                                • SKU:
+                                ${escapeHTML(
+                                    product.sku
+                                )}
+                            </small>
 
-                    <span class="low-label">
-                        ${product.quantity}
-                        pcs remaining
-                    </span>
+                            <span class="low-label">
+                                ${product.quantity}
+                                pcs remaining
+                            </span>
 
-                </div>
-            `;
-
-        }).join("");
-
+                        </div>
+                    `;
+                }
+            )
+            .join("");
 }
 
 
-/* =========================================================
+/* =====================================================
    INVENTORY
-========================================================= */
+===================================================== */
 
-window.renderInventory = function() {
+function renderInventory() {
 
     const table =
-        getElement("inventoryTableBody");
+        document.getElementById(
+            "inventoryTableBody"
+        );
+
 
     if (!table) {
         return;
@@ -1059,15 +1187,21 @@ window.renderInventory = function() {
 
 
     const searchBox =
-        getElement("searchProduct");
+        document.getElementById(
+            "searchProduct"
+        );
 
     const categoryFilter =
-        getElement("categoryFilter");
+        document.getElementById(
+            "categoryFilter"
+        );
 
 
     const search =
         searchBox
-            ? searchBox.value.toLowerCase().trim()
+            ? searchBox.value
+                .toLowerCase()
+                .trim()
             : "";
 
 
@@ -1078,182 +1212,227 @@ window.renderInventory = function() {
 
 
     const filteredProducts =
-        products.filter(function(product) {
+        products.filter(
+            function(product) {
 
-            const name =
-                product.name.toLowerCase();
+                const name =
+                    product.name
+                        .toLowerCase();
 
-            const sku =
-                product.sku.toLowerCase();
-
-
-            const searchMatch =
-                name.includes(search) ||
-                sku.includes(search);
+                const sku =
+                    product.sku
+                        .toLowerCase();
 
 
-            const categoryMatch =
-                category === "" ||
-                product.category === category;
+                const searchMatch =
+                    name.includes(search) ||
+                    sku.includes(search);
 
 
-            return (
-                searchMatch &&
-                categoryMatch
-            );
+                const categoryMatch =
+                    category === "" ||
+                    product.category === category;
 
-        });
+
+                return (
+                    searchMatch &&
+                    categoryMatch
+                );
+            }
+        );
 
 
     table.innerHTML = "";
 
 
-    if (filteredProducts.length === 0) {
+    if (
+        filteredProducts.length === 0
+    ) {
 
         table.innerHTML = `
             <tr>
-                <td colspan="7" class="empty-table">
+                <td
+                    colspan="7"
+                    class="empty-table">
                     No products found.
                 </td>
             </tr>
         `;
 
         return;
-
     }
 
 
-    filteredProducts.forEach(function(product) {
+    filteredProducts.forEach(
+        function(product) {
 
-        const isLow =
-            product.quantity <=
-            product.threshold;
-
-
-        const row =
-            document.createElement("tr");
+            const isLow =
+                product.quantity <=
+                product.threshold;
 
 
-        row.innerHTML = `
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
-            <td>
-                <strong>
-                    ${escapeHTML(product.name)}
-                </strong>
-            </td>
 
-            <td>
-                ${escapeHTML(product.sku)}
-            </td>
+            row.innerHTML = `
 
-            <td>
-                ${escapeHTML(product.category)}
-            </td>
+                <td>
+                    <strong>
+                        ${escapeHTML(
+                            product.name
+                        )}
+                    </strong>
+                </td>
 
-            <td>
-                ${product.quantity}
-            </td>
+                <td>
+                    ${escapeHTML(
+                        product.sku
+                    )}
+                </td>
 
-            <td>
-                ₱${product.price.toFixed(2)}
-            </td>
+                <td>
+                    ${escapeHTML(
+                        product.category
+                    )}
+                </td>
 
-            <td>
+                <td>
+                    ${product.quantity}
+                </td>
 
-                <span class="status ${
-                    isLow
-                        ? "status-low"
-                        : "status-ok"
-                }">
+                <td>
+                    ₱${product.price.toFixed(2)}
+                </td>
 
-                    ${
-                        isLow
-                            ? "LOW STOCK"
-                            : "IN STOCK"
+                <td>
+
+                    <span class="
+                        status
+                        ${
+                            isLow
+                                ? "status-low"
+                                : "status-ok"
+                        }
+                    ">
+
+                        ${
+                            isLow
+                                ? "LOW STOCK"
+                                : "IN STOCK"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="action"
+                        data-edit-id="${product.id}"
+                        title="Edit Stock">
+                        ✏️
+                    </button>
+
+                    <button
+                        class="action delete"
+                        data-delete-id="${product.id}"
+                        title="Delete Product">
+                        🗑️
+                    </button>
+
+                </td>
+            `;
+
+
+            table.appendChild(row);
+        }
+    );
+
+
+    /* EDIT BUTTONS */
+
+    table
+        .querySelectorAll(
+            "[data-edit-id]"
+        )
+        .forEach(
+            function(button) {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        editQuantity(
+                            button.dataset.editId
+                        );
                     }
-
-                </span>
-
-            </td>
-
-            <td>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="editQuantity('${product.id}')"
-                    title="Edit Stock">
-                    ✏️
-                </button>
-
-                <button
-                    type="button"
-                    class="action delete"
-                    onclick="deleteProduct('${product.id}')"
-                    title="Delete Product">
-                    🗑️
-                </button>
-
-            </td>
-
-        `;
+                );
+            }
+        );
 
 
-        table.appendChild(row);
+    /* DELETE BUTTONS */
 
-    });
+    table
+        .querySelectorAll(
+            "[data-delete-id]"
+        )
+        .forEach(
+            function(button) {
 
-};
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        deleteProduct(
+                            button.dataset.deleteId
+                        );
+                    }
+                );
+            }
+        );
+}
 
 
-/* =========================================================
-   SEARCH INVENTORY
-========================================================= */
+/* =====================================================
+   SEARCH
+===================================================== */
 
 const searchProduct =
-    getElement("searchProduct");
+    document.getElementById(
+        "searchProduct"
+    );
 
 if (searchProduct) {
 
     searchProduct.addEventListener(
         "input",
-        function() {
-
-            renderInventory();
-
-        }
+        renderInventory
     );
-
 }
 
 
-/* =========================================================
-   CATEGORY FILTER
-========================================================= */
-
 const categoryFilter =
-    getElement("categoryFilter");
+    document.getElementById(
+        "categoryFilter"
+    );
 
 if (categoryFilter) {
 
     categoryFilter.addEventListener(
         "change",
-        function() {
-
-            renderInventory();
-
-        }
+        renderInventory
     );
-
 }
 
 
-/* =========================================================
+/* =====================================================
    ADD PRODUCT
-========================================================= */
-
-const productForm =
-    getElement("productForm");
+===================================================== */
 
 if (productForm) {
 
@@ -1271,36 +1450,66 @@ if (productForm) {
                 );
 
                 return;
-
             }
 
 
             const name =
-                getElement("productName").value.trim();
+                document
+                    .getElementById(
+                        "productName"
+                    )
+                    .value
+                    .trim();
+
 
             const sku =
-                getElement("productSKU").value.trim();
+                document
+                    .getElementById(
+                        "productSKU"
+                    )
+                    .value
+                    .trim();
+
 
             const category =
-                getElement("productCategory").value;
+                document
+                    .getElementById(
+                        "productCategory"
+                    )
+                    .value;
+
 
             const quantity =
                 Number(
-                    getElement("productQuantity").value
+                    document
+                        .getElementById(
+                            "productQuantity"
+                        )
+                        .value
                 );
+
 
             const price =
                 Number(
-                    getElement("productPrice").value
+                    document
+                        .getElementById(
+                            "productPrice"
+                        )
+                        .value
                 );
+
 
             const threshold =
                 Number(
-                    getElement("productThreshold").value
+                    document
+                        .getElementById(
+                            "lowStockThreshold"
+                        )
+                        .value
                 );
 
 
-            /* Validation */
+            /* VALIDATION */
 
             if (!name) {
 
@@ -1309,7 +1518,6 @@ if (productForm) {
                 );
 
                 return;
-
             }
 
 
@@ -1320,7 +1528,6 @@ if (productForm) {
                 );
 
                 return;
-
             }
 
 
@@ -1331,39 +1538,36 @@ if (productForm) {
                 );
 
                 return;
-
             }
 
 
             if (
-                isNaN(quantity) ||
-                isNaN(price) ||
-                isNaN(threshold) ||
                 quantity < 0 ||
                 price < 0 ||
                 threshold < 0
             ) {
 
                 alert(
-                    "Please enter valid product values."
+                    "Values cannot be negative."
                 );
 
                 return;
-
             }
 
 
-            /* Duplicate SKU */
+            /* DUPLICATE SKU */
 
             const duplicate =
-                products.some(function(product) {
+                products.some(
+                    function(product) {
 
-                    return (
-                        product.sku.toLowerCase() ===
-                        sku.toLowerCase()
-                    );
-
-                });
+                        return (
+                            product.sku
+                                .toLowerCase() ===
+                            sku.toLowerCase()
+                        );
+                    }
+                );
 
 
             if (duplicate) {
@@ -1373,7 +1577,6 @@ if (productForm) {
                 );
 
                 return;
-
             }
 
 
@@ -1403,16 +1606,17 @@ if (productForm) {
                             currentUser.email,
 
                         createdAt:
-                            new Date().toLocaleString()
+                            new Date().toISOString()
 
                     }
                 );
 
 
                 await addActivity(
-                    "ADD PRODUCT",
-                    currentUser.email,
-                    "Added product: " + name
+                    "Added product: " +
+                    name +
+                    " by " +
+                    currentUser.email
                 );
 
 
@@ -1424,27 +1628,41 @@ if (productForm) {
                 productForm.reset();
 
 
-                /* Return threshold to 5 */
-
-                const thresholdInput =
-                    getElement("productThreshold");
-
-                if (thresholdInput) {
-                    thresholdInput.value = 5;
-                }
+                document
+                    .getElementById(
+                        "productQuantity"
+                    )
+                    .value = 0;
 
 
-                /* Go inventory */
+                document
+                    .getElementById(
+                        "productPrice"
+                    )
+                    .value = 0;
+
+
+                document
+                    .getElementById(
+                        "lowStockThreshold"
+                    )
+                    .value = 5;
+
+
+                const inventoryButton =
+                    document.querySelector(
+                        '[data-page="inventory"]'
+                    );
+
 
                 showPage(
                     "inventory",
-                    document.querySelector(
-                        '.nav-btn[data-page="inventory"]'
-                    )
+                    inventoryButton
                 );
 
+            }
 
-            } catch (errorObject) {
+            catch (errorObject) {
 
                 console.error(
                     "Add product error:",
@@ -1455,20 +1673,17 @@ if (productForm) {
                     "Unable to save product: " +
                     errorObject.message
                 );
-
             }
-
         }
     );
-
 }
 
 
-/* =========================================================
+/* =====================================================
    EDIT QUANTITY
-========================================================= */
+===================================================== */
 
-window.editQuantity = async function(id) {
+async function editQuantity(id) {
 
     if (!currentUser) {
 
@@ -1477,16 +1692,16 @@ window.editQuantity = async function(id) {
         );
 
         return;
-
     }
 
 
     const product =
-        products.find(function(item) {
+        products.find(
+            function(item) {
 
-            return item.id === id;
-
-        });
+                return item.id === id;
+            }
+        );
 
 
     if (!product) {
@@ -1496,7 +1711,6 @@ window.editQuantity = async function(id) {
         );
 
         return;
-
     }
 
 
@@ -1527,7 +1741,6 @@ window.editQuantity = async function(id) {
         );
 
         return;
-
     }
 
 
@@ -1546,28 +1759,24 @@ window.editQuantity = async function(id) {
                     currentUser.email,
 
                 updatedAt:
-                    new Date().toLocaleString()
+                    new Date().toISOString()
 
             }
         );
 
 
         await addActivity(
-            "UPDATE STOCK",
-            currentUser.email,
-            "Updated " +
+            "Updated stock: " +
             product.name +
-            " stock to " +
-            quantity
+            " to " +
+            quantity +
+            " by " +
+            currentUser.email
         );
 
+    }
 
-        alert(
-            "Stock updated successfully."
-        );
-
-
-    } catch (errorObject) {
+    catch (errorObject) {
 
         console.error(
             "Update error:",
@@ -1575,20 +1784,17 @@ window.editQuantity = async function(id) {
         );
 
         alert(
-            "Unable to update product: " +
-            errorObject.message
+            "Unable to update product."
         );
-
     }
+}
 
-};
 
-
-/* =========================================================
+/* =====================================================
    DELETE PRODUCT
-========================================================= */
+===================================================== */
 
-window.deleteProduct = async function(id) {
+async function deleteProduct(id) {
 
     if (!currentUser) {
 
@@ -1597,16 +1803,16 @@ window.deleteProduct = async function(id) {
         );
 
         return;
-
     }
 
 
     const product =
-        products.find(function(item) {
+        products.find(
+            function(item) {
 
-            return item.id === id;
-
-        });
+                return item.id === id;
+            }
+        );
 
 
     if (!product) {
@@ -1616,7 +1822,6 @@ window.deleteProduct = async function(id) {
         );
 
         return;
-
     }
 
 
@@ -1644,10 +1849,10 @@ window.deleteProduct = async function(id) {
 
 
         await addActivity(
-            "DELETE PRODUCT",
-            currentUser.email,
             "Deleted product: " +
-            product.name
+            product.name +
+            " by " +
+            currentUser.email
         );
 
 
@@ -1655,8 +1860,9 @@ window.deleteProduct = async function(id) {
             "Product deleted successfully."
         );
 
+    }
 
-    } catch (errorObject) {
+    catch (errorObject) {
 
         console.error(
             "Delete error:",
@@ -1664,151 +1870,178 @@ window.deleteProduct = async function(id) {
         );
 
         alert(
-            "Unable to delete product: " +
-            errorObject.message
+            "Unable to delete product."
         );
-
     }
+}
 
-};
 
-
-/* =========================================================
-   RENDER ACTIVITY LOGS
-========================================================= */
+/* =====================================================
+   ACTIVITY TABLE
+===================================================== */
 
 function renderActivities() {
 
+    const table =
+        document.getElementById(
+            "activityTableBody"
+        );
+
     const recentActivity =
-        getElement("recentActivity");
+        document.getElementById(
+            "recentActivity"
+        );
 
-    const activityTableBody =
-        getElement("activityTableBody");
+
+    if (!table && !recentActivity) {
+        return;
+    }
 
 
-    /* Dashboard recent activity */
+    if (activities.length === 0) {
 
-    if (recentActivity) {
+        if (table) {
 
-        if (activities.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td
+                        colspan="4"
+                        class="empty-table">
+                        No activity logs.
+                    </td>
+                </tr>
+            `;
+        }
+
+
+        if (recentActivity) {
 
             recentActivity.innerHTML = `
                 <p class="empty-message">
                     No recent activity.
                 </p>
             `;
+        }
 
-        } else {
+        return;
+    }
 
-            recentActivity.innerHTML =
-                activities
-                    .slice(0, 5)
-                    .map(function(activity) {
+
+    /* ACTIVITY TABLE */
+
+    if (table) {
+
+        table.innerHTML =
+            activities
+                .slice(0, 50)
+                .map(
+                    function(activity) {
 
                         return `
+                            <tr>
 
+                                <td>
+                                    ${escapeHTML(
+                                        activity.action ||
+                                        "Activity"
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHTML(
+                                        activity.user ||
+                                        "-"
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHTML(
+                                        activity.details ||
+                                        activity.message ||
+                                        ""
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${formatDate(
+                                        activity.time
+                                    )}
+                                </td>
+
+                            </tr>
+                        `;
+                    }
+                )
+                .join("");
+    }
+
+
+    /* RECENT ACTIVITY */
+
+    if (recentActivity) {
+
+        recentActivity.innerHTML =
+            activities
+                .slice(0, 5)
+                .map(
+                    function(activity) {
+
+                        return `
                             <div class="activity-item">
 
                                 📝
-
-                                <strong>
-                                    ${escapeHTML(
-                                        activity.action
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${escapeHTML(
-                                        activity.details
-                                    )}
-                                </span>
+                                ${escapeHTML(
+                                    activity.message
+                                )}
 
                                 <small>
-                                    ${escapeHTML(
+                                    ${formatDate(
                                         activity.time
                                     )}
                                 </small>
 
                             </div>
-
                         `;
-
-                    })
-                    .join("");
-
-        }
-
-    }
-
-
-    /* Activity table */
-
-    if (activityTableBody) {
-
-        if (activities.length === 0) {
-
-            activityTableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="empty-table">
-                        No activity logs.
-                    </td>
-                </tr>
-            `;
-
-            return;
-
-        }
-
-
-        activityTableBody.innerHTML =
-            activities
-                .map(function(activity) {
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                <strong>
-                                    ${escapeHTML(
-                                        activity.action
-                                    )}
-                                </strong>
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    activity.user
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    activity.details
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    activity.time
-                                )}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                })
+                    }
+                )
                 .join("");
-
     }
-
 }
 
 
-/* =========================================================
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+
+
+    return date.toLocaleString(
+        "en-PH",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+}
+
+
+/* =====================================================
    ESCAPE HTML
-========================================================= */
+===================================================== */
 
 function escapeHTML(value) {
 
@@ -1838,15 +2071,16 @@ function escapeHTML(value) {
             /'/g,
             "&#039;"
         );
-
 }
 
 
-/* =========================================================
+/* =====================================================
    FIREBASE ERROR MESSAGES
-========================================================= */
+===================================================== */
 
-function getFirebaseErrorMessage(errorObject) {
+function getFirebaseErrorMessage(
+    errorObject
+) {
 
     const code =
         errorObject.code || "";
@@ -1854,49 +2088,50 @@ function getFirebaseErrorMessage(errorObject) {
 
     switch (code) {
 
-        case "auth/invalid-api-key":
-
-            return "Firebase API key is invalid. Check your Firebase Web App configuration.";
-
-        case "auth/api-key-not-valid":
-
-            return "Firebase API key is not valid. Copy the API key from Firebase Project Settings.";
-
         case "auth/invalid-credential":
 
             return "Incorrect email or password.";
+
 
         case "auth/invalid-email":
 
             return "Invalid email address.";
 
+
         case "auth/user-not-found":
 
             return "Account does not exist.";
+
 
         case "auth/wrong-password":
 
             return "Incorrect password.";
 
+
         case "auth/email-already-in-use":
 
             return "This email is already registered.";
+
 
         case "auth/weak-password":
 
             return "Password must be at least 6 characters.";
 
+
         case "auth/too-many-requests":
 
             return "Too many attempts. Please try again later.";
+
 
         case "auth/network-request-failed":
 
             return "Network error. Check your internet connection.";
 
-        case "permission-denied":
 
-            return "Firebase permission denied. Check your Realtime Database Rules.";
+        case "auth/operation-not-allowed":
+
+            return "Email/Password authentication is not enabled in Firebase.";
+
 
         default:
 
@@ -1904,23 +2139,5 @@ function getFirebaseErrorMessage(errorObject) {
                 errorObject.message ||
                 "Something went wrong."
             );
-
     }
-
 }
-
-
-/* =========================================================
-   INITIAL PAGE
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        renderInventory();
-        renderActivities();
-        updateDashboard();
-
-    }
-);
