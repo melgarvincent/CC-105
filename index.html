@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -10,6 +11,7 @@
     <title>Arbees Bakery Shop</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -94,8 +96,9 @@
      REGISTER PAGE
 ===================================================== -->
 
-<section id="registerPage"
-         class="auth-page hidden">
+<section
+    id="registerPage"
+    class="auth-page hidden">
 
     <div class="auth-card">
 
@@ -197,8 +200,10 @@
      MAIN SYSTEM
 ===================================================== -->
 
-<section id="system"
-         class="system-page hidden">
+<section
+    id="systemPage"
+    class="system-page hidden">
+
 
     <!-- =================================================
          SIDEBAR
@@ -222,51 +227,47 @@
 
         </div>
 
+
         <nav>
 
             <button
                 class="nav-btn active"
                 data-page="dashboard">
-                🏠
-                <span>Dashboard</span>
+                🏠 Dashboard
             </button>
 
             <button
                 class="nav-btn"
                 data-page="inventory">
-                📦
-                <span>Inventory</span>
+                📦 Inventory
             </button>
 
             <button
                 class="nav-btn"
                 data-page="addProduct">
-                ➕
-                <span>Add Product</span>
+                ➕ Add Product
             </button>
 
             <button
                 class="nav-btn"
                 data-page="activity">
-                📋
-                <span>Activity Logs</span>
+                📋 Activity Logs
             </button>
 
             <button
                 class="nav-btn"
                 data-page="users">
-                👥
-                <span>Users</span>
+                👥 Users
             </button>
 
             <button
                 class="nav-btn"
                 data-page="settings">
-                ⚙️
-                <span>Settings</span>
+                ⚙️ Settings
             </button>
 
         </nav>
+
 
         <button
             id="logoutBtn"
@@ -282,6 +283,7 @@
     ================================================= -->
 
     <main class="main-content">
+
 
         <!-- MOBILE HEADER -->
 
@@ -327,23 +329,15 @@
 
             <div class="user-info">
 
-                <div class="user-info-left">
+                <div>
 
-                    <div class="user-avatar">
-                        👤
-                    </div>
+                    <strong id="currentUserName">
+                        User
+                    </strong>
 
-                    <div>
-
-                        <strong id="currentUserName">
-                            User
-                        </strong>
-
-                        <small id="currentUserEmail">
-                            user@email.com
-                        </small>
-
-                    </div>
+                    <small id="currentUserEmail">
+                        user@email.com
+                    </small>
 
                 </div>
 
@@ -357,6 +351,7 @@
             <!-- STATISTICS -->
 
             <div class="stats-grid">
+
 
                 <div class="stat-card">
 
@@ -447,6 +442,7 @@
             <!-- DASHBOARD GRID -->
 
             <div class="dashboard-grid">
+
 
                 <div class="panel">
 
@@ -644,9 +640,10 @@
 
                     <div class="form-grid">
 
+
                         <div class="form-group">
 
-                            <label for="productName">
+                            <label>
                                 Product Name
                             </label>
 
@@ -662,7 +659,7 @@
 
                         <div class="form-group">
 
-                            <label for="productSKU">
+                            <label>
                                 SKU
                             </label>
 
@@ -678,7 +675,7 @@
 
                         <div class="form-group">
 
-                            <label for="productCategory">
+                            <label>
                                 Category
                             </label>
 
@@ -717,7 +714,7 @@
 
                         <div class="form-group">
 
-                            <label for="productQuantity">
+                            <label>
                                 Quantity
                             </label>
 
@@ -734,7 +731,7 @@
 
                         <div class="form-group">
 
-                            <label for="productPrice">
+                            <label>
                                 Price
                             </label>
 
@@ -752,7 +749,7 @@
 
                         <div class="form-group">
 
-                            <label for="lowStockThreshold">
+                            <label>
                                 Low Stock Threshold
                             </label>
 
@@ -765,6 +762,7 @@
                             >
 
                         </div>
+
 
                     </div>
 
@@ -828,10 +826,12 @@
                     <thead>
 
                         <tr>
+
                             <th>Action</th>
                             <th>User</th>
                             <th>Details</th>
                             <th>Date & Time</th>
+
                         </tr>
 
                     </thead>
@@ -967,12 +967,13 @@
 
                 <p>
                     <strong>Platform:</strong>
-                    Responsive Web Application
+                    Mobile Responsive Web Application
                 </p>
 
             </div>
 
         </section>
+
 
     </main>
 
@@ -980,10 +981,11 @@
 
 
 <!-- =====================================================
-     FIREBASE JAVASCRIPT
+     FIREBASE SCRIPT
 ===================================================== -->
 
 <script type="module" src="script.js"></script>
 
 </body>
+
 </html>
