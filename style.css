@@ -387,27 +387,38 @@ form {
 }
 
 .user-avatar {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    background: #f2dfd0;
+    overflow: hidden;
+    background: #f3e2d4;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    flex-shrink: 0;
 }
 
-.user-mini strong {
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    font-size: 15px;
-    color: #2b1b12;
 }
 
-.user-mini small {
-    display: block;
-    margin-top: 3px;
-    color: #8a6f61;
-    font-size: 13px;
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.user-details strong {
+    font-size: 16px;
+    color: #2d211b;
+}
+
+.user-details small {
+    font-size: 14px;
+    color: #876d5c;
 }
 
 /* =========================================================
