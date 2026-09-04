@@ -7,10 +7,21 @@
 
     <title>Arbee's Bakery Shop</title>
 
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- YOUR CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
 
 <!-- =====================================================
      LOGIN PAGE
@@ -20,7 +31,6 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -36,7 +46,6 @@
         </div>
 
 
-        <!-- LOGIN FORM -->
         <form id="loginForm">
 
             <div class="form-group">
@@ -49,6 +58,7 @@
                     type="email"
                     id="loginEmail"
                     placeholder="Enter your email"
+                    autocomplete="email"
                     required
                 >
 
@@ -65,6 +75,7 @@
                     type="password"
                     id="loginPassword"
                     placeholder="Enter your password"
+                    autocomplete="current-password"
                     required
                 >
 
@@ -87,14 +98,13 @@
         </form>
 
 
-        <!-- REGISTER LINK -->
         <p class="switch-text">
 
             Don't have an account?
 
             <button
                 type="button"
-                onclick="showRegister()"
+                id="showRegisterBtn"
                 class="link-btn"
             >
                 Register
@@ -119,7 +129,6 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -135,7 +144,6 @@
         </div>
 
 
-        <!-- REGISTER FORM -->
         <form id="registerForm">
 
             <div class="form-group">
@@ -148,6 +156,7 @@
                     type="text"
                     id="registerName"
                     placeholder="Enter your full name"
+                    autocomplete="name"
                     required
                 >
 
@@ -164,6 +173,7 @@
                     type="email"
                     id="registerEmail"
                     placeholder="Enter your email"
+                    autocomplete="email"
                     required
                 >
 
@@ -180,6 +190,7 @@
                     type="password"
                     id="registerPassword"
                     placeholder="Create a password"
+                    autocomplete="new-password"
                     required
                 >
 
@@ -196,6 +207,7 @@
                     type="password"
                     id="confirmPassword"
                     placeholder="Confirm your password"
+                    autocomplete="new-password"
                     required
                 >
 
@@ -218,14 +230,13 @@
         </form>
 
 
-        <!-- LOGIN LINK -->
         <p class="switch-text">
 
             Already have an account?
 
             <button
                 type="button"
-                onclick="showLogin()"
+                id="showLoginBtn"
                 class="link-btn"
             >
                 Login
@@ -240,7 +251,7 @@
 
 
 <!-- =====================================================
-     SYSTEM PAGE
+     MAIN SYSTEM
 ===================================================== -->
 
 <section
@@ -248,13 +259,16 @@
     class="system hidden"
 >
 
+
     <!-- =================================================
          SIDEBAR
     ================================================== -->
 
     <aside class="sidebar">
 
-        <!-- SIDEBAR LOGO -->
+
+        <!-- LOGO -->
+
         <div class="sidebar-logo">
 
             <div class="logo-icon small">
@@ -266,7 +280,7 @@
 
             </div>
 
-            <div>
+            <div class="sidebar-brand">
 
                 <h2>Arbees</h2>
 
@@ -278,56 +292,89 @@
 
 
         <!-- NAVIGATION -->
-        <nav>
+
+        <nav class="sidebar-nav">
 
             <button
+                type="button"
                 class="nav-btn active"
                 data-page="dashboard"
             >
-                🏠 Dashboard
+                <span>🏠</span>
+                <span>Dashboard</span>
             </button>
 
 
             <button
+                type="button"
                 class="nav-btn"
                 data-page="inventory"
             >
-                📦 Inventory
+                <span>📦</span>
+                <span>Inventory</span>
             </button>
 
 
             <button
+                type="button"
                 class="nav-btn"
                 data-page="addProduct"
             >
-                ➕ Add Product
+                <span>➕</span>
+                <span>Add Product</span>
             </button>
 
 
             <button
+                type="button"
                 class="nav-btn"
                 data-page="activity"
             >
-                📋 Activity Logs
+                <span>📋</span>
+                <span>Activity Logs</span>
             </button>
 
 
             <button
+                type="button"
                 class="nav-btn"
                 data-page="users"
             >
-                👤 My Account
+                <span>👤</span>
+                <span>My Account</span>
             </button>
 
         </nav>
 
 
+        <!-- SIDEBAR DECORATION -->
+
+        <div class="sidebar-decoration">
+
+            <div class="bread-decoration">
+                🥖
+            </div>
+
+            <div class="wheat-decoration">
+                🌾
+            </div>
+
+            <div class="bread-small">
+                🥐 🍞
+            </div>
+
+        </div>
+
+
         <!-- LOGOUT -->
+
         <button
+            type="button"
             id="logoutBtn"
             class="logout-btn"
         >
-            🚪 Logout
+            <span>🚪</span>
+            Logout
         </button>
 
     </aside>
@@ -340,45 +387,56 @@
 
     <main class="main-content">
 
-        <!-- TOPBAR -->
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
         <header class="topbar">
 
-            <div>
+            <div class="topbar-title">
 
                 <h1 id="pageTitle">
                     Dashboard
                 </h1>
 
                 <p>
-                    Welcome to Arbees Bakery Shop
+                    Welcome to Arbee's Bakery Shop 🥖
                 </p>
 
             </div>
 
 
-<!-- USER MINI PROFILE -->
-<div class="user-mini">
+            <!-- USER MINI PROFILE -->
 
-    <div class="user-avatar">
-        <img
-            src="MY PICTURE.jpg"
-            alt="Profile Picture"
-        >
-    </div>
+            <div class="user-mini">
 
-    <div class="user-details">
+                <div class="user-avatar">
 
-        <strong id="headerUserName">
-            User
-        </strong>
+                    <img
+                        src="MY PICTURE.jpg"
+                        alt="Profile Picture"
+                    >
 
-        <small id="headerUserEmail">
-            user@email.com
-        </small>
+                </div>
 
-    </div>
+                <div class="user-details">
 
-</div>
+                    <strong id="headerUserName">
+                        User
+                    </strong>
+
+                    <small id="headerUserEmail">
+                        user@email.com
+                    </small>
+
+                </div>
+
+                <span class="profile-arrow">
+                   ⌄
+                </span>
+
+            </div>
 
         </header>
 
@@ -393,17 +451,18 @@
             class="page"
         >
 
-            <!-- WELCOME -->
+
+            <!-- WELCOME CARD -->
+
             <div class="welcome-card">
 
-                <div>
+                <div class="welcome-content">
 
                     <h2>
-                        Welcome,
+                        Good day,
                         <span id="currentUserName">
                             User
-                        </span>
-                        ! 👋
+                        </span>! 👋
                     </h2>
 
                     <p>
@@ -420,21 +479,45 @@
                     STAFF
                 </div>
 
+
+                <!-- BAKERY DECORATION -->
+
+                <div class="welcome-decoration">
+
+                    <span class="decor-cloud">
+                        ☁️
+                    </span>
+
+                    <span class="decor-bakery">
+                        🏪
+                    </span>
+
+                    <span class="decor-bread">
+                        🥖 🥐
+                    </span>
+
+                </div>
+
             </div>
 
 
 
-            <!-- STATISTICS -->
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
             <div class="stats-grid">
 
+
                 <!-- TOTAL PRODUCTS -->
-                <div class="stat-card">
+
+                <div class="stat-card purple">
 
                     <div class="stat-icon">
                         📦
                     </div>
 
-                    <div>
+                    <div class="stat-info">
 
                         <span>
                             Total Products
@@ -444,6 +527,14 @@
                             0
                         </h2>
 
+                        <small>
+                            Products in inventory
+                        </small>
+
+                    </div>
+
+                    <div class="stat-chart">
+                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -451,13 +542,14 @@
 
 
                 <!-- TOTAL STOCK -->
-                <div class="stat-card">
+
+                <div class="stat-card green">
 
                     <div class="stat-icon">
                         📊
                     </div>
 
-                    <div>
+                    <div class="stat-info">
 
                         <span>
                             Total Stock
@@ -467,6 +559,14 @@
                             0
                         </h2>
 
+                        <small>
+                            Available items
+                        </small>
+
+                    </div>
+
+                    <div class="stat-chart">
+                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -474,13 +574,14 @@
 
 
                 <!-- LOW STOCK -->
-                <div class="stat-card">
+
+                <div class="stat-card yellow">
 
                     <div class="stat-icon">
                         ⚠️
                     </div>
 
-                    <div>
+                    <div class="stat-info">
 
                         <span>
                             Low Stock
@@ -490,6 +591,14 @@
                             0
                         </h2>
 
+                        <small>
+                            Needs restocking
+                        </small>
+
+                    </div>
+
+                    <div class="stat-chart">
+                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -497,13 +606,14 @@
 
 
                 <!-- ESTIMATED VALUE -->
-                <div class="stat-card">
+
+                <div class="stat-card blue">
 
                     <div class="stat-icon">
-                        💰
+                        ₱
                     </div>
 
-                    <div>
+                    <div class="stat-info">
 
                         <span>
                             Estimated Value
@@ -513,6 +623,14 @@
                             ₱0.00
                         </h2>
 
+                        <small>
+                            Total inventory value
+                        </small>
+
+                    </div>
+
+                    <div class="stat-chart">
+                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -521,17 +639,38 @@
 
 
 
-            <!-- DASHBOARD GRID -->
+            <!-- =================================================
+                 DASHBOARD GRID
+            ================================================== -->
+
             <div class="dashboard-grid">
 
+
                 <!-- LOW STOCK PRODUCTS -->
+
                 <div class="content-card">
 
                     <div class="card-header">
 
-                        <h3>
-                            ⚠️ Low Stock Products
-                        </h3>
+                        <div>
+
+                            <h3>
+                                ⚠️ Low Stock Products
+                            </h3>
+
+                            <p>
+                                Products that need attention
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="view-btn"
+                            onclick="openPage('inventory')"
+                        >
+                            View All
+                        </button>
 
                     </div>
 
@@ -549,13 +688,30 @@
 
 
                 <!-- RECENT ACTIVITY -->
+
                 <div class="content-card">
 
                     <div class="card-header">
 
-                        <h3>
-                            📋 Recent Activity
-                        </h3>
+                        <div>
+
+                            <h3>
+                                📋 Recent Activity
+                            </h3>
+
+                            <p>
+                                Latest system activities
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="view-btn purple-btn"
+                            onclick="openPage('activity')"
+                        >
+                            View All
+                        </button>
 
                     </div>
 
@@ -601,6 +757,7 @@
 
 
                 <button
+                    type="button"
                     id="inventoryAddBtn"
                     class="primary-btn small-btn"
                 >
@@ -611,7 +768,8 @@
 
 
 
-            <!-- SEARCH -->
+            <!-- SEARCH AND FILTER -->
+
             <div class="filter-bar">
 
                 <input
@@ -654,6 +812,7 @@
 
 
             <!-- INVENTORY TABLE -->
+
             <div class="table-card">
 
                 <div class="table-wrapper">
@@ -698,6 +857,7 @@
 
 
                         <tbody id="inventoryTableBody">
+
                         </tbody>
 
                     </table>
@@ -743,7 +903,9 @@
 
                     <div class="form-grid">
 
+
                         <!-- PRODUCT NAME -->
+
                         <div class="form-group">
 
                             <label for="productName">
@@ -762,6 +924,7 @@
 
 
                         <!-- SKU -->
+
                         <div class="form-group">
 
                             <label for="productSKU">
@@ -780,6 +943,7 @@
 
 
                         <!-- CATEGORY -->
+
                         <div class="form-group">
 
                             <label for="productCategory">
@@ -822,6 +986,7 @@
 
 
                         <!-- QUANTITY -->
+
                         <div class="form-group">
 
                             <label for="productQuantity">
@@ -841,6 +1006,7 @@
 
 
                         <!-- PRICE -->
+
                         <div class="form-group">
 
                             <label for="productPrice">
@@ -861,6 +1027,7 @@
 
 
                         <!-- LOW STOCK THRESHOLD -->
+
                         <div class="form-group">
 
                             <label for="lowStockThreshold">
@@ -882,6 +1049,7 @@
 
 
                     <!-- MESSAGE -->
+
                     <p
                         id="productMessage"
                         class="success-message"
@@ -889,7 +1057,8 @@
 
 
 
-                    <!-- BUTTON -->
+                    <!-- SUBMIT -->
+
                     <button
                         type="submit"
                         class="primary-btn"
@@ -964,6 +1133,7 @@
 
 
                         <tbody id="activityTableBody">
+
                         </tbody>
 
                     </table>
@@ -1004,61 +1174,85 @@
 
 
             <!-- ACCOUNT CARD -->
+
             <div class="account-card">
 
-                <!-- PROFILE IMAGE -->
-                <div class="profile-image">
 
-                    <img
-                        src="MY PICTURE.jpg"
-                        alt="My Profile Picture"
-                    >
+                <!-- PROFILE -->
+
+                <div class="profile-section">
+
+                    <div class="profile-image">
+
+                        <img
+                            src="MY PICTURE.jpg"
+                            alt="My Profile Picture"
+                        >
+
+                    </div>
+
+
+                    <div class="profile-heading">
+
+                        <h2 id="profileName">
+                            User
+                        </h2>
+
+                        <p id="profileEmail">
+                            user@email.com
+                        </p>
+
+                        <span
+                            id="profileRole"
+                            class="role-badge"
+                        >
+                            STAFF
+                        </span>
+
+                    </div>
 
                 </div>
 
 
 
-                <!-- ACCOUNT INFORMATION -->
+                <!-- ACCOUNT DETAILS -->
+
                 <div class="account-info">
 
-                    <!-- NAME -->
-                    <div>
+
+                    <div class="account-detail">
 
                         <span>
-                            Name
+                            Full Name
                         </span>
 
-                        <strong id="profileName">
+                        <strong id="accountName">
                             User
                         </strong>
 
                     </div>
 
 
-
-                    <!-- EMAIL -->
-                    <div>
+                    <div class="account-detail">
 
                         <span>
-                            Email
+                            Email Address
                         </span>
 
-                        <strong id="profileEmail">
+                        <strong id="accountEmail">
                             user@email.com
                         </strong>
 
                     </div>
 
 
-
-                    <!-- ROLE -->
-                    <div>
+                    <div class="account-detail">
 
                         <span>
-                            Role
+                            Account Role
                         </span>
 
-                        <strong id="profileRole">
+                        <strong>
                             STAFF
                         </strong>
 
@@ -1080,10 +1274,59 @@
      JAVASCRIPT
 ===================================================== -->
 
-<script
-    type="module"
-    src="script.js"
-></script>
+<script type="module">
+
+    /*
+     * Import your main Firebase/system script.
+     */
+    import "./script.js";
+
+
+    /*
+     * These functions make the Login/Register buttons
+     * work even though script.js is a module.
+     */
+
+    window.showRegister = function () {
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("registerPage")
+            .classList.remove("hidden");
+
+    };
+
+
+    window.showLogin = function () {
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("loginPage")
+            .classList.remove("hidden");
+
+    };
+
+
+    /*
+     * Login/Register button events
+     */
+
+    document
+        .getElementById("showRegisterBtn")
+        .addEventListener("click", window.showRegister);
+
+
+    document
+        .getElementById("showLoginBtn")
+        .addEventListener("click", window.showLogin);
+
+</script>
 
 </body>
 </html>
