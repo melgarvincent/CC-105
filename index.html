@@ -1,52 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Arbees Bakery Shop</title>
+    <title>Arbee's Bakery Shop</title>
 
-    <!-- Poppins Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- =========================
+<!-- =====================================================
      LOGIN PAGE
-========================= -->
+===================================================== -->
 
-<div id="loginPage" class="auth-page">
+<section id="loginPage" class="auth-page">
 
     <div class="auth-card">
 
-        <img
-            src="arbees-bakeshop-logo1.png"
-            alt="Arbees Bakery Shop"
-            class="auth-logo"
-        >
+        <!-- LOGO -->
+        <div class="logo-box">
 
-        <h1>Welcome Back!</h1>
+            <img
+                src="arbees-bakeshop-logo1.png"
+                alt="Arbee's Bakeshop Logo"
+                class="auth-logo"
+            >
 
-        <p class="auth-subtitle">
-            Login to your Arbees Bakery Shop account
-        </p>
+            <h1>Arbee's Bakery</h1>
 
+            <p>Inventory Management System</p>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
         <form id="loginForm">
 
-            <div class="input-group">
+            <div class="form-group">
 
                 <label for="loginEmail">
-                    Email Address
+                    Email
                 </label>
 
                 <input
@@ -58,7 +54,8 @@
 
             </div>
 
-            <div class="input-group">
+
+            <div class="form-group">
 
                 <label for="loginPassword">
                     Password
@@ -73,7 +70,12 @@
 
             </div>
 
-            <p id="loginError" class="error-message"></p>
+
+            <p
+                id="loginError"
+                class="error-message"
+            ></p>
+
 
             <button
                 type="submit"
@@ -84,14 +86,16 @@
 
         </form>
 
-        <p class="auth-switch">
+
+        <!-- REGISTER LINK -->
+        <p class="switch-text">
 
             Don't have an account?
 
             <button
                 type="button"
-                class="link-btn"
                 onclick="showRegister()"
+                class="link-btn"
             >
                 Register
             </button>
@@ -100,32 +104,41 @@
 
     </div>
 
-</div>
+</section>
 
 
-<!-- =========================
+
+<!-- =====================================================
      REGISTER PAGE
-========================= -->
+===================================================== -->
 
-<div id="registerPage" class="auth-page hidden">
+<section
+    id="registerPage"
+    class="auth-page hidden"
+>
 
     <div class="auth-card">
 
-        <img
-            src="arbees-bakeshop-logo1.png"
-            alt="Arbees Bakery Shop"
-            class="auth-logo"
-        >
+        <!-- LOGO -->
+        <div class="logo-box">
 
-        <h1>Create Account</h1>
+            <img
+                src="arbees-bakeshop-logo1.png"
+                alt="Arbee's Bakeshop Logo"
+                class="auth-logo"
+            >
 
-        <p class="auth-subtitle">
-            Register your Arbees Bakery Shop account
-        </p>
+            <h1>Create Account</h1>
 
+            <p>Arbees Bakeshop</p>
+
+        </div>
+
+
+        <!-- REGISTER FORM -->
         <form id="registerForm">
 
-            <div class="input-group">
+            <div class="form-group">
 
                 <label for="registerName">
                     Full Name
@@ -140,10 +153,11 @@
 
             </div>
 
-            <div class="input-group">
+
+            <div class="form-group">
 
                 <label for="registerEmail">
-                    Email Address
+                    Email
                 </label>
 
                 <input
@@ -155,7 +169,8 @@
 
             </div>
 
-            <div class="input-group">
+
+            <div class="form-group">
 
                 <label for="registerPassword">
                     Password
@@ -170,7 +185,8 @@
 
             </div>
 
-            <div class="input-group">
+
+            <div class="form-group">
 
                 <label for="confirmPassword">
                     Confirm Password
@@ -185,25 +201,32 @@
 
             </div>
 
-            <p id="registerError" class="error-message"></p>
+
+            <p
+                id="registerError"
+                class="error-message"
+            ></p>
+
 
             <button
                 type="submit"
                 class="primary-btn"
             >
-                Create Account
+                Register
             </button>
 
         </form>
 
-        <p class="auth-switch">
+
+        <!-- LOGIN LINK -->
+        <p class="switch-text">
 
             Already have an account?
 
             <button
                 type="button"
-                class="link-btn"
                 onclick="showLogin()"
+                class="link-btn"
             >
                 Login
             </button>
@@ -212,34 +235,38 @@
 
     </div>
 
-</div>
+</section>
 
 
-<!-- =========================
-     MAIN SYSTEM
-========================= -->
 
-<div id="systemPage" class="system-page hidden">
+<!-- =====================================================
+     SYSTEM PAGE
+===================================================== -->
 
+<section
+    id="systemPage"
+    class="system hidden"
+>
 
-    <!-- =========================
+    <!-- =================================================
          SIDEBAR
-    ========================= -->
+    ================================================== -->
 
     <aside class="sidebar">
 
+        <!-- SIDEBAR LOGO -->
         <div class="sidebar-logo">
 
-            <div class="logo-icon">
+            <div class="logo-icon small">
 
                 <img
                     src="arbees-bakeshop-logo1.png"
-                    alt="Arbees Logo"
+                    alt="Arbees Bakeshop Logo"
                 >
 
             </div>
 
-            <div class="logo-text">
+            <div>
 
                 <h2>Arbees</h2>
 
@@ -251,164 +278,132 @@
 
 
         <!-- NAVIGATION -->
-
-        <nav class="sidebar-nav">
+        <nav>
 
             <button
-                class="nav-item active"
+                class="nav-btn active"
                 data-page="dashboard"
             >
-                <span class="nav-icon">⌂</span>
-                <span>Dashboard</span>
+                🏠 Dashboard
             </button>
 
+
             <button
-                class="nav-item"
+                class="nav-btn"
                 data-page="inventory"
             >
-                <span class="nav-icon">📦</span>
-                <span>Inventory</span>
+                📦 Inventory
             </button>
 
+
             <button
-                class="nav-item"
+                class="nav-btn"
                 data-page="addProduct"
             >
-                <span class="nav-icon">＋</span>
-                <span>Add Product</span>
+                ➕ Add Product
             </button>
 
+
             <button
-                class="nav-item"
+                class="nav-btn"
                 data-page="activity"
             >
-                <span class="nav-icon">▣</span>
-                <span>Activity Logs</span>
+                📋 Activity Logs
             </button>
 
+
             <button
-                class="nav-item"
+                class="nav-btn"
                 data-page="users"
             >
-                <span class="nav-icon">♙</span>
-                <span>My Account</span>
+                👤 My Account
             </button>
 
         </nav>
 
 
-        <!-- SIDEBAR DECORATION -->
-
-        <div class="sidebar-decoration">
-
-            <div class="bread">
-                🥖 🍞 🥐
-            </div>
-
-            <div class="wheat">
-                🌾 🌾
-            </div>
-
-            <div class="cupcake">
-                🧁
-            </div>
-
-        </div>
-
-
         <!-- LOGOUT -->
-
         <button
             id="logoutBtn"
             class="logout-btn"
         >
-            <span>↪</span>
-            Logout
+            🚪 Logout
         </button>
 
     </aside>
 
 
-    <!-- =========================
+
+    <!-- =================================================
          MAIN CONTENT
-    ========================= -->
+    ================================================== -->
 
     <main class="main-content">
 
+        <!-- TOPBAR -->
+        <header class="topbar">
 
-        <!-- =========================
-             DASHBOARD
-        ========================= -->
+            <div>
 
-        <section
-            id="dashboard"
-            class="page-section"
-        >
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
 
-            <!-- HEADER -->
-
-            <div class="dashboard-header">
-
-                <div>
-
-                    <h1>
-                        Dashboard
-                    </h1>
-
-                    <p>
-                        Welcome to Arbees Bakery Shop 🥖
-                    </p>
-
-                </div>
-
-
-                <!-- PROFILE -->
-
-                <div class="header-profile">
-
-                    <div class="header-avatar">
-
-                        <img
-                            src="profile.jpg"
-                            alt="Profile"
-                        >
-
-                    </div>
-
-                    <div class="header-user-info">
-
-                        <strong id="headerUserName">
-                            User
-                        </strong>
-
-                        <span id="headerUserEmail">
-                            user@email.com
-                        </span>
-
-                    </div>
-
-                    <span class="profile-arrow">
-                        ⌄
-                    </span>
-
-                </div>
+                <p>
+                    Welcome to Arbees Bakery Shop
+                </p>
 
             </div>
 
 
-            <!-- =========================
-                 WELCOME BANNER
-            ========================= -->
+<!-- USER MINI PROFILE -->
+<div class="user-mini">
 
-            <div class="welcome-banner">
+    <div class="user-avatar">
+        <img
+            src="MY PICTURE.jpg"
+            alt="Profile Picture"
+        >
+    </div>
 
-                <div class="welcome-text">
+    <div class="user-details">
+
+        <strong id="headerUserName">
+            User
+        </strong>
+
+        <small id="headerUserEmail">
+            user@email.com
+        </small>
+
+    </div>
+
+</div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section
+            id="dashboardPage"
+            class="page"
+        >
+
+            <!-- WELCOME -->
+            <div class="welcome-card">
+
+                <div>
 
                     <h2>
-                        Good day,
-                        <span id="dashboardUserName">
+                        Welcome,
+                        <span id="currentUserName">
                             User
-                        </span>! 👋
+                        </span>
+                        ! 👋
                     </h2>
 
                     <p>
@@ -418,45 +413,28 @@
                 </div>
 
 
-                <div class="bakery-decoration">
-
-                    <div class="bakery-building">
-
-                        <div class="bakery-sign">
-                            ARBEE'S
-                        </div>
-
-                        <div class="bakery-awning">
-                            ▾ ▾ ▾ ▾ ▾
-                        </div>
-
-                        <div class="bakery-window">
-                            🍞 🥐 🍰
-                        </div>
-
-                    </div>
-
+                <div
+                    class="role-badge"
+                    id="userRole"
+                >
+                    STAFF
                 </div>
 
             </div>
 
 
-            <!-- =========================
-                 STAT CARDS
-            ========================= -->
 
+            <!-- STATISTICS -->
             <div class="stats-grid">
 
-
                 <!-- TOTAL PRODUCTS -->
-
-                <div class="stat-card purple-card">
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         📦
                     </div>
 
-                    <div class="stat-content">
+                    <div>
 
                         <span>
                             Total Products
@@ -466,33 +444,20 @@
                             0
                         </h2>
 
-                        <small class="stat-positive">
-                            ↗ Products in inventory
-                        </small>
-
-                    </div>
-
-                    <div class="mini-chart purple-chart">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
 
                 </div>
 
 
-                <!-- TOTAL STOCK -->
 
-                <div class="stat-card green-card">
+                <!-- TOTAL STOCK -->
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         📊
                     </div>
 
-                    <div class="stat-content">
+                    <div>
 
                         <span>
                             Total Stock
@@ -502,33 +467,20 @@
                             0
                         </h2>
 
-                        <small class="stat-positive">
-                            ↗ Available items
-                        </small>
-
-                    </div>
-
-                    <div class="mini-chart green-chart">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
 
                 </div>
 
 
-                <!-- LOW STOCK -->
 
-                <div class="stat-card yellow-card">
+                <!-- LOW STOCK -->
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         ⚠️
                     </div>
 
-                    <div class="stat-content">
+                    <div>
 
                         <span>
                             Low Stock
@@ -538,33 +490,20 @@
                             0
                         </h2>
 
-                        <small class="stat-warning">
-                            Needs restocking
-                        </small>
-
-                    </div>
-
-                    <div class="mini-chart yellow-chart">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
 
                 </div>
 
 
-                <!-- ESTIMATED VALUE -->
 
-                <div class="stat-card blue-card">
+                <!-- ESTIMATED VALUE -->
+                <div class="stat-card">
 
                     <div class="stat-icon">
-                        ₱
+                        💰
                     </div>
 
-                    <div class="stat-content">
+                    <div>
 
                         <span>
                             Estimated Value
@@ -574,19 +513,6 @@
                             ₱0.00
                         </h2>
 
-                        <small class="stat-blue">
-                            Total inventory value
-                        </small>
-
-                    </div>
-
-                    <div class="mini-chart blue-chart">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
 
                 </div>
@@ -594,119 +520,51 @@
             </div>
 
 
-            <!-- =========================
-                 BOTTOM PANELS
-            ========================= -->
 
-            <div class="dashboard-columns">
+            <!-- DASHBOARD GRID -->
+            <div class="dashboard-grid">
 
+                <!-- LOW STOCK PRODUCTS -->
+                <div class="content-card">
 
-                <!-- LOW STOCK -->
+                    <div class="card-header">
 
-                <div class="dashboard-panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-title">
-
-                            <span class="title-icon warning-icon">
-                                ⚠
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Low Stock Products
-                                </h3>
-
-                                <p>
-                                    Products that need attention
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <button
-                            class="view-all-btn red-btn"
-                            onclick="openPage('inventory')"
-                        >
-                            View all
-                        </button>
+                        <h3>
+                            ⚠️ Low Stock Products
+                        </h3>
 
                     </div>
 
 
-                    <div
-                        id="lowStockList"
-                        class="low-stock-list"
-                    >
+                    <div id="lowStockList">
 
-                        <div class="empty-dashboard">
-
-                            <span>📦</span>
-
-                            <p>
-                                No low stock products
-                            </p>
-
-                        </div>
+                        <p class="empty-text">
+                            No low stock products.
+                        </p>
 
                     </div>
 
                 </div>
 
 
+
                 <!-- RECENT ACTIVITY -->
+                <div class="content-card">
 
-                <div class="dashboard-panel">
+                    <div class="card-header">
 
-                    <div class="panel-header">
-
-                        <div class="panel-title">
-
-                            <span class="title-icon activity-icon">
-                                ▣
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Recent Activity
-                                </h3>
-
-                                <p>
-                                    Latest system activities
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <button
-                            class="view-all-btn purple-btn"
-                            onclick="openPage('activity')"
-                        >
-                            View all
-                        </button>
+                        <h3>
+                            📋 Recent Activity
+                        </h3>
 
                     </div>
 
 
-                    <div
-                        id="recentActivity"
-                        class="activity-list"
-                    >
+                    <div id="recentActivity">
 
-                        <div class="empty-dashboard">
-
-                            <span>📝</span>
-
-                            <p>
-                                No recent activity
-                            </p>
-
-                        </div>
+                        <p class="empty-text">
+                            No recent activity.
+                        </p>
 
                     </div>
 
@@ -717,28 +575,30 @@
         </section>
 
 
-        <!-- =========================
-             INVENTORY
-        ========================= -->
+
+        <!-- =================================================
+             INVENTORY PAGE
+        ================================================== -->
 
         <section
-            id="inventory"
-            class="page-section"
+            id="inventoryPage"
+            class="page hidden"
         >
 
-            <div class="page-title">
+            <div class="page-actions">
 
                 <div>
 
-                    <h1>
+                    <h2>
                         Inventory
-                    </h1>
+                    </h2>
 
                     <p>
-                        Manage your bakery products
+                        Manage your bakery products.
                     </p>
 
                 </div>
+
 
                 <button
                     id="inventoryAddBtn"
@@ -750,7 +610,9 @@
             </div>
 
 
-            <div class="inventory-toolbar">
+
+            <!-- SEARCH -->
+            <div class="filter-bar">
 
                 <input
                     type="text"
@@ -758,9 +620,10 @@
                     placeholder="🔍 Search product..."
                 >
 
+
                 <select id="categoryFilter">
 
-                    <option value="">
+                    <option value="all">
                         All Categories
                     </option>
 
@@ -776,8 +639,12 @@
                         Pastry
                     </option>
 
-                    <option value="Cookie">
-                        Cookie
+                    <option value="Cookies">
+                        Cookies
+                    </option>
+
+                    <option value="Others">
+                        Others
                     </option>
 
                 </select>
@@ -785,57 +652,89 @@
             </div>
 
 
-            <div class="table-container">
 
-                <table class="inventory-table">
+            <!-- INVENTORY TABLE -->
+            <div class="table-card">
 
-                    <thead>
+                <div class="table-wrapper">
 
-                        <tr>
-                            <th>Product</th>
-                            <th>SKU</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+                    <table>
 
-                    </thead>
+                        <thead>
 
-                    <tbody id="inventoryTableBody"></tbody>
+                            <tr>
 
-                </table>
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Price
+                                </th>
+
+                                <th>
+                                    Stock Status
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="inventoryTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- =========================
-             ADD PRODUCT
-        ========================= -->
+
+        <!-- =================================================
+             ADD PRODUCT PAGE
+        ================================================== -->
 
         <section
-            id="addProduct"
-            class="page-section"
+            id="addProductPage"
+            class="page hidden"
         >
 
-            <div class="page-title">
+            <div class="page-actions">
 
                 <div>
 
-                    <h1>
+                    <h2>
                         Add Product
-                    </h1>
+                    </h2>
 
                     <p>
-                        Add a new bakery product
+                        Add a new bakery product.
                     </p>
 
                 </div>
 
             </div>
+
 
 
             <div class="form-card">
@@ -844,41 +743,46 @@
 
                     <div class="form-grid">
 
-                        <div class="input-group">
+                        <!-- PRODUCT NAME -->
+                        <div class="form-group">
 
-                            <label>
+                            <label for="productName">
                                 Product Name
                             </label>
 
                             <input
                                 type="text"
                                 id="productName"
-                                placeholder="Chocolate Cake"
+                                placeholder="Example: Chocolate Cake"
                                 required
                             >
 
                         </div>
 
 
-                        <div class="input-group">
 
-                            <label>
+                        <!-- SKU -->
+                        <div class="form-group">
+
+                            <label for="productSKU">
                                 SKU
                             </label>
 
                             <input
                                 type="text"
                                 id="productSKU"
-                                placeholder="CAKE-001"
+                                placeholder="Example: CAKE-001"
                                 required
                             >
 
                         </div>
 
 
-                        <div class="input-group">
 
-                            <label>
+                        <!-- CATEGORY -->
+                        <div class="form-group">
+
+                            <label for="productCategory">
                                 Category
                             </label>
 
@@ -903,8 +807,12 @@
                                     Pastry
                                 </option>
 
-                                <option value="Cookie">
-                                    Cookie
+                                <option value="Cookies">
+                                    Cookies
+                                </option>
+
+                                <option value="Others">
+                                    Others
                                 </option>
 
                             </select>
@@ -912,9 +820,11 @@
                         </div>
 
 
-                        <div class="input-group">
 
-                            <label>
+                        <!-- QUANTITY -->
+                        <div class="form-group">
+
+                            <label for="productQuantity">
                                 Quantity
                             </label>
 
@@ -922,15 +832,18 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
+                                value="0"
                                 required
                             >
 
                         </div>
 
 
-                        <div class="input-group">
 
-                            <label>
+                        <!-- PRICE -->
+                        <div class="form-group">
+
+                            <label for="productPrice">
                                 Price
                             </label>
 
@@ -939,15 +852,18 @@
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
+                                placeholder="0.00"
                                 required
                             >
 
                         </div>
 
 
-                        <div class="input-group">
 
-                            <label>
+                        <!-- LOW STOCK THRESHOLD -->
+                        <div class="form-group">
+
+                            <label for="lowStockThreshold">
                                 Low Stock Threshold
                             </label>
 
@@ -964,12 +880,16 @@
                     </div>
 
 
+
+                    <!-- MESSAGE -->
                     <p
                         id="productMessage"
                         class="success-message"
                     ></p>
 
 
+
+                    <!-- BUTTON -->
                     <button
                         type="submit"
                         class="primary-btn"
@@ -984,25 +904,26 @@
         </section>
 
 
-        <!-- =========================
+
+        <!-- =================================================
              ACTIVITY LOGS
-        ========================= -->
+        ================================================== -->
 
         <section
-            id="activity"
-            class="page-section"
+            id="activityPage"
+            class="page hidden"
         >
 
-            <div class="page-title">
+            <div class="page-actions">
 
                 <div>
 
-                    <h1>
+                    <h2>
                         Activity Logs
-                    </h1>
+                    </h2>
 
                     <p>
-                        Track recent system activities
+                        View recent system activities.
                     </p>
 
                 </div>
@@ -1010,49 +931,70 @@
             </div>
 
 
-            <div class="table-container">
 
-                <table class="inventory-table">
+            <div class="table-card">
 
-                    <thead>
+                <div class="table-wrapper">
 
-                        <tr>
-                            <th>Date & Time</th>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Details</th>
-                        </tr>
+                    <table>
 
-                    </thead>
+                        <thead>
 
-                    <tbody id="activityTableBody"></tbody>
+                            <tr>
 
-                </table>
+                                <th>
+                                    Date & Time
+                                </th>
+
+                                <th>
+                                    User
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                                <th>
+                                    Details
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="activityTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- =========================
+
+        <!-- =================================================
              MY ACCOUNT
-        ========================= -->
+        ================================================== -->
 
         <section
-            id="users"
-            class="page-section"
+            id="usersPage"
+            class="page hidden"
         >
 
-            <div class="page-title">
+            <div class="page-actions">
 
                 <div>
 
-                    <h1>
+                    <h2>
                         My Account
-                    </h1>
+                    </h2>
 
                     <p>
-                        Your profile information
+                        Your account information.
                     </p>
 
                 </div>
@@ -1060,77 +1002,63 @@
             </div>
 
 
+
+            <!-- ACCOUNT CARD -->
             <div class="account-card">
 
-                <div class="account-profile">
+                <!-- PROFILE IMAGE -->
+                <div class="profile-image">
 
-                    <div class="profile-image">
-
-                        <img
-                            src="profile.jpg"
-                            alt="Profile Picture"
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <h2 id="profileName">
-                            User
-                        </h2>
-
-                        <p id="profileEmail">
-                            user@email.com
-                        </p>
-
-                        <span
-                            id="profileRole"
-                            class="role-badge"
-                        >
-                            STAFF
-                        </span>
-
-                    </div>
+                    <img
+                        src="MY PICTURE.jpg"
+                        alt="My Profile Picture"
+                    >
 
                 </div>
 
 
-                <div class="account-details">
 
-                    <div class="detail-box">
+                <!-- ACCOUNT INFORMATION -->
+                <div class="account-info">
+
+                    <!-- NAME -->
+                    <div>
 
                         <span>
-                            Full Name
+                            Name
                         </span>
 
-                        <strong id="accountName">
+                        <strong id="profileName">
                             User
                         </strong>
 
                     </div>
 
 
-                    <div class="detail-box">
+
+                    <!-- EMAIL -->
+                    <div>
 
                         <span>
                             Email
                         </span>
 
-                        <strong id="accountEmail">
+                        <strong id="profileEmail">
                             user@email.com
                         </strong>
 
                     </div>
 
 
-                    <div class="detail-box">
+
+                    <!-- ROLE -->
+                    <div>
 
                         <span>
                             Role
                         </span>
 
-                        <strong>
+                        <strong id="profileRole">
                             STAFF
                         </strong>
 
@@ -1144,12 +1072,18 @@
 
     </main>
 
-</div>
+</section>
 
 
-<!-- JAVASCRIPT -->
 
-<script type="module" src="script.js"></script>
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script
+    type="module"
+    src="script.js"
+></script>
 
 </body>
 </html>
