@@ -12,7 +12,6 @@
 
 <body>
 
-
 <!-- =====================================================
      LOGIN PAGE
 ===================================================== -->
@@ -21,12 +20,13 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
+        <!-- LOGO SA TAAS SA LOGIN FORM -->
         <div class="logo-box">
 
             <img
                 src="arbees-bakeshop-logo1.png"
                 alt="Arbees Bakeshop Logo"
+                class="auth-logo"
             >
 
             <h1>Arbees Bakery</h1>
@@ -119,12 +119,13 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
+        <!-- LOGO SA TAAS SA REGISTER FORM -->
         <div class="logo-box">
 
             <img
                 src="arbees-bakeshop-logo1.png"
                 alt="Arbees Bakeshop Logo"
+                class="auth-logo"
             >
 
             <h1>Create Account</h1>
@@ -247,13 +248,11 @@
     class="system hidden"
 >
 
-
     <!-- =================================================
          SIDEBAR
     ================================================== -->
 
     <aside class="sidebar">
-
 
         <!-- SIDEBAR LOGO -->
         <div class="sidebar-logo">
@@ -267,7 +266,6 @@
 
             </div>
 
-
             <div>
 
                 <h2>Arbees</h2>
@@ -279,12 +277,9 @@
         </div>
 
 
-
         <!-- NAVIGATION -->
         <nav>
 
-
-            <!-- DASHBOARD -->
             <button
                 class="nav-btn active"
                 data-page="dashboard"
@@ -293,7 +288,6 @@
             </button>
 
 
-            <!-- INVENTORY -->
             <button
                 class="nav-btn"
                 data-page="inventory"
@@ -302,7 +296,6 @@
             </button>
 
 
-            <!-- ADD PRODUCT -->
             <button
                 class="nav-btn"
                 data-page="addProduct"
@@ -311,7 +304,6 @@
             </button>
 
 
-            <!-- ACTIVITY -->
             <button
                 class="nav-btn"
                 data-page="activity"
@@ -320,7 +312,6 @@
             </button>
 
 
-            <!-- ACCOUNT -->
             <button
                 class="nav-btn"
                 data-page="users"
@@ -328,9 +319,7 @@
                 👤 My Account
             </button>
 
-
         </nav>
-
 
 
         <!-- LOGOUT -->
@@ -340,7 +329,6 @@
         >
             🚪 Logout
         </button>
-
 
     </aside>
 
@@ -352,13 +340,8 @@
 
     <main class="main-content">
 
-
-        <!-- =================================================
-             TOPBAR
-        ================================================== -->
-
+        <!-- TOPBAR -->
         <header class="topbar">
-
 
             <div>
 
@@ -373,15 +356,12 @@
             </div>
 
 
-
             <!-- USER MINI PROFILE -->
             <div class="user-mini">
-
 
                 <div class="user-avatar">
                     👤
                 </div>
-
 
                 <div>
 
@@ -395,16 +375,14 @@
 
                 </div>
 
-
             </div>
-
 
         </header>
 
 
 
         <!-- =================================================
-             DASHBOARD PAGE
+             DASHBOARD
         ================================================== -->
 
         <section
@@ -412,25 +390,18 @@
             class="page"
         >
 
-
             <!-- WELCOME -->
             <div class="welcome-card">
-
 
                 <div>
 
                     <h2>
-
                         Welcome,
-
                         <span id="currentUserName">
                             User
                         </span>
-
-                       ! 👋
-
+                        ! 👋
                     </h2>
-
 
                     <p>
                         Here's what's happening in your bakery today.
@@ -446,7 +417,6 @@
                     STAFF
                 </div>
 
-
             </div>
 
 
@@ -454,14 +424,12 @@
             <!-- STATISTICS -->
             <div class="stats-grid">
 
-
                 <!-- TOTAL PRODUCTS -->
                 <div class="stat-card">
 
                     <div class="stat-icon">
                         📦
                     </div>
-
 
                     <div>
 
@@ -486,7 +454,6 @@
                         📊
                     </div>
 
-
                     <div>
 
                         <span>
@@ -509,7 +476,6 @@
                     <div class="stat-icon">
                         ⚠️
                     </div>
-
 
                     <div>
 
@@ -534,7 +500,6 @@
                         💰
                     </div>
 
-
                     <div>
 
                         <span>
@@ -549,18 +514,15 @@
 
                 </div>
 
-
             </div>
 
 
 
-            <!-- DASHBOARD CARDS -->
+            <!-- DASHBOARD GRID -->
             <div class="dashboard-grid">
-
 
                 <!-- LOW STOCK PRODUCTS -->
                 <div class="content-card">
-
 
                     <div class="card-header">
 
@@ -579,14 +541,12 @@
 
                     </div>
 
-
                 </div>
 
 
 
                 <!-- RECENT ACTIVITY -->
                 <div class="content-card">
-
 
                     <div class="card-header">
 
@@ -605,12 +565,9 @@
 
                     </div>
 
-
                 </div>
 
-
             </div>
-
 
         </section>
 
@@ -625,10 +582,7 @@
             class="page hidden"
         >
 
-
-            <!-- PAGE HEADER -->
             <div class="page-actions">
-
 
                 <div>
 
@@ -650,14 +604,12 @@
                     + Add Product
                 </button>
 
-
             </div>
 
 
 
-            <!-- SEARCH / FILTER -->
+            <!-- SEARCH -->
             <div class="filter-bar">
-
 
                 <input
                     type="text"
@@ -694,7 +646,6 @@
 
                 </select>
 
-
             </div>
 
 
@@ -702,44 +653,27 @@
             <!-- INVENTORY TABLE -->
             <div class="table-card">
 
-
                 <div class="table-wrapper">
 
-
                     <table>
-
 
                         <thead>
 
                             <tr>
 
-                                <th>
-                                    Product
-                                </th>
+                                <th>Product</th>
 
-                                <th>
-                                    SKU
-                                </th>
+                                <th>SKU</th>
 
-                                <th>
-                                    Category
-                                </th>
+                                <th>Category</th>
 
-                                <th>
-                                    Quantity
-                                </th>
+                                <th>Quantity</th>
 
-                                <th>
-                                    Price
-                                </th>
+                                <th>Price</th>
 
-                                <th>
-                                    Stock Status
-                                </th>
+                                <th>Stock Status</th>
 
-                                <th>
-                                    Actions
-                                </th>
+                                <th>Actions</th>
 
                             </tr>
 
@@ -749,15 +683,11 @@
                         <tbody id="inventoryTableBody">
                         </tbody>
 
-
                     </table>
-
 
                 </div>
 
-
             </div>
-
 
         </section>
 
@@ -772,10 +702,7 @@
             class="page hidden"
         >
 
-
-            <!-- PAGE HEADER -->
             <div class="page-actions">
-
 
                 <div>
 
@@ -789,20 +716,15 @@
 
                 </div>
 
-
             </div>
 
 
 
-            <!-- PRODUCT FORM -->
             <div class="form-card">
-
 
                 <form id="productForm">
 
-
                     <div class="form-grid">
-
 
                         <!-- PRODUCT NAME -->
                         <div class="form-group">
@@ -938,7 +860,6 @@
 
                         </div>
 
-
                     </div>
 
 
@@ -951,7 +872,7 @@
 
 
 
-                    <!-- SUBMIT -->
+                    <!-- BUTTON -->
                     <button
                         type="submit"
                         class="primary-btn"
@@ -959,19 +880,16 @@
                         Add Product
                     </button>
 
-
                 </form>
 
-
             </div>
-
 
         </section>
 
 
 
         <!-- =================================================
-             ACTIVITY LOGS PAGE
+             ACTIVITY LOGS
         ================================================== -->
 
         <section
@@ -979,10 +897,7 @@
             class="page hidden"
         >
 
-
-            <!-- PAGE HEADER -->
             <div class="page-actions">
-
 
                 <div>
 
@@ -996,20 +911,15 @@
 
                 </div>
 
-
             </div>
 
 
 
-            <!-- ACTIVITY TABLE -->
             <div class="table-card">
-
 
                 <div class="table-wrapper">
 
-
                     <table>
-
 
                         <thead>
 
@@ -1039,22 +949,18 @@
                         <tbody id="activityTableBody">
                         </tbody>
 
-
                     </table>
-
 
                 </div>
 
-
             </div>
-
 
         </section>
 
 
 
         <!-- =================================================
-             MY ACCOUNT PAGE
+             MY ACCOUNT
         ================================================== -->
 
         <section
@@ -1062,10 +968,7 @@
             class="page hidden"
         >
 
-
-            <!-- PAGE HEADER -->
             <div class="page-actions">
-
 
                 <div>
 
@@ -1079,14 +982,11 @@
 
                 </div>
 
-
             </div>
 
 
 
-            <!-- ACCOUNT CARD -->
             <div class="account-card">
-
 
                 <!-- PROFILE IMAGE -->
                 <div class="profile-image">
@@ -1100,11 +1000,9 @@
 
 
 
-                <!-- ACCOUNT INFORMATION -->
+                <!-- ACCOUNT INFO -->
                 <div class="account-info">
 
-
-                    <!-- NAME -->
                     <div>
 
                         <span>
@@ -1118,8 +1016,6 @@
                     </div>
 
 
-
-                    <!-- EMAIL -->
                     <div>
 
                         <span>
@@ -1133,8 +1029,6 @@
                     </div>
 
 
-
-                    <!-- ROLE -->
                     <div>
 
                         <span>
@@ -1147,18 +1041,13 @@
 
                     </div>
 
-
                 </div>
-
 
             </div>
 
-
         </section>
 
-
     </main>
-
 
 </section>
 
@@ -1172,7 +1061,6 @@
     type="module"
     src="script.js"
 ></script>
-
 
 </body>
 </html>
