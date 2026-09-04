@@ -26,7 +26,7 @@ button {
 
 
 /* =========================
-   AUTH PAGE
+   LOGIN / REGISTER
 ========================= */
 
 .auth-page {
@@ -34,7 +34,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 30px 20px;
     background: linear-gradient(135deg, #fff8f1, #f2dfd0);
 }
 
@@ -49,7 +49,7 @@ button {
 
 
 /* =========================
-   ARBEES BAKESHOP LOGO
+   BAKERY LOGO
 ========================= */
 
 .logo-box {
@@ -57,50 +57,27 @@ button {
     margin-bottom: 28px;
 }
 
-/* MAIN LOGO */
-.bakery-logo {
+/* LOGO IMAGE */
+.logo-box img {
     display: block;
     width: 180px;
-    height: 90px;
-    max-width: 100%;
+    height: 105px;
     object-fit: contain;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 18px auto;
 }
 
 /* TITLE */
 .logo-box h1 {
     font-size: 28px;
-    margin: 0 0 5px 0;
     color: #3d2b1f;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
 }
 
 /* SUBTITLE */
 .logo-box p {
     color: #8b7566;
-    margin: 0;
-}
-
-
-/* =========================
-   OLD LOGO ICON
-========================= */
-
-.logo-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: #f2dfd0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto auto 12px;
-    font-size: 35px;
-}
-
-.logo-icon.small {
-    width: 45px;
-    height: 45px;
-    font-size: 23px;
+    font-size: 15px;
     margin: 0;
 }
 
@@ -117,6 +94,7 @@ button {
     display: block;
     margin-bottom: 7px;
     font-weight: 600;
+    color: #3d2b1f;
 }
 
 .form-group input,
@@ -130,6 +108,7 @@ button {
     outline: none;
     background: #ffffff;
     color: #3d2b1f;
+    font-size: 14px;
 }
 
 .form-group input:focus,
@@ -137,7 +116,7 @@ button {
 .filter-bar input:focus,
 .filter-bar select:focus {
     border-color: #a66b45;
-    box-shadow: 0 0 0 2px rgba(166, 107, 69, 0.08);
+    box-shadow: 0 0 0 3px rgba(166, 107, 69, 0.08);
 }
 
 
@@ -169,23 +148,6 @@ button {
     width: auto;
 }
 
-.link-btn {
-    border: none;
-    background: none;
-    color: #8b5739;
-    font-weight: bold;
-    padding: 0;
-}
-
-.link-btn:hover {
-    text-decoration: underline;
-}
-
-
-/* =========================
-   MESSAGES
-========================= */
-
 .error-message {
     color: #d33;
     font-size: 14px;
@@ -202,6 +164,19 @@ button {
     text-align: center;
     margin-top: 20px;
     color: #76675e;
+    font-size: 14px;
+}
+
+.link-btn {
+    border: none;
+    background: none;
+    color: #8b5739;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
 }
 
 
@@ -247,22 +222,33 @@ button {
 }
 
 
-/* =========================
-   SIDEBAR LOGO
-========================= */
+/* SIDEBAR LOGO IMAGE */
 
-.sidebar-bakery-logo {
-    width: 55px;
-    height: 55px;
-    object-fit: contain;
-    flex-shrink: 0;
+.sidebar-logo .logo-icon {
+    width: 65px;
+    height: 65px;
     border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-logo .logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* HIDE OLD EMOJI */
+
+.logo-icon.small {
+    font-size: 0;
+}
+
 
 .sidebar nav {
     display: flex;
@@ -287,11 +273,6 @@ button {
     color: white;
 }
 
-
-/* =========================
-   LOGOUT
-========================= */
-
 .logout-btn {
     margin-top: auto;
     border: none;
@@ -315,6 +296,7 @@ button {
 .main-content {
     flex: 1;
     min-width: 0;
+    background: #fdfcfb;
 }
 
 
@@ -341,11 +323,6 @@ button {
     color: #8b7566;
     margin-top: 4px;
 }
-
-
-/* =========================
-   USER MINI PROFILE
-========================= */
 
 .user-mini {
     display: flex;
@@ -402,11 +379,6 @@ button {
     color: #8b7566;
     margin-top: 7px;
 }
-
-
-/* =========================
-   ROLE BADGE
-========================= */
 
 .role-badge {
     background: #f2dfd0;
@@ -491,11 +463,6 @@ button {
     padding: 25px 10px;
 }
 
-
-/* =========================
-   LOW STOCK / ACTIVITY
-========================= */
-
 .low-stock-item,
 .activity-item {
     padding: 12px;
@@ -528,7 +495,6 @@ button {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    gap: 15px;
 }
 
 .page-actions h2 {
@@ -541,7 +507,7 @@ button {
 
 
 /* =========================
-   FILTER BAR
+   FILTER
 ========================= */
 
 .filter-bar {
@@ -588,11 +554,6 @@ td {
     font-size: 14px;
 }
 
-
-/* =========================
-   STOCK STATUS
-========================= */
-
 .status-low {
     color: #c0392b;
     font-weight: bold;
@@ -603,35 +564,20 @@ td {
     font-weight: bold;
 }
 
-
-/* =========================
-   ACTION BUTTONS
-========================= */
-
 .action-btn {
     border: none;
     padding: 7px 10px;
     border-radius: 7px;
     margin-right: 5px;
-    cursor: pointer;
 }
 
 .edit-btn {
     background: #eee2d8;
-    color: #5d4030;
-}
-
-.edit-btn:hover {
-    background: #dfcdbd;
 }
 
 .delete-btn {
     background: #f5d5d1;
     color: #9b2c25;
-}
-
-.delete-btn:hover {
-    background: #edc0bb;
 }
 
 
@@ -681,7 +627,6 @@ td {
 
 .account-info {
     flex: 1;
-    width: 100%;
 }
 
 .account-info div {
@@ -698,7 +643,7 @@ td {
 
 
 /* =========================
-   MOBILE - 900px
+   MOBILE
 ========================= */
 
 @media (max-width: 900px) {
@@ -714,14 +659,34 @@ td {
     .sidebar {
         width: 210px;
     }
+
 }
 
 
 /* =========================
-   MOBILE - 700px
+   TABLET / MOBILE
 ========================= */
 
 @media (max-width: 700px) {
+
+    .auth-page {
+        padding: 20px 15px;
+    }
+
+    .auth-card {
+        max-width: 430px;
+        padding: 30px 25px;
+    }
+
+    .logo-box img {
+        width: 160px;
+        height: 90px;
+        margin-bottom: 15px;
+    }
+
+    .logo-box h1 {
+        font-size: 25px;
+    }
 
     .system {
         display: block;
@@ -735,6 +700,11 @@ td {
 
     .sidebar-logo {
         margin-bottom: 15px;
+    }
+
+    .sidebar-logo .logo-icon {
+        width: 55px;
+        height: 55px;
     }
 
     .sidebar nav {
@@ -785,31 +755,17 @@ td {
         align-items: flex-start;
     }
 
-    .page-actions {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .small-btn {
-        width: 100%;
-    }
-
-    /* LOGO SA MOBILE */
-    .bakery-logo {
-        width: 170px;
-        height: 85px;
-    }
 }
 
 
 /* =========================
-   SMALL PHONE - 450px
+   SMALL PHONE
 ========================= */
 
 @media (max-width: 450px) {
 
     .auth-page {
-        padding: 12px;
+        padding: 15px;
     }
 
     .auth-card {
@@ -817,15 +773,18 @@ td {
         border-radius: 16px;
     }
 
-    /* SMALLER LOGO */
-    .bakery-logo {
-        width: 150px;
-        height: 75px;
-        margin-bottom: 10px;
+    .logo-box {
+        margin-bottom: 24px;
+    }
+
+    .logo-box img {
+        width: 145px;
+        height: 80px;
+        margin-bottom: 14px;
     }
 
     .logo-box h1 {
-        font-size: 25px;
+        font-size: 23px;
     }
 
     .logo-box p {
@@ -836,18 +795,14 @@ td {
         grid-template-columns: 1fr;
     }
 
-    .sidebar-bakery-logo {
-        width: 48px;
-        height: 48px;
+    .page-actions {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
     }
 
-    .page {
-        padding: 12px;
+    .small-btn {
+        width: 100%;
     }
 
-    .content-card,
-    .form-card,
-    .account-card {
-        padding: 15px;
-    }
 }
