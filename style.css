@@ -26,7 +26,7 @@ button {
 
 
 /* =========================
-   AUTH
+   AUTH PAGE
 ========================= */
 
 .auth-page {
@@ -41,10 +41,10 @@ button {
 .auth-card {
     width: 100%;
     max-width: 430px;
-    background: white;
+    background: #ffffff;
     padding: 35px;
     border-radius: 20px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -57,22 +57,51 @@ button {
     margin-bottom: 28px;
 }
 
-.main-logo {
-    width: 230px;
-    height: auto;
-    max-width: 100%;
+/* Main bakery logo */
+.bakery-logo {
     display: block;
-    margin: 0 auto 15px;
+    width: 260px;
+    height: 130px;
+    max-width: 100%;
     object-fit: contain;
+    margin: 0 auto 15px auto;
 }
 
+/* Logo title */
 .logo-box h1 {
     font-size: 28px;
-    margin-bottom: 5px;
+    margin: 0 0 5px 0;
+    color: #3d2b1f;
 }
 
+/* Logo subtitle */
 .logo-box p {
     color: #8b7566;
+    margin: 0;
+}
+
+
+/* =========================
+   OLD LOGO ICON
+========================= */
+
+.logo-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #f2dfd0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto auto 12px;
+    font-size: 35px;
+}
+
+.logo-icon.small {
+    width: 45px;
+    height: 45px;
+    font-size: 23px;
+    margin: 0;
 }
 
 
@@ -99,7 +128,8 @@ button {
     border: 1px solid #ddd0c6;
     border-radius: 10px;
     outline: none;
-    background: white;
+    background: #ffffff;
+    color: #3d2b1f;
 }
 
 .form-group input:focus,
@@ -107,7 +137,13 @@ button {
 .filter-bar input:focus,
 .filter-bar select:focus {
     border-color: #a66b45;
+    box-shadow: 0 0 0 2px rgba(166, 107, 69, 0.08);
 }
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 .primary-btn {
     width: 100%;
@@ -118,15 +154,37 @@ button {
     color: white;
     font-weight: bold;
     font-size: 15px;
+    transition: 0.2s ease;
 }
 
 .primary-btn:hover {
     background: #70452e;
 }
 
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
 .small-btn {
     width: auto;
 }
+
+.link-btn {
+    border: none;
+    background: none;
+    color: #8b5739;
+    font-weight: bold;
+    padding: 0;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
 
 .error-message {
     color: #d33;
@@ -146,13 +204,6 @@ button {
     color: #76675e;
 }
 
-.link-btn {
-    border: none;
-    background: none;
-    color: #8b5739;
-    font-weight: bold;
-}
-
 
 /* =========================
    SYSTEM
@@ -162,6 +213,11 @@ button {
     min-height: 100vh;
     display: flex;
 }
+
+
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar {
     width: 250px;
@@ -181,13 +237,13 @@ button {
     padding: 0 10px;
 }
 
-.sidebar-logo-img {
+/* If using bakery logo in sidebar */
+.sidebar-bakery-logo {
     width: 55px;
     height: 55px;
     object-fit: contain;
-    background: white;
+    flex-shrink: 0;
     border-radius: 8px;
-    padding: 3px;
 }
 
 .sidebar-logo h2 {
@@ -198,6 +254,11 @@ button {
     font-size: 12px;
     color: #d9c7bb;
 }
+
+
+/* =========================
+   NAVIGATION
+========================= */
 
 .sidebar nav {
     display: flex;
@@ -213,6 +274,7 @@ button {
     padding: 13px 15px;
     border-radius: 10px;
     font-size: 15px;
+    transition: 0.2s ease;
 }
 
 .nav-btn:hover,
@@ -220,6 +282,11 @@ button {
     background: #6f4935;
     color: white;
 }
+
+
+/* =========================
+   LOGOUT
+========================= */
 
 .logout-btn {
     margin-top: auto;
@@ -229,12 +296,27 @@ button {
     padding: 13px;
     border-radius: 10px;
     font-size: 15px;
+    transition: 0.2s ease;
 }
+
+.logout-btn:hover {
+    background: #70452e;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
 
 .main-content {
     flex: 1;
     min-width: 0;
 }
+
+
+/* =========================
+   TOPBAR
+========================= */
 
 .topbar {
     min-height: 80px;
@@ -255,6 +337,11 @@ button {
     color: #8b7566;
     margin-top: 4px;
 }
+
+
+/* =========================
+   USER MINI PROFILE
+========================= */
 
 .user-mini {
     display: flex;
@@ -291,6 +378,11 @@ button {
     padding: 30px;
 }
 
+
+/* =========================
+   WELCOME CARD
+========================= */
+
 .welcome-card {
     background: white;
     padding: 25px;
@@ -299,13 +391,18 @@ button {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 
 .welcome-card p {
     color: #8b7566;
     margin-top: 7px;
 }
+
+
+/* =========================
+   ROLE BADGE
+========================= */
 
 .role-badge {
     background: #f2dfd0;
@@ -335,7 +432,7 @@ button {
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 
 .stat-icon {
@@ -347,6 +444,7 @@ button {
     align-items: center;
     justify-content: center;
     font-size: 23px;
+    flex-shrink: 0;
 }
 
 .stat-card span {
@@ -376,7 +474,7 @@ button {
     background: white;
     border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 
 .card-header {
@@ -388,6 +486,11 @@ button {
     text-align: center;
     padding: 25px 10px;
 }
+
+
+/* =========================
+   LOW STOCK / ACTIVITY
+========================= */
 
 .low-stock-item,
 .activity-item {
@@ -421,6 +524,7 @@ button {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 15px;
 }
 
 .page-actions h2 {
@@ -433,7 +537,7 @@ button {
 
 
 /* =========================
-   FILTER
+   FILTER BAR
 ========================= */
 
 .filter-bar {
@@ -480,6 +584,11 @@ td {
     font-size: 14px;
 }
 
+
+/* =========================
+   STOCK STATUS
+========================= */
+
 .status-low {
     color: #c0392b;
     font-weight: bold;
@@ -490,15 +599,26 @@ td {
     font-weight: bold;
 }
 
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
 .action-btn {
     border: none;
     padding: 7px 10px;
     border-radius: 7px;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .edit-btn {
     background: #eee2d8;
+    color: #5d4030;
+}
+
+.edit-btn:hover {
+    background: #dfcdbd;
 }
 
 .delete-btn {
@@ -506,9 +626,13 @@ td {
     color: #9b2c25;
 }
 
+.delete-btn:hover {
+    background: #edc0bb;
+}
+
 
 /* =========================
-   PRODUCT FORM
+   ADD PRODUCT FORM
 ========================= */
 
 .form-card {
@@ -553,6 +677,7 @@ td {
 
 .account-info {
     flex: 1;
+    width: 100%;
 }
 
 .account-info div {
@@ -569,7 +694,7 @@ td {
 
 
 /* =========================
-   MOBILE
+   MOBILE - 900px
 ========================= */
 
 @media (max-width: 900px) {
@@ -587,6 +712,11 @@ td {
     }
 
 }
+
+
+/* =========================
+   MOBILE - 700px
+========================= */
 
 @media (max-width: 700px) {
 
@@ -652,24 +782,70 @@ td {
         align-items: flex-start;
     }
 
-    .main-logo {
-        width: 200px;
+    .page-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .small-btn {
+        width: 100%;
+    }
+
+    /* Smaller main logo on mobile */
+    .bakery-logo {
+        width: 230px;
+        height: 115px;
     }
 
 }
 
+
+/* =========================
+   SMALL PHONE - 450px
+========================= */
+
 @media (max-width: 450px) {
+
+    .auth-page {
+        padding: 12px;
+    }
 
     .auth-card {
         padding: 25px 20px;
+        border-radius: 16px;
+    }
+
+    .bakery-logo {
+        width: 210px;
+        height: 105px;
+        margin-bottom: 12px;
+    }
+
+    .logo-box h1 {
+        font-size: 25px;
+    }
+
+    .logo-box p {
+        font-size: 14px;
     }
 
     .sidebar nav {
         grid-template-columns: 1fr;
     }
 
-    .main-logo {
-        width: 180px;
+    .sidebar-bakery-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .page {
+        padding: 12px;
+    }
+
+    .content-card,
+    .form-card,
+    .account-card {
+        padding: 15px;
     }
 
 }
