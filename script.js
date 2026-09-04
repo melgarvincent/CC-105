@@ -1,26 +1,27 @@
-/* ==========================================
-   BAKERY INVENTORY SYSTEM
-   FIREBASE REALTIME DATABASE
-========================================== */
+/* =====================================================
+   ARBEES BAKERY SHOP
+   FIREBASE REALTIME DATABASE ONLY
+   NO FIREBASE AUTHENTICATION
+===================================================== */
 
-import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getDatabase,
     ref,
-    push,
     set,
-    update,
+    get,
+    push,
     remove,
-    onValue
-} from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+    update
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-/* ==========================================
-   FIREBASE CONFIGURATION
-========================================== */
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
 
 const firebaseConfig = {
     databaseURL:
@@ -28,106 +29,425 @@ const firebaseConfig = {
 };
 
 
-/* Initialize Firebase */
+/* =====================================================
+   INITIALIZE FIREBASE
+===================================================== */
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-/* Database locations */
+/* =====================================================
+   DATABASE REFERENCES
+===================================================== */
 
 const productsRef = ref(db, "bakeryProducts");
 const activityRef = ref(db, "activityLogs");
+const usersRef = ref(db, "users");
 
 
-/* Local arrays */
+/* =====================================================
+   CURRENT USER
+===================================================== */
 
-let products = [];
-let activities = [];
-
-
-/* ==========================================
-   LOGIN
-========================================== */
-
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-        const email =
-            document
-                .getElementById("email")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
-
-        const error =
-            document
-                .getElementById("loginError");
+let currentUser = null;
 
 
-        /*
-            DEMO LOGIN
+/* =====================================================
+   EMAIL KEY
+   Firebase paths cannot contain "."
+===================================================== */
 
-            Email:
-            admin@bakery.com
+function emailKey(email) {
 
-            Password:
-            Bakery@123
-        */
+    return email
+        .trim()
+        .toLowerCase()
+        .replace(/\./g, "_")
+        .replace(/#/g, "_")
+        .replace(/\$/g, "_")
+        .replace(/\[/g, "_")
+        .replace(/\]/g, "_")
+        .replace(/@/g, "_at_");
 
-        if (
-            email === "admin@bakery.com" &&
-            password === "Bakery@123"
-        ) {
-
-            sessionStorage.setItem(
-                "bakeryLoggedIn",
-                "true"
-            );
-
-
-            document
-                .getElementById("loginPage")
-                .classList.add("hidden");
+}
 
 
-            document
-                .getElementById("system")
-                .classList.remove("hidden");
+/* =====================================================
+   PAGE SWITCH
+===================================================== */
 
+function showPage(page) {
 
-            updateDashboard();
+    const pages = [
+        "dashboardPage",
+        "inventoryPage",
+        "addProductPage",
+        "activityPage",
+        "usersPage"
+    ];
 
-        } else {
+    pages.forEach(id => {
 
-            error.textContent =
-                "Invalid email or password.";
+        const element = document.getElementById(id);
 
+        if (element) {
+            element.classList.add("hidden");
         }
 
     });
 
 
-/* ==========================================
+    const target = document.getElementById(page + "Page");
+
+    if (target) {
+        target.classList.remove("hidden");
+    }
+
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+
+        btn.classList.remove("active");
+
+        if (btn.dataset.page === page) {
+            btn.classList.add("active");
+        }
+
+    });
+
+
+    const titles = {
+        dashboard: "Dashboard",
+        inventory: "Inventory",
+        addProduct: "Add Product",
+        activity: "Activity Logs",
+        users: "My Account"
+    };
+
+
+    document.getElementById("pageTitle").textContent =
+        titles[page] || "Dashboard";
+
+
+    if (page === "dashboard") {
+        updateDashboard();
+    }
+
+    if (page === "inventory") {
+        renderInventory();
+    }
+
+    if (page === "activity") {
+        renderActivities();
+    }
+
+    if (page === "users") {
+        loadProfile();
+    }
+
+}
+
+
+/* Make available if needed */
+window.showPage = showPage;
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+async function registerUser(event) {
+
+    event.preventDefault();
+
+
+    const name =
+        document.getElementById("registerName").value.trim();
+
+    const email =
+        document.getElementById("registerEmail").value.trim().toLowerCase();
+
+    const password =
+        document.getElementById("registerPassword").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    const error =
+        document.getElementById("registerError");
+
+
+    error.textContent = "";
+
+
+    if (!name || !email || !password) {
+
+        error.textContent =
+            "Please complete all fields.";
+
+        return;
+    }
+
+
+    if (password.length < 6) {
+
+        error.textContent =
+            "Password must be at least 6 characters.";
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        error.textContent =
+            "Passwords do not match.";
+
+        return;
+    }
+
+
+    try {
+
+        const key = emailKey(email);
+
+        const userRef = ref(db, "users/" + key);
+
+        const snapshot = await get(userRef);
+
+
+        if (snapshot.exists()) {
+
+            error.textContent =
+                "Email is already registered.";
+
+            return;
+        }
+
+
+        await set(userRef, {
+
+            name: name,
+
+            email: email,
+
+            password: password,
+
+            role: "STAFF",
+
+            createdAt: new Date().toISOString()
+
+        });
+
+
+        await addActivity(
+            "Registered Account",
+            name + " created a new account."
+        );
+
+
+        alert("Registration successful! You can now login.");
+
+
+        document.getElementById("registerForm").reset();
+
+        showLogin();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        error.textContent =
+            "Registration failed: " + err.message;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function loginUser(event) {
+
+    event.preventDefault();
+
+
+    const email =
+        document.getElementById("loginEmail").value.trim().toLowerCase();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const error =
+        document.getElementById("loginError");
+
+
+    error.textContent = "";
+
+
+    if (!email || !password) {
+
+        error.textContent =
+            "Please enter email and password.";
+
+        return;
+    }
+
+
+    try {
+
+        const key = emailKey(email);
+
+        const userRef =
+            ref(db, "users/" + key);
+
+        const snapshot =
+            await get(userRef);
+
+
+        if (!snapshot.exists()) {
+
+            error.textContent =
+                "Account not found.";
+
+            return;
+        }
+
+
+        const user = snapshot.val();
+
+
+        if (user.password !== password) {
+
+            error.textContent =
+                "Invalid email or password.";
+
+            return;
+        }
+
+
+        currentUser = {
+
+            name: user.name,
+
+            email: user.email,
+
+            role: user.role || "STAFF"
+
+        };
+
+
+        sessionStorage.setItem(
+            "bakeryUser",
+            JSON.stringify(currentUser)
+        );
+
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("systemPage")
+            .classList.remove("hidden");
+
+
+        updateUserDisplay();
+
+        await addActivity(
+            "Login",
+            currentUser.name + " logged into the system."
+        );
+
+        updateDashboard();
+
+
+        document
+            .getElementById("loginForm")
+            .reset();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        error.textContent =
+            "Login failed: " + err.message;
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW REGISTER
+===================================================== */
+
+window.showRegister = function () {
+
+    document
+        .getElementById("loginPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("registerPage")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("loginError")
+        .textContent = "";
+
+};
+
+
+/* =====================================================
+   SHOW LOGIN
+===================================================== */
+
+window.showLogin = function () {
+
+    document
+        .getElementById("registerPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("registerError")
+        .textContent = "";
+
+};
+
+
+/* =====================================================
    LOGOUT
-========================================== */
+===================================================== */
 
-window.logout = function() {
+function logout() {
 
-    sessionStorage.removeItem(
-        "bakeryLoggedIn"
-    );
+    sessionStorage.removeItem("bakeryUser");
+
+    currentUser = null;
 
 
     document
-        .getElementById("system")
+        .getElementById("systemPage")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("registerPage")
         .classList.add("hidden");
 
 
@@ -135,337 +455,472 @@ window.logout = function() {
         .getElementById("loginPage")
         .classList.remove("hidden");
 
-};
+}
 
 
-/* ==========================================
-   PAGE NAVIGATION
-========================================== */
+window.logout = logout;
 
-window.showPage = function(page, button) {
 
-    document
-        .getElementById("dashboardPage")
-        .classList.add("hidden");
+/* =====================================================
+   UPDATE USER DISPLAY
+===================================================== */
 
-    document
-        .getElementById("inventoryPage")
-        .classList.add("hidden");
+function updateUserDisplay() {
 
-    document
-        .getElementById("activityPage")
-        .classList.add("hidden");
+    if (!currentUser) return;
 
 
-    const pageElement =
-        document.getElementById(
-            page + "Page"
-        );
+    document.getElementById("currentUserName").textContent =
+        currentUser.name;
 
-    if (pageElement) {
-        pageElement.classList.remove("hidden");
-    }
+    document.getElementById("currentUserEmail").textContent =
+        currentUser.email;
 
+    document.getElementById("userRole").textContent =
+        currentUser.role;
 
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(function(btn) {
+    document.getElementById("headerUserName").textContent =
+        currentUser.name;
 
-            btn.classList.remove("active");
-
-        });
-
-
-    if (button) {
-        button.classList.add("active");
-    }
-
-
-    if (page === "dashboard") {
-
-        const title =
-            document.getElementById("pageTitle");
-
-        if (title) {
-            title.textContent = "Dashboard";
-        }
-
-        updateDashboard();
-
-    }
-
-
-    if (page === "inventory") {
-
-        const title =
-            document.getElementById("pageTitle");
-
-        if (title) {
-            title.textContent = "Inventory";
-        }
-
-        renderInventory();
-
-    }
-
-
-    if (page === "activity") {
-
-        const title =
-            document.getElementById("pageTitle");
-
-        if (title) {
-            title.textContent = "Activity Logs";
-        }
-
-        renderActivities();
-
-    }
-
-};
-
-
-/* ==========================================
-   LOAD PRODUCTS
-========================================== */
-
-onValue(
-    productsRef,
-    function(snapshot) {
-
-        products = [];
-
-        const data = snapshot.val();
-
-        if (data) {
-
-            Object.keys(data).forEach(
-                function(key) {
-
-                    products.push({
-
-                        id: key,
-
-                        name:
-                            data[key].name || "",
-
-                        sku:
-                            data[key].sku || "",
-
-                        category:
-                            data[key].category || "",
-
-                        quantity:
-                            Number(
-                                data[key].quantity || 0
-                            ),
-
-                        price:
-                            Number(
-                                data[key].price || 0
-                            ),
-
-                        threshold:
-                            Number(
-                                data[key].threshold || 0
-                            )
-
-                    });
-
-                }
-            );
-
-        }
-
-        updateDashboard();
-        renderInventory();
-
-    }
-);
-
-
-/* ==========================================
-   ADD PRODUCT
-========================================== */
-
-const productForm =
-    document.getElementById("productForm");
-
-
-if (productForm) {
-
-    productForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-
-            const name =
-                document
-                    .getElementById("productName")
-                    .value
-                    .trim();
-
-
-            const sku =
-                document
-                    .getElementById("productSKU")
-                    .value
-                    .trim();
-
-
-            const category =
-                document
-                    .getElementById("productCategory")
-                    .value;
-
-
-            const quantity =
-                Number(
-                    document
-                        .getElementById("productQuantity")
-                        .value
-                );
-
-
-            const price =
-                Number(
-                    document
-                        .getElementById("productPrice")
-                        .value
-                );
-
-
-            const threshold =
-                Number(
-                    document
-                        .getElementById("lowStockThreshold")
-                        .value
-                );
-
-
-            const message =
-                document.getElementById(
-                    "productMessage"
-                );
-
-
-            if (
-                !name ||
-                !sku ||
-                !category ||
-                isNaN(quantity) ||
-                isNaN(price)
-            ) {
-
-                if (message) {
-                    message.textContent =
-                        "Please complete all fields.";
-                }
-
-                return;
-            }
-
-
-            try {
-
-                const newProduct =
-                    push(productsRef);
-
-
-                await set(
-                    newProduct,
-                    {
-
-                        name: name,
-
-                        sku: sku,
-
-                        category: category,
-
-                        quantity: quantity,
-
-                        price: price,
-
-                        threshold: threshold,
-
-                        createdAt:
-                            new Date().toLocaleString()
-
-                    }
-                );
-
-
-                await addActivity(
-                    "Added product: " + name
-                );
-
-
-                productForm.reset();
-
-
-                if (message) {
-
-                    message.textContent =
-                        "Product added successfully.";
-
-                }
-
-
-            } catch (errorObject) {
-
-                console.error(
-                    "Add product error:",
-                    errorObject
-                );
-
-
-                if (message) {
-
-                    message.textContent =
-                        "Unable to add product.";
-
-                }
-
-            }
-
-        }
-    );
+    document.getElementById("headerUserEmail").textContent =
+        currentUser.email;
 
 }
 
 
-/* ==========================================
-   EDIT STOCK
-========================================== */
+/* =====================================================
+   PROFILE
+===================================================== */
 
-window.editQuantity = async function(id) {
+function loadProfile() {
 
-    const product =
-        products.find(
-            function(item) {
+    if (!currentUser) return;
 
-                return item.id === id;
 
-            }
+    document.getElementById("profileName").textContent =
+        currentUser.name;
+
+    document.getElementById("profileEmail").textContent =
+        currentUser.email;
+
+    document.getElementById("profileRole").textContent =
+        currentUser.role;
+
+}
+
+
+/* =====================================================
+   ADD ACTIVITY
+===================================================== */
+
+async function addActivity(action, details) {
+
+    try {
+
+        const newActivity =
+            push(activityRef);
+
+
+        await set(newActivity, {
+
+            user:
+                currentUser ? currentUser.name : "System",
+
+            email:
+                currentUser ? currentUser.email : "",
+
+            action: action,
+
+            details: details,
+
+            timestamp:
+                new Date().toISOString()
+
+        });
+
+    }
+    catch (err) {
+
+        console.error(
+            "Activity log error:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ADD PRODUCT
+===================================================== */
+
+async function addProduct(event) {
+
+    event.preventDefault();
+
+
+    const message =
+        document.getElementById("productMessage");
+
+
+    const name =
+        document.getElementById("productName").value.trim();
+
+    const sku =
+        document.getElementById("productSKU").value.trim();
+
+    const category =
+        document.getElementById("productCategory").value;
+
+    const quantity =
+        Number(document.getElementById("productQuantity").value);
+
+    const price =
+        Number(document.getElementById("productPrice").value);
+
+    const threshold =
+        Number(document.getElementById("lowStockThreshold").value);
+
+
+    message.textContent = "";
+
+
+    if (!name || !sku || !category) {
+
+        message.textContent =
+            "Please complete all fields.";
+
+        message.style.color = "#d33";
+
+        return;
+    }
+
+
+    if (quantity < 0 || price < 0 || threshold < 0) {
+
+        message.textContent =
+            "Invalid quantity, price, or threshold.";
+
+        message.style.color = "#d33";
+
+        return;
+    }
+
+
+    try {
+
+        const newProduct =
+            push(productsRef);
+
+
+        await set(newProduct, {
+
+            name: name,
+
+            sku: sku,
+
+            category: category,
+
+            quantity: quantity,
+
+            price: price,
+
+            threshold: threshold,
+
+            createdAt:
+                new Date().toISOString(),
+
+            createdBy:
+                currentUser
+                    ? currentUser.email
+                    : "Unknown"
+
+        });
+
+
+        await addActivity(
+            "Added Product",
+            `${name} was added to inventory.`
         );
 
 
-    if (!product) {
+        message.textContent =
+            "Product added successfully!";
 
-        alert("Product not found.");
+        message.style.color = "#26834a";
 
-        return;
+
+        document
+            .getElementById("productForm")
+            .reset();
+
+
+        document.getElementById(
+            "lowStockThreshold"
+        ).value = 5;
+
+
+        updateDashboard();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        message.textContent =
+            "Failed to add product: " + err.message;
+
+        message.style.color = "#d33";
+
+    }
+
+}
+
+
+/* =====================================================
+   GET PRODUCTS
+===================================================== */
+
+async function getProducts() {
+
+    try {
+
+        const snapshot =
+            await get(productsRef);
+
+
+        if (!snapshot.exists()) {
+            return {};
+        }
+
+
+        return snapshot.val();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        return {};
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER INVENTORY
+===================================================== */
+
+async function renderInventory() {
+
+    const tbody =
+        document.getElementById("inventoryTableBody");
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="7" style="text-align:center;">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+
+    const products =
+        await getProducts();
+
+
+    tbody.innerHTML = "";
+
+
+    const search =
+        document
+            .getElementById("searchProduct")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const category =
+        document
+            .getElementById("categoryFilter")
+            .value;
+
+
+    let count = 0;
+
+
+    Object.entries(products).forEach(
+        ([id, product]) => {
+
+            const productName =
+                String(product.name || "").toLowerCase();
+
+            const productCategory =
+                product.category || "";
+
+
+            if (
+                search &&
+                !productName.includes(search)
+            ) {
+                return;
+            }
+
+
+            if (
+                category !== "all" &&
+                productCategory !== category
+            ) {
+                return;
+            }
+
+
+            count++;
+
+
+            const quantity =
+                Number(product.quantity || 0);
+
+            const threshold =
+                Number(product.threshold || 5);
+
+            const price =
+                Number(product.price || 0);
+
+
+            const low =
+                quantity <= threshold;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    <strong>
+                        ${escapeHTML(product.name || "")}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(product.sku || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(product.category || "-")}
+                </td>
+
+                <td>
+                    ${quantity}
+                </td>
+
+                <td>
+                    ₱${price.toFixed(2)}
+                </td>
+
+                <td class="${low ? "status-low" : "status-good"}">
+                    ${low ? "Low Stock" : "In Stock"}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        data-edit="${id}"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="action-btn delete-btn"
+                        data-delete="${id}"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+
+
+    if (count === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align:center;">
+                    No products found.
+                </td>
+            </tr>
+        `;
 
     }
 
 
+    document
+        .querySelectorAll("[data-delete]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => deleteProduct(button.dataset.delete)
+            );
+
+        });
+
+
+    document
+        .querySelectorAll("[data-edit]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => editQuantity(button.dataset.edit)
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   EDIT PRODUCT
+===================================================== */
+
+async function editQuantity(id) {
+
+    const productRef =
+        ref(db, "bakeryProducts/" + id);
+
+
+    const snapshot =
+        await get(productRef);
+
+
+    if (!snapshot.exists()) {
+
+        alert("Product not found.");
+
+        return;
+    }
+
+
+    const product =
+        snapshot.val();
+
+
     const newQuantity =
         prompt(
-            "Enter new quantity for " +
-            product.name,
-
+            "Enter new quantity:",
             product.quantity
         );
 
@@ -480,92 +935,83 @@ window.editQuantity = async function(id) {
 
 
     if (
-        isNaN(quantity) ||
+        Number.isNaN(quantity) ||
         quantity < 0
     ) {
 
-        alert(
-            "Please enter a valid quantity."
-        );
+        alert("Invalid quantity.");
 
         return;
-
     }
 
 
     try {
 
         await update(
-            ref(
-                db,
-                "bakeryProducts/" + id
-            ),
-
+            productRef,
             {
-
-                quantity: quantity,
-
-                updatedAt:
-                    new Date().toLocaleString()
-
+                quantity: quantity
             }
         );
 
 
         await addActivity(
-            "Updated stock of " +
-            product.name +
-            " to " +
-            quantity
+            "Updated Product",
+            `${product.name} quantity changed to ${quantity}.`
         );
 
 
-    } catch (errorObject) {
+        await renderInventory();
 
-        console.error(
-            "Update error:",
-            errorObject
-        );
+        await updateDashboard();
+
+
+        alert("Quantity updated successfully.");
+
+    }
+    catch (err) {
+
+        console.error(err);
 
         alert(
-            "Unable to update product."
+            "Failed to update product: " +
+            err.message
         );
 
     }
 
-};
+}
 
 
-/* ==========================================
+/* =====================================================
    DELETE PRODUCT
-========================================== */
+===================================================== */
 
-window.deleteProduct = async function(id) {
+async function deleteProduct(id) {
 
-    const product =
-        products.find(
-            function(item) {
-
-                return item.id === id;
-
-            }
-        );
+    const productRef =
+        ref(db, "bakeryProducts/" + id);
 
 
-    if (!product) {
+    const snapshot =
+        await get(productRef);
+
+
+    if (!snapshot.exists()) {
 
         alert("Product not found.");
 
         return;
-
     }
+
+
+    const product =
+        snapshot.val();
 
 
     const confirmed =
         confirm(
-            "Are you sure you want to delete " +
-            product.name +
-            "?"
+            `Delete "${product.name}"?`
         );
 
 
@@ -576,72 +1022,30 @@ window.deleteProduct = async function(id) {
 
     try {
 
-        await remove(
-            ref(
-                db,
-                "bakeryProducts/" + id
-            )
-        );
+        await remove(productRef);
 
 
         await addActivity(
-            "Deleted product: " +
-            product.name
+            "Deleted Product",
+            `${product.name} was removed from inventory.`
         );
 
 
-        alert(
-            "Product deleted successfully."
-        );
+        await renderInventory();
+
+        await updateDashboard();
 
 
-    } catch (errorObject) {
-
-        console.error(
-            "Delete error:",
-            errorObject
-        );
-
-
-        alert(
-            "Unable to delete product."
-        );
+        alert("Product deleted.");
 
     }
+    catch (err) {
 
-};
+        console.error(err);
 
-
-/* ==========================================
-   ACTIVITY LOG
-========================================== */
-
-async function addActivity(message) {
-
-    try {
-
-        const newActivity =
-            push(activityRef);
-
-
-        await set(
-            newActivity,
-            {
-
-                message: message,
-
-                time:
-                    new Date().toLocaleString()
-
-            }
-        );
-
-
-    } catch (errorObject) {
-
-        console.error(
-            "Activity log error:",
-            errorObject
+        alert(
+            "Failed to delete product: " +
+            err.message
         );
 
     }
@@ -649,572 +1053,495 @@ async function addActivity(message) {
 }
 
 
-/* ==========================================
-   LOAD ACTIVITY LOGS
-========================================== */
-
-onValue(
-    activityRef,
-    function(snapshot) {
-
-        activities = [];
-
-        const data =
-            snapshot.val();
-
-
-        if (data) {
-
-            Object.keys(data).forEach(
-                function(key) {
-
-                    activities.push({
-
-                        id: key,
-
-                        message:
-                            data[key].message || "",
-
-                        time:
-                            data[key].time || ""
-
-                    });
-
-                }
-            );
-
-        }
-
-
-        activities.reverse();
-
-        renderActivities();
-
-    }
-);
-
-
-/* ==========================================
-   RENDER ACTIVITY
-========================================== */
-
-function renderActivities() {
-
-    const recentActivity =
-        document.getElementById(
-            "recentActivity"
-        );
-
-
-    const activityList =
-        document.getElementById(
-            "activityList"
-        );
-
-
-    if (
-        !recentActivity &&
-        !activityList
-    ) {
-        return;
-    }
-
-
-    if (activities.length === 0) {
-
-        const emptyHTML =
-            "<p>No activity logs.</p>";
-
-
-        if (recentActivity) {
-            recentActivity.innerHTML =
-                emptyHTML;
-        }
-
-
-        if (activityList) {
-            activityList.innerHTML =
-                emptyHTML;
-        }
-
-
-        return;
-
-    }
-
-
-    const html =
-        activities
-            .slice(0, 20)
-            .map(
-                function(activity) {
-
-                    return `
-                        <div class="activity-item">
-                            📝
-                            ${escapeHTML(
-                                activity.message
-                            )}
-                            <small>
-                                ${escapeHTML(
-                                    activity.time
-                                )}
-                            </small>
-                        </div>
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    if (recentActivity) {
-        recentActivity.innerHTML =
-            html;
-    }
-
-
-    if (activityList) {
-        activityList.innerHTML =
-            html;
-    }
-
-}
-
-
-/* ==========================================
+/* =====================================================
    DASHBOARD
-========================================== */
+===================================================== */
 
-function updateDashboard() {
+async function updateDashboard() {
+
+    const products =
+        await getProducts();
+
+
+    const list =
+        Object.values(products);
+
 
     let totalStock = 0;
 
-    let lowStock = 0;
+    let estimatedValue = 0;
 
-    let totalValue = 0;
-
-
-    products.forEach(
-        function(product) {
-
-            totalStock +=
-                Number(product.quantity);
-
-            totalValue +=
-                Number(product.quantity) *
-                Number(product.price);
+    let lowStockCount = 0;
 
 
-            if (
-                Number(product.quantity) <=
-                Number(product.threshold)
-            ) {
+    list.forEach(product => {
 
-                lowStock++;
+        const quantity =
+            Number(product.quantity || 0);
 
-            }
+        const price =
+            Number(product.price || 0);
 
+        const threshold =
+            Number(product.threshold || 5);
+
+
+        totalStock += quantity;
+
+        estimatedValue +=
+            quantity * price;
+
+
+        if (quantity <= threshold) {
+            lowStockCount++;
         }
-    );
+
+    });
 
 
-    const totalProducts =
-        document.getElementById(
-            "totalProducts"
-        );
+    document.getElementById(
+        "totalProducts"
+    ).textContent = list.length;
 
 
-    const totalStockElement =
-        document.getElementById(
-            "totalStock"
-        );
+    document.getElementById(
+        "totalStock"
+    ).textContent = totalStock;
 
 
-    const lowStockElement =
-        document.getElementById(
-            "lowStock"
-        );
+    document.getElementById(
+        "lowStock"
+    ).textContent = lowStockCount;
 
 
-    const inventoryValue =
-        document.getElementById(
-            "inventoryValue"
-        );
+    document.getElementById(
+        "estimatedValue"
+    ).textContent =
+        "₱" + estimatedValue.toFixed(2);
 
 
-    if (totalProducts) {
+    renderLowStock(products);
 
-        totalProducts.textContent =
-            products.length;
-
-    }
-
-
-    if (totalStockElement) {
-
-        totalStockElement.textContent =
-            totalStock;
-
-    }
-
-
-    if (lowStockElement) {
-
-        lowStockElement.textContent =
-            lowStock;
-
-    }
-
-
-    if (inventoryValue) {
-
-        inventoryValue.textContent =
-            "₱" +
-            totalValue.toLocaleString(
-                "en-PH",
-                {
-
-                    minimumFractionDigits: 2,
-
-                    maximumFractionDigits: 2
-
-                }
-            );
-
-    }
-
-
-    renderLowStock();
+    renderRecentActivity();
 
 }
 
 
-/* ==========================================
+/* =====================================================
    LOW STOCK
-========================================== */
+===================================================== */
 
-function renderLowStock() {
+function renderLowStock(products) {
 
     const container =
-        document.getElementById(
-            "lowStockList"
-        );
+        document.getElementById("lowStockList");
 
 
-    if (!container) {
-        return;
-    }
+    container.innerHTML = "";
 
 
     const lowProducts =
-        products.filter(
-            function(product) {
+        Object.values(products)
+            .filter(product => {
 
-                return (
-                    Number(product.quantity) <=
-                    Number(product.threshold)
-                );
+                const quantity =
+                    Number(product.quantity || 0);
 
-            }
-        );
+                const threshold =
+                    Number(product.threshold || 5);
+
+                return quantity <= threshold;
+
+            });
 
 
     if (lowProducts.length === 0) {
 
-        container.innerHTML =
-            "<p>No low-stock products.</p>";
+        container.innerHTML = `
+            <p class="empty-text">
+                No low stock products.
+            </p>
+        `;
 
         return;
-
     }
 
 
-    container.innerHTML =
-        lowProducts
-            .map(
-                function(product) {
+    lowProducts.forEach(product => {
 
-                    return `
-                        <div class="stock-item">
+        const item =
+            document.createElement("div");
 
-                            <strong>
-                                ${escapeHTML(
-                                    product.name
-                                )}
-                            </strong>
 
-                            <small>
-                                ${escapeHTML(
-                                    product.category
-                                )}
-                                • SKU:
-                                ${escapeHTML(
-                                    product.sku
-                                )}
-                            </small>
+        item.className =
+            "low-stock-item";
 
-                            <span class="low-label">
-                                ${product.quantity}
-                                pcs remaining
-                            </span>
 
-                        </div>
-                    `;
+        item.innerHTML = `
 
-                }
-            )
-            .join("");
+            <strong>
+                ${escapeHTML(product.name || "")}
+            </strong>
+
+            <span>
+                Only ${Number(product.quantity || 0)} left
+            </span>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
 
 }
 
 
-/* ==========================================
-   INVENTORY TABLE
-========================================== */
+/* =====================================================
+   RECENT ACTIVITY
+===================================================== */
 
-window.renderInventory = function() {
+async function renderRecentActivity() {
 
-    const table =
-        document.getElementById(
-            "inventoryTable"
-        );
+    const container =
+        document.getElementById("recentActivity");
 
 
-    if (!table) {
-        return;
+    container.innerHTML = `
+        <p class="empty-text">
+            Loading...
+        </p>
+    `;
+
+
+    try {
+
+        const snapshot =
+            await get(activityRef);
+
+
+        if (!snapshot.exists()) {
+
+            container.innerHTML = `
+                <p class="empty-text">
+                    No recent activity.
+                </p>
+            `;
+
+            return;
+        }
+
+
+        const activities =
+            Object.values(snapshot.val())
+                .sort(
+                    (a, b) =>
+                        new Date(b.timestamp) -
+                        new Date(a.timestamp)
+                )
+                .slice(0, 5);
+
+
+        container.innerHTML = "";
+
+
+        activities.forEach(activity => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "activity-item";
+
+
+            item.innerHTML = `
+
+                <strong>
+                    ${escapeHTML(activity.action || "")}
+                </strong>
+
+                <span>
+                    ${escapeHTML(activity.details || "")}
+                </span>
+
+            `;
+
+
+            container.appendChild(item);
+
+        });
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        container.innerHTML = `
+            <p class="empty-text">
+                Unable to load activity.
+            </p>
+        `;
+
     }
 
-
-    const searchBox =
-        document.getElementById(
-            "searchBox"
-        );
+}
 
 
-    const categoryFilter =
-        document.getElementById(
-            "categoryFilter"
-        );
+/* =====================================================
+   ACTIVITY PAGE
+===================================================== */
+
+async function renderActivities() {
+
+    const tbody =
+        document.getElementById("activityTableBody");
 
 
-    const search =
-        searchBox
-            ? searchBox.value
-                .toLowerCase()
-                .trim()
-            : "";
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                Loading...
+            </td>
+        </tr>
+    `;
 
 
-    const category =
-        categoryFilter
-            ? categoryFilter.value
-            : "";
+    try {
+
+        const snapshot =
+            await get(activityRef);
 
 
-    const filteredProducts =
-        products.filter(
-            function(product) {
-
-                const searchMatch =
-                    product.name
-                        .toLowerCase()
-                        .includes(search)
-                    ||
-                    product.sku
-                        .toLowerCase()
-                        .includes(search);
+        tbody.innerHTML = "";
 
 
-                const categoryMatch =
-                    !category ||
-                    product.category === category;
+        if (!snapshot.exists()) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align:center;">
+                        No activity logs.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
 
 
-                return (
-                    searchMatch &&
-                    categoryMatch
+        const activities =
+            Object.values(snapshot.val())
+                .sort(
+                    (a, b) =>
+                        new Date(b.timestamp) -
+                        new Date(a.timestamp)
+                );
+
+
+        activities.forEach(activity => {
+
+            const row =
+                document.createElement("tr");
+
+
+            const date =
+                activity.timestamp
+                    ? new Date(
+                        activity.timestamp
+                    ).toLocaleString()
+                    : "-";
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHTML(date)}
+                </td>
+
+                <td>
+                    ${escapeHTML(activity.user || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(activity.action || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(activity.details || "-")}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        });
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    Failed to load activity logs.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+    .getElementById("searchProduct")
+    .addEventListener(
+        "input",
+        renderInventory
+    );
+
+
+document
+    .getElementById("categoryFilter")
+    .addEventListener(
+        "change",
+        renderInventory
+    );
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                showPage(
+                    button.dataset.page
                 );
 
             }
         );
 
+    });
 
-    if (filteredProducts.length === 0) {
 
-        table.innerHTML = `
-            <tr>
-                <td colspan="7" class="empty-table">
-                    No products found.
-                </td>
-            </tr>
-        `;
+/* =====================================================
+   BUTTONS
+===================================================== */
 
-        return;
+document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        loginUser
+    );
+
+
+document
+    .getElementById("registerForm")
+    .addEventListener(
+        "submit",
+        registerUser
+    );
+
+
+document
+    .getElementById("productForm")
+    .addEventListener(
+        "submit",
+        addProduct
+    );
+
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        logout
+    );
+
+
+document
+    .getElementById("inventoryAddBtn")
+    .addEventListener(
+        "click",
+        () => showPage("addProduct")
+    );
+
+
+/* =====================================================
+   CHECK SESSION
+===================================================== */
+
+const savedUser =
+    sessionStorage.getItem("bakeryUser");
+
+
+if (savedUser) {
+
+    try {
+
+        currentUser =
+            JSON.parse(savedUser);
+
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("systemPage")
+            .classList.remove("hidden");
+
+
+        updateUserDisplay();
+
+        updateDashboard();
 
     }
+    catch (err) {
 
+        console.error(err);
 
-    table.innerHTML =
-        filteredProducts
-            .map(
-                function(product) {
-
-                    return `
-                        <tr>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.name
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.sku
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.category
-                                )}
-                            </td>
-
-                            <td>
-                                ${product.quantity}
-                            </td>
-
-                            <td>
-                                ₱${Number(
-                                    product.price
-                                ).toFixed(2)}
-                            </td>
-
-                            <td>
-                                ${product.threshold}
-                            </td>
-
-                            <td>
-
-                                <button
-                                    onclick="editQuantity('${product.id}')">
-                                    Edit
-                                </button>
-
-                                <button
-                                    onclick="deleteProduct('${product.id}')">
-                                    Delete
-                                </button>
-
-                            </td>
-
-                        </tr>
-                    `;
-
-                }
-            )
-            .join("");
-
-};
-
-
-/* ==========================================
-   SEARCH
-========================================== */
-
-const searchBox =
-    document.getElementById(
-        "searchBox"
-    );
-
-
-if (searchBox) {
-
-    searchBox.addEventListener(
-        "input",
-        renderInventory
-    );
-
-}
-
-
-/* ==========================================
-   CATEGORY FILTER
-========================================== */
-
-const categoryFilter =
-    document.getElementById(
-        "categoryFilter"
-    );
-
-
-if (categoryFilter) {
-
-    categoryFilter.addEventListener(
-        "change",
-        renderInventory
-    );
-
-}
-
-
-/* ==========================================
-   ESCAPE HTML
-========================================== */
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
+        sessionStorage.removeItem(
+            "bakeryUser"
         );
 
-}
-
-
-/* ==========================================
-   SESSION CHECK
-========================================== */
-
-if (
-    sessionStorage.getItem(
-        "bakeryLoggedIn"
-    ) === "true"
-) {
-
-    document
-        .getElementById("loginPage")
-        ?.classList.add("hidden");
-
-
-    document
-        .getElementById("system")
-        ?.classList.remove("hidden");
-
-
-    updateDashboard();
+    }
 
 }
