@@ -6,7 +6,7 @@
 
     <title>Arbees Bakery Shop</title>
 
-    <!-- GOOGLE FONT -->
+    <!-- Poppins Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -21,28 +21,25 @@
 
 <body>
 
-<!-- =====================================================
+<!-- =========================
      LOGIN PAGE
-===================================================== -->
+========================= -->
 
 <div id="loginPage" class="auth-page">
 
     <div class="auth-card">
 
-        <div class="auth-logo-container">
-            <img
-                src="arbees-bakeshop-logo1.png"
-                alt="Arbees Bakery Shop"
-                class="auth-logo"
-            >
-        </div>
+        <img
+            src="arbees-bakeshop-logo1.png"
+            alt="Arbees Bakery Shop"
+            class="auth-logo"
+        >
 
         <h1>Welcome Back!</h1>
 
         <p class="auth-subtitle">
             Login to your Arbees Bakery Shop account
         </p>
-
 
         <form id="loginForm">
 
@@ -61,7 +58,6 @@
 
             </div>
 
-
             <div class="input-group">
 
                 <label for="loginPassword">
@@ -77,12 +73,7 @@
 
             </div>
 
-
-            <p
-                id="loginError"
-                class="error-message"
-            ></p>
-
+            <p id="loginError" class="error-message"></p>
 
             <button
                 type="submit"
@@ -92,7 +83,6 @@
             </button>
 
         </form>
-
 
         <p class="auth-switch">
 
@@ -113,28 +103,25 @@
 </div>
 
 
-<!-- =====================================================
+<!-- =========================
      REGISTER PAGE
-===================================================== -->
+========================= -->
 
 <div id="registerPage" class="auth-page hidden">
 
     <div class="auth-card">
 
-        <div class="auth-logo-container">
-            <img
-                src="arbees-bakeshop-logo1.png"
-                alt="Arbees Bakery Shop"
-                class="auth-logo"
-            >
-        </div>
+        <img
+            src="arbees-bakeshop-logo1.png"
+            alt="Arbees Bakery Shop"
+            class="auth-logo"
+        >
 
         <h1>Create Account</h1>
 
         <p class="auth-subtitle">
             Register your Arbees Bakery Shop account
         </p>
-
 
         <form id="registerForm">
 
@@ -153,7 +140,6 @@
 
             </div>
 
-
             <div class="input-group">
 
                 <label for="registerEmail">
@@ -168,7 +154,6 @@
                 >
 
             </div>
-
 
             <div class="input-group">
 
@@ -185,7 +170,6 @@
 
             </div>
 
-
             <div class="input-group">
 
                 <label for="confirmPassword">
@@ -201,12 +185,7 @@
 
             </div>
 
-
-            <p
-                id="registerError"
-                class="error-message"
-            ></p>
-
+            <p id="registerError" class="error-message"></p>
 
             <button
                 type="submit"
@@ -216,7 +195,6 @@
             </button>
 
         </form>
-
 
         <p class="auth-switch">
 
@@ -237,20 +215,18 @@
 </div>
 
 
-<!-- =====================================================
+<!-- =========================
      MAIN SYSTEM
-===================================================== -->
+========================= -->
 
 <div id="systemPage" class="system-page hidden">
 
 
-    <!-- =================================================
+    <!-- =========================
          SIDEBAR
-    ================================================== -->
+    ========================= -->
 
     <aside class="sidebar">
-
-        <!-- LOGO -->
 
         <div class="sidebar-logo">
 
@@ -286,7 +262,6 @@
                 <span>Dashboard</span>
             </button>
 
-
             <button
                 class="nav-item"
                 data-page="inventory"
@@ -294,7 +269,6 @@
                 <span class="nav-icon">📦</span>
                 <span>Inventory</span>
             </button>
-
 
             <button
                 class="nav-item"
@@ -304,7 +278,6 @@
                 <span>Add Product</span>
             </button>
 
-
             <button
                 class="nav-item"
                 data-page="activity"
@@ -312,7 +285,6 @@
                 <span class="nav-icon">▣</span>
                 <span>Activity Logs</span>
             </button>
-
 
             <button
                 class="nav-item"
@@ -329,22 +301,16 @@
 
         <div class="sidebar-decoration">
 
-            <div class="bread basket">
-
+            <div class="bread">
                 🥖 🍞 🥐
-
             </div>
 
             <div class="wheat">
-
-                🌾 🌾 🌾
-
+                🌾 🌾
             </div>
 
             <div class="cupcake">
-
                 🧁
-
             </div>
 
         </div>
@@ -356,35 +322,30 @@
             id="logoutBtn"
             class="logout-btn"
         >
-
             <span>↪</span>
-
             Logout
-
         </button>
 
     </aside>
 
 
-
-    <!-- =================================================
+    <!-- =========================
          MAIN CONTENT
-    ================================================== -->
+    ========================= -->
 
     <main class="main-content">
 
 
-        <!-- =================================================
+        <!-- =========================
              DASHBOARD
-        ================================================== -->
+        ========================= -->
 
         <section
             id="dashboard"
             class="page-section"
         >
 
-
-            <!-- TOP HEADER -->
+            <!-- HEADER -->
 
             <div class="dashboard-header">
 
@@ -401,7 +362,7 @@
                 </div>
 
 
-                <!-- HEADER USER -->
+                <!-- PROFILE -->
 
                 <div class="header-profile">
 
@@ -413,7 +374,6 @@
                         >
 
                     </div>
-
 
                     <div class="header-user-info">
 
@@ -427,7 +387,6 @@
 
                     </div>
 
-
                     <span class="profile-arrow">
                         ⌄
                     </span>
@@ -437,24 +396,19 @@
             </div>
 
 
-
-            <!-- =================================================
+            <!-- =========================
                  WELCOME BANNER
-            ================================================== -->
+            ========================= -->
 
             <div class="welcome-banner">
 
                 <div class="welcome-text">
 
                     <h2>
-
                         Good day,
                         <span id="dashboardUserName">
                             User
-                        </span>!
-
-                        👋
-
+                        </span>! 👋
                     </h2>
 
                     <p>
@@ -463,8 +417,6 @@
 
                 </div>
 
-
-                <!-- BAKERY ILLUSTRATION -->
 
                 <div class="bakery-decoration">
 
@@ -489,10 +441,9 @@
             </div>
 
 
-
-            <!-- =================================================
+            <!-- =========================
                  STAT CARDS
-            ================================================== -->
+            ========================= -->
 
             <div class="stats-grid">
 
@@ -504,7 +455,6 @@
                     <div class="stat-icon">
                         📦
                     </div>
-
 
                     <div class="stat-content">
 
@@ -522,20 +472,16 @@
 
                     </div>
 
-
                     <div class="mini-chart purple-chart">
-
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
-
                     </div>
 
                 </div>
-
 
 
                 <!-- TOTAL STOCK -->
@@ -545,7 +491,6 @@
                     <div class="stat-icon">
                         📊
                     </div>
-
 
                     <div class="stat-content">
 
@@ -563,20 +508,16 @@
 
                     </div>
 
-
                     <div class="mini-chart green-chart">
-
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
-
                     </div>
 
                 </div>
-
 
 
                 <!-- LOW STOCK -->
@@ -586,7 +527,6 @@
                     <div class="stat-icon">
                         ⚠️
                     </div>
-
 
                     <div class="stat-content">
 
@@ -604,20 +544,16 @@
 
                     </div>
 
-
                     <div class="mini-chart yellow-chart">
-
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
-
                     </div>
 
                 </div>
-
 
 
                 <!-- ESTIMATED VALUE -->
@@ -627,7 +563,6 @@
                     <div class="stat-icon">
                         ₱
                     </div>
-
 
                     <div class="stat-content">
 
@@ -645,16 +580,13 @@
 
                     </div>
 
-
                     <div class="mini-chart blue-chart">
-
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
-
                     </div>
 
                 </div>
@@ -662,15 +594,14 @@
             </div>
 
 
-
-            <!-- =================================================
-                 BOTTOM DASHBOARD
-            ================================================== -->
+            <!-- =========================
+                 BOTTOM PANELS
+            ========================= -->
 
             <div class="dashboard-columns">
 
 
-                <!-- LOW STOCK PRODUCTS -->
+                <!-- LOW STOCK -->
 
                 <div class="dashboard-panel">
 
@@ -696,7 +627,6 @@
 
                         </div>
 
-
                         <button
                             class="view-all-btn red-btn"
                             onclick="openPage('inventory')"
@@ -714,9 +644,7 @@
 
                         <div class="empty-dashboard">
 
-                            <span>
-                                📦
-                            </span>
+                            <span>📦</span>
 
                             <p>
                                 No low stock products
@@ -727,7 +655,6 @@
                     </div>
 
                 </div>
-
 
 
                 <!-- RECENT ACTIVITY -->
@@ -756,7 +683,6 @@
 
                         </div>
 
-
                         <button
                             class="view-all-btn purple-btn"
                             onclick="openPage('activity')"
@@ -774,9 +700,7 @@
 
                         <div class="empty-dashboard">
 
-                            <span>
-                                📝
-                            </span>
+                            <span>📝</span>
 
                             <p>
                                 No recent activity
@@ -793,15 +717,13 @@
         </section>
 
 
-
-        <!-- =================================================
-             INVENTORY PAGE
-        ================================================== -->
+        <!-- =========================
+             INVENTORY
+        ========================= -->
 
         <section
             id="inventory"
             class="page-section"
-            style="display:none;"
         >
 
             <div class="page-title">
@@ -835,7 +757,6 @@
                     id="searchProduct"
                     placeholder="🔍 Search product..."
                 >
-
 
                 <select id="categoryFilter">
 
@@ -871,43 +792,18 @@
                     <thead>
 
                         <tr>
-
-                            <th>
-                                Product
-                            </th>
-
-                            <th>
-                                SKU
-                            </th>
-
-                            <th>
-                                Category
-                            </th>
-
-                            <th>
-                                Quantity
-                            </th>
-
-                            <th>
-                                Price
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
 
                     </thead>
 
-
-                    <tbody id="inventoryTableBody">
-
-                    </tbody>
+                    <tbody id="inventoryTableBody"></tbody>
 
                 </table>
 
@@ -916,15 +812,13 @@
         </section>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              ADD PRODUCT
-        ================================================== -->
+        ========================= -->
 
         <section
             id="addProduct"
             class="page-section"
-            style="display:none;"
         >
 
             <div class="page-title">
@@ -950,7 +844,6 @@
 
                     <div class="form-grid">
 
-
                         <div class="input-group">
 
                             <label>
@@ -960,7 +853,7 @@
                             <input
                                 type="text"
                                 id="productName"
-                                placeholder="Example: Chocolate Cake"
+                                placeholder="Chocolate Cake"
                                 required
                             >
 
@@ -976,7 +869,7 @@
                             <input
                                 type="text"
                                 id="productSKU"
-                                placeholder="Example: CAKE-001"
+                                placeholder="CAKE-001"
                                 required
                             >
 
@@ -1029,7 +922,6 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
-                                placeholder="0"
                                 required
                             >
 
@@ -1047,7 +939,6 @@
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
-                                placeholder="0.00"
                                 required
                             >
 
@@ -1064,7 +955,6 @@
                                 type="number"
                                 id="lowStockThreshold"
                                 min="0"
-                                placeholder="5"
                                 value="5"
                                 required
                             >
@@ -1094,15 +984,13 @@
         </section>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              ACTIVITY LOGS
-        ================================================== -->
+        ========================= -->
 
         <section
             id="activity"
             class="page-section"
-            style="display:none;"
         >
 
             <div class="page-title">
@@ -1129,31 +1017,15 @@
                     <thead>
 
                         <tr>
-
-                            <th>
-                                Date & Time
-                            </th>
-
-                            <th>
-                                User
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
-                            <th>
-                                Details
-                            </th>
-
+                            <th>Date & Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
                         </tr>
 
                     </thead>
 
-
-                    <tbody id="activityTableBody">
-
-                    </tbody>
+                    <tbody id="activityTableBody"></tbody>
 
                 </table>
 
@@ -1162,15 +1034,13 @@
         </section>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              MY ACCOUNT
-        ================================================== -->
+        ========================= -->
 
         <section
             id="users"
             class="page-section"
-            style="display:none;"
         >
 
             <div class="page-title">
