@@ -233,19 +233,15 @@
             <div class="page-header">
 
                 <div>
-
                     <h1>Dashboard</h1>
 
                     <p>
                         Welcome to Arbees Bakery Shop
                     </p>
-
                 </div>
 
             </div>
 
-
-            <!-- USER INFORMATION -->
 
             <div class="user-info">
 
@@ -279,11 +275,13 @@
                     </div>
 
                     <div>
+
                         <span>Total Products</span>
 
                         <strong id="totalProducts">
                             0
                         </strong>
+
                     </div>
 
                 </div>
@@ -296,11 +294,13 @@
                     </div>
 
                     <div>
+
                         <span>Total Stock</span>
 
                         <strong id="totalStock">
                             0
                         </strong>
+
                     </div>
 
                 </div>
@@ -313,11 +313,13 @@
                     </div>
 
                     <div>
+
                         <span>Low Stock</span>
 
                         <strong id="lowStock">
                             0
                         </strong>
+
                     </div>
 
                 </div>
@@ -330,11 +332,13 @@
                     </div>
 
                     <div>
+
                         <span>Estimated Value</span>
 
                         <strong id="estimatedValue">
                             ₱0.00
                         </strong>
+
                     </div>
 
                 </div>
@@ -342,11 +346,9 @@
             </div>
 
 
-            <!-- DASHBOARD GRID -->
+            <!-- DASHBOARD PANELS -->
 
             <div class="dashboard-grid">
-
-                <!-- LOW STOCK -->
 
                 <div class="panel">
 
@@ -358,9 +360,8 @@
 
                     </div>
 
-                    <div
-                        id="lowStockList"
-                        class="low-stock-list">
+                    <div id="lowStockList"
+                         class="low-stock-list">
 
                         <p class="empty-message">
                             No low stock products.
@@ -370,8 +371,6 @@
 
                 </div>
 
-
-                <!-- RECENT ACTIVITY -->
 
                 <div class="panel">
 
@@ -383,9 +382,8 @@
 
                     </div>
 
-                    <div
-                        id="recentActivity"
-                        class="activity-list">
+                    <div id="recentActivity"
+                         class="activity-list">
 
                         <p class="empty-message">
                             No recent activity.
@@ -404,7 +402,8 @@
              INVENTORY
         ================================================= -->
 
-        <section id="inventoryPage" class="content-page hidden">
+        <section id="inventoryPage"
+                 class="content-page hidden">
 
             <div class="page-header">
 
@@ -492,8 +491,7 @@
 
                         <tr>
 
-                            <td
-                                colspan="7"
+                            <td colspan="7"
                                 class="empty-table">
 
                                 No products found.
@@ -515,7 +513,8 @@
              ADD PRODUCT
         ================================================= -->
 
-        <section id="addProductPage" class="content-page hidden">
+        <section id="addProductPage"
+                 class="content-page hidden">
 
             <div class="page-header">
 
@@ -576,9 +575,8 @@
                                 Category
                             </label>
 
-                            <select
-                                id="productCategory"
-                                required>
+                            <select id="productCategory"
+                                    required>
 
                                 <option value="">
                                     Select Category
@@ -683,7 +681,9 @@
 
                     </div>
 
-                    <p id="productMessage" class="success-message"></p>
+                    <p id="productMessage"
+                       class="success-message">
+                    </p>
 
                 </form>
 
@@ -696,7 +696,8 @@
              ACTIVITY LOGS
         ================================================= -->
 
-        <section id="activityPage" class="content-page hidden">
+        <section id="activityPage"
+                 class="content-page hidden">
 
             <div class="page-header">
 
@@ -734,8 +735,7 @@
 
                         <tr>
 
-                            <td
-                                colspan="4"
+                            <td colspan="4"
                                 class="empty-table">
 
                                 No activity logs.
@@ -757,7 +757,8 @@
              USERS / MY ACCOUNT
         ================================================= -->
 
-        <section id="usersPage" class="content-page hidden">
+        <section id="usersPage"
+                 class="content-page hidden">
 
             <div class="page-header">
 
@@ -778,9 +779,11 @@
 
                 <div class="profile-image">
 
-                    <!-- PUT YOUR IMAGE HERE -->
-                    <img src="MY PICTURE" alt="Profile Picture">
-                    
+                    <img
+                        src="profile.jpg"
+                        alt="Profile Picture"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='👤';"
+                    >
 
                 </div>
 
@@ -811,55 +814,10 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     FIREBASE + JAVASCRIPT
 ===================================================== -->
 
-<script>
-
-function showRegister() {
-
-    document
-        .getElementById("loginPage")
-        .classList.add("hidden");
-
-    document
-        .getElementById("registerPage")
-        .classList.remove("hidden");
-
-    const error =
-        document.getElementById("loginError");
-
-    if (error) {
-        error.textContent = "";
-    }
-}
-
-
-function showLogin() {
-
-    document
-        .getElementById("registerPage")
-        .classList.add("hidden");
-
-    document
-        .getElementById("loginPage")
-        .classList.remove("hidden");
-
-    const error =
-        document.getElementById("registerError");
-
-    if (error) {
-        error.textContent = "";
-    }
-}
-
-</script>
-
-
-<script
-    type="module"
-    src="script.js">
-</script>
+<script type="module" src="script.js"></script>
 
 </body>
 
