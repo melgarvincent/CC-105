@@ -12,9 +12,9 @@
 
 <body>
 
-<!-- =====================================================
-     LOGIN PAGE
-===================================================== -->
+<!-- ================================
+     LOGIN
+================================ -->
 
 <section id="loginPage" class="auth-page">
 
@@ -50,13 +50,8 @@
                 required
             >
 
-            <button
-                type="submit"
-                class="primary-btn"
-                id="loginBtn">
-
+            <button type="submit" class="primary-btn">
                 Login
-
             </button>
 
             <p id="loginError" class="error-message"></p>
@@ -67,12 +62,8 @@
 
             <span>Don't have an account?</span>
 
-            <button
-                type="button"
-                id="showRegisterBtn">
-
+            <button type="button" id="goRegisterBtn">
                 Register
-
             </button>
 
         </div>
@@ -82,9 +73,9 @@
 </section>
 
 
-<!-- =====================================================
-     REGISTER PAGE
-===================================================== -->
+<!-- ================================
+     REGISTER
+================================ -->
 
 <section id="registerPage" class="auth-page hidden">
 
@@ -140,13 +131,8 @@
                 required
             >
 
-            <button
-                type="submit"
-                class="primary-btn"
-                id="registerBtn">
-
+            <button type="submit" class="primary-btn">
                 Register
-
             </button>
 
             <p id="registerError" class="error-message"></p>
@@ -157,12 +143,8 @@
 
             <span>Already have an account?</span>
 
-            <button
-                type="button"
-                id="showLoginBtn">
-
+            <button type="button" id="goLoginBtn">
                 Login
-
             </button>
 
         </div>
@@ -172,9 +154,9 @@
 </section>
 
 
-<!-- =====================================================
-     MAIN SYSTEM
-===================================================== -->
+<!-- ================================
+     SYSTEM
+================================ -->
 
 <section id="systemPage" class="system-page hidden">
 
@@ -188,76 +170,53 @@
                 🥐
             </div>
 
-            <h2>ARBEES</h2>
-
-            <span>BAKERY SHOP</span>
+            <div>
+                <h2>ARBEES</h2>
+                <span>BAKERY SHOP</span>
+            </div>
 
         </div>
 
+
         <nav>
 
-            <button
-                class="nav-btn active"
-                data-page="dashboard">
-
-                🏠 <span>Dashboard</span>
-
+            <button class="nav-btn active" data-page="dashboard">
+                🏠 Dashboard
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="inventory">
-
-                📦 <span>Inventory</span>
-
+            <button class="nav-btn" data-page="inventory">
+                📦 Inventory
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="addProduct">
-
-                ➕ <span>Add Product</span>
-
+            <button class="nav-btn" data-page="addProduct">
+                ➕ Add Product
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="activity">
-
-                📋 <span>Activity Logs</span>
-
+            <button class="nav-btn" data-page="activity">
+                📋 Activity Logs
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="users">
-
-                👤 <span>My Account</span>
-
+            <button class="nav-btn" data-page="users">
+                👤 My Account
             </button>
 
         </nav>
 
-        <button
-            id="logoutBtn"
-            class="logout-btn">
 
+        <button id="logoutBtn" class="logout-btn">
             🚪 Logout
-
         </button>
 
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
 
     <main class="main-content">
 
         <div class="mobile-header">
 
-            <strong>
-                🥐 Arbees Bakery
-            </strong>
+            <strong>🥐 Arbees Bakery</strong>
 
             <button id="mobileLogout">
                 🚪
@@ -266,13 +225,11 @@
         </div>
 
 
-        <!-- =================================================
+        <!-- ================================
              DASHBOARD
-        ================================================= -->
+        ================================= -->
 
-        <section
-            id="dashboardPage"
-            class="content-page">
+        <section id="dashboardPage" class="content-page">
 
             <div class="page-header">
 
@@ -310,8 +267,6 @@
             </div>
 
 
-            <!-- STATISTICS -->
-
             <div class="stats-grid">
 
                 <div class="stat-card">
@@ -322,9 +277,7 @@
 
                     <div>
 
-                        <span>
-                            Total Products
-                        </span>
+                        <span>Total Products</span>
 
                         <strong id="totalProducts">
                             0
@@ -343,9 +296,7 @@
 
                     <div>
 
-                        <span>
-                            Total Stock
-                        </span>
+                        <span>Total Stock</span>
 
                         <strong id="totalStock">
                             0
@@ -364,9 +315,7 @@
 
                     <div>
 
-                        <span>
-                            Low Stock
-                        </span>
+                        <span>Low Stock</span>
 
                         <strong id="lowStock">
                             0
@@ -385,9 +334,7 @@
 
                     <div>
 
-                        <span>
-                            Estimated Value
-                        </span>
+                        <span>Estimated Value</span>
 
                         <strong id="estimatedValue">
                             ₱0.00
@@ -412,9 +359,7 @@
 
                     </div>
 
-                    <div
-                        id="lowStockList"
-                        class="low-stock-list">
+                    <div id="lowStockList">
 
                         <p class="empty-message">
                             No low stock products.
@@ -435,9 +380,7 @@
 
                     </div>
 
-                    <div
-                        id="recentActivity"
-                        class="activity-list">
+                    <div id="recentActivity">
 
                         <p class="empty-message">
                             No recent activity.
@@ -452,13 +395,11 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- ================================
              INVENTORY
-        ================================================= -->
+        ================================= -->
 
-        <section
-            id="inventoryPage"
-            class="content-page hidden">
+        <section id="inventoryPage" class="content-page hidden">
 
             <div class="page-header">
 
@@ -473,8 +414,8 @@
                 </div>
 
                 <button
-                    class="primary-btn small-btn"
-                    id="inventoryAddBtn">
+                    id="inventoryAddBtn"
+                    class="primary-btn small-btn">
 
                     + Add Product
 
@@ -546,12 +487,8 @@
 
                         <tr>
 
-                            <td
-                                colspan="7"
-                                class="empty-table">
-
+                            <td colspan="7" class="empty-table">
                                 No products found.
-
                             </td>
 
                         </tr>
@@ -565,13 +502,11 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- ================================
              ADD PRODUCT
-        ================================================= -->
+        ================================= -->
 
-        <section
-            id="addProductPage"
-            class="content-page hidden">
+        <section id="addProductPage" class="content-page hidden">
 
             <div class="page-header">
 
@@ -596,9 +531,7 @@
 
                         <div class="form-group">
 
-                            <label>
-                                Product Name
-                            </label>
+                            <label>Product Name</label>
 
                             <input
                                 type="text"
@@ -612,9 +545,7 @@
 
                         <div class="form-group">
 
-                            <label>
-                                SKU
-                            </label>
+                            <label>SKU</label>
 
                             <input
                                 type="text"
@@ -628,13 +559,9 @@
 
                         <div class="form-group">
 
-                            <label>
-                                Category
-                            </label>
+                            <label>Category</label>
 
-                            <select
-                                id="productCategory"
-                                required>
+                            <select id="productCategory" required>
 
                                 <option value="">
                                     Select Category
@@ -667,15 +594,12 @@
 
                         <div class="form-group">
 
-                            <label>
-                                Quantity
-                            </label>
+                            <label>Quantity</label>
 
                             <input
                                 type="number"
                                 id="productQuantity"
                                 min="0"
-                                placeholder="0"
                                 required
                             >
 
@@ -684,16 +608,13 @@
 
                         <div class="form-group">
 
-                            <label>
-                                Price
-                            </label>
+                            <label>Price</label>
 
                             <input
                                 type="number"
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
-                                placeholder="0.00"
                                 required
                             >
 
@@ -739,10 +660,7 @@
 
                     </div>
 
-                    <p
-                        id="productMessage"
-                        class="success-message">
-                    </p>
+                    <p id="productMessage" class="success-message"></p>
 
                 </form>
 
@@ -751,13 +669,11 @@
         </section>
 
 
-        <!-- =================================================
-             ACTIVITY LOGS
-        ================================================= -->
+        <!-- ================================
+             ACTIVITY
+        ================================= -->
 
-        <section
-            id="activityPage"
-            class="content-page hidden">
+        <section id="activityPage" class="content-page hidden">
 
             <div class="page-header">
 
@@ -795,12 +711,8 @@
 
                         <tr>
 
-                            <td
-                                colspan="4"
-                                class="empty-table">
-
+                            <td colspan="4" class="empty-table">
                                 No activity logs.
-
                             </td>
 
                         </tr>
@@ -814,13 +726,11 @@
         </section>
 
 
-        <!-- =================================================
-             MY ACCOUNT
-        ================================================= -->
+        <!-- ================================
+             ACCOUNT
+        ================================= -->
 
-        <section
-            id="usersPage"
-            class="content-page hidden">
+        <section id="usersPage" class="content-page hidden">
 
             <div class="page-header">
 
@@ -844,7 +754,7 @@
                     <img
                         src="profile.jpg"
                         alt="Profile Picture"
-                        onerror="this.style.display='none'; this.parentElement.innerHTML='👤';">
+                    >
 
                 </div>
 
@@ -856,7 +766,7 @@
                     </h2>
 
                     <p id="profileEmail">
-                        user@email.com
+                        -
                     </p>
 
                     <span id="profileRole">
@@ -873,10 +783,6 @@
 
 </section>
 
-
-<!-- =====================================================
-     FIREBASE SCRIPT
-===================================================== -->
 
 <script type="module" src="script.js"></script>
 
