@@ -7,21 +7,10 @@
 
     <title>Arbee's Bakery Shop</title>
 
-    <!-- GOOGLE FONT -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- YOUR CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
 
 <!-- =====================================================
      LOGIN PAGE
@@ -31,6 +20,7 @@
 
     <div class="auth-card">
 
+        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -46,6 +36,7 @@
         </div>
 
 
+        <!-- LOGIN FORM -->
         <form id="loginForm">
 
             <div class="form-group">
@@ -58,7 +49,6 @@
                     type="email"
                     id="loginEmail"
                     placeholder="Enter your email"
-                    autocomplete="email"
                     required
                 >
 
@@ -75,7 +65,6 @@
                     type="password"
                     id="loginPassword"
                     placeholder="Enter your password"
-                    autocomplete="current-password"
                     required
                 >
 
@@ -98,13 +87,14 @@
         </form>
 
 
+        <!-- REGISTER LINK -->
         <p class="switch-text">
 
             Don't have an account?
 
             <button
                 type="button"
-                id="showRegisterBtn"
+                onclick="showRegister()"
                 class="link-btn"
             >
                 Register
@@ -129,6 +119,7 @@
 
     <div class="auth-card">
 
+        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -144,6 +135,7 @@
         </div>
 
 
+        <!-- REGISTER FORM -->
         <form id="registerForm">
 
             <div class="form-group">
@@ -156,7 +148,6 @@
                     type="text"
                     id="registerName"
                     placeholder="Enter your full name"
-                    autocomplete="name"
                     required
                 >
 
@@ -173,7 +164,6 @@
                     type="email"
                     id="registerEmail"
                     placeholder="Enter your email"
-                    autocomplete="email"
                     required
                 >
 
@@ -190,7 +180,6 @@
                     type="password"
                     id="registerPassword"
                     placeholder="Create a password"
-                    autocomplete="new-password"
                     required
                 >
 
@@ -207,7 +196,6 @@
                     type="password"
                     id="confirmPassword"
                     placeholder="Confirm your password"
-                    autocomplete="new-password"
                     required
                 >
 
@@ -230,13 +218,14 @@
         </form>
 
 
+        <!-- LOGIN LINK -->
         <p class="switch-text">
 
             Already have an account?
 
             <button
                 type="button"
-                id="showLoginBtn"
+                onclick="showLogin()"
                 class="link-btn"
             >
                 Login
@@ -251,7 +240,7 @@
 
 
 <!-- =====================================================
-     MAIN SYSTEM
+     SYSTEM PAGE
 ===================================================== -->
 
 <section
@@ -259,16 +248,13 @@
     class="system hidden"
 >
 
-
     <!-- =================================================
          SIDEBAR
     ================================================== -->
 
     <aside class="sidebar">
 
-
-        <!-- LOGO -->
-
+        <!-- SIDEBAR LOGO -->
         <div class="sidebar-logo">
 
             <div class="logo-icon small">
@@ -280,7 +266,7 @@
 
             </div>
 
-            <div class="sidebar-brand">
+            <div>
 
                 <h2>Arbees</h2>
 
@@ -292,89 +278,62 @@
 
 
         <!-- NAVIGATION -->
-
-        <nav class="sidebar-nav">
+        <nav>
 
             <button
-                type="button"
                 class="nav-btn active"
                 data-page="dashboard"
+                type="button"
             >
-                <span>🏠</span>
-                <span>Dashboard</span>
+                🏠 Dashboard
             </button>
 
 
             <button
-                type="button"
                 class="nav-btn"
                 data-page="inventory"
+                type="button"
             >
-                <span>📦</span>
-                <span>Inventory</span>
+                📦 Inventory
             </button>
 
 
             <button
-                type="button"
                 class="nav-btn"
                 data-page="addProduct"
+                type="button"
             >
-                <span>➕</span>
-                <span>Add Product</span>
+                ➕ Add Product
             </button>
 
 
             <button
-                type="button"
                 class="nav-btn"
                 data-page="activity"
+                type="button"
             >
-                <span>📋</span>
-                <span>Activity Logs</span>
+                📋 Activity Logs
             </button>
 
 
             <button
-                type="button"
                 class="nav-btn"
                 data-page="users"
+                type="button"
             >
-                <span>👤</span>
-                <span>My Account</span>
+                👤 My Account
             </button>
 
         </nav>
 
 
-        <!-- SIDEBAR DECORATION -->
-
-        <div class="sidebar-decoration">
-
-            <div class="bread-decoration">
-                🥖
-            </div>
-
-            <div class="wheat-decoration">
-                🌾
-            </div>
-
-            <div class="bread-small">
-                🥐 🍞
-            </div>
-
-        </div>
-
-
         <!-- LOGOUT -->
-
         <button
-            type="button"
             id="logoutBtn"
             class="logout-btn"
+            type="button"
         >
-            <span>🚪</span>
-            Logout
+            🚪 Logout
         </button>
 
     </aside>
@@ -388,20 +347,17 @@
     <main class="main-content">
 
 
-        <!-- =================================================
-             TOPBAR
-        ================================================== -->
-
+        <!-- TOPBAR -->
         <header class="topbar">
 
-            <div class="topbar-title">
+            <div>
 
                 <h1 id="pageTitle">
                     Dashboard
                 </h1>
 
                 <p>
-                    Welcome to Arbee's Bakery Shop 🥖
+                    Welcome to Arbees Bakery Shop
                 </p>
 
             </div>
@@ -420,6 +376,7 @@
 
                 </div>
 
+
                 <div class="user-details">
 
                     <strong id="headerUserName">
@@ -431,10 +388,6 @@
                     </small>
 
                 </div>
-
-                <span class="profile-arrow">
-                   ⌄
-                </span>
 
             </div>
 
@@ -451,18 +404,18 @@
             class="page"
         >
 
-
-            <!-- WELCOME CARD -->
+            <!-- WELCOME -->
 
             <div class="welcome-card">
 
-                <div class="welcome-content">
+                <div>
 
                     <h2>
-                        Good day,
+                        Welcome,
                         <span id="currentUserName">
                             User
-                        </span>! 👋
+                        </span>
+                        ! 👋
                     </h2>
 
                     <p>
@@ -479,45 +432,24 @@
                     STAFF
                 </div>
 
-
-                <!-- BAKERY DECORATION -->
-
-                <div class="welcome-decoration">
-
-                    <span class="decor-cloud">
-                        ☁️
-                    </span>
-
-                    <span class="decor-bakery">
-                        🏪
-                    </span>
-
-                    <span class="decor-bread">
-                        🥖 🥐
-                    </span>
-
-                </div>
-
             </div>
 
 
 
-            <!-- =================================================
-                 STATISTICS
-            ================================================== -->
+            <!-- STATISTICS -->
 
             <div class="stats-grid">
 
 
                 <!-- TOTAL PRODUCTS -->
 
-                <div class="stat-card purple">
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         📦
                     </div>
 
-                    <div class="stat-info">
+                    <div>
 
                         <span>
                             Total Products
@@ -527,14 +459,6 @@
                             0
                         </h2>
 
-                        <small>
-                            Products in inventory
-                        </small>
-
-                    </div>
-
-                    <div class="stat-chart">
-                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -543,13 +467,13 @@
 
                 <!-- TOTAL STOCK -->
 
-                <div class="stat-card green">
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         📊
                     </div>
 
-                    <div class="stat-info">
+                    <div>
 
                         <span>
                             Total Stock
@@ -559,14 +483,6 @@
                             0
                         </h2>
 
-                        <small>
-                            Available items
-                        </small>
-
-                    </div>
-
-                    <div class="stat-chart">
-                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -575,13 +491,13 @@
 
                 <!-- LOW STOCK -->
 
-                <div class="stat-card yellow">
+                <div class="stat-card">
 
                     <div class="stat-icon">
                         ⚠️
                     </div>
 
-                    <div class="stat-info">
+                    <div>
 
                         <span>
                             Low Stock
@@ -591,14 +507,6 @@
                             0
                         </h2>
 
-                        <small>
-                            Needs restocking
-                        </small>
-
-                    </div>
-
-                    <div class="stat-chart">
-                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -607,13 +515,13 @@
 
                 <!-- ESTIMATED VALUE -->
 
-                <div class="stat-card blue">
+                <div class="stat-card">
 
                     <div class="stat-icon">
-                        ₱
+                        💰
                     </div>
 
-                    <div class="stat-info">
+                    <div>
 
                         <span>
                             Estimated Value
@@ -623,14 +531,6 @@
                             ₱0.00
                         </h2>
 
-                        <small>
-                            Total inventory value
-                        </small>
-
-                    </div>
-
-                    <div class="stat-chart">
-                        ╱╲╱╲
                     </div>
 
                 </div>
@@ -639,9 +539,7 @@
 
 
 
-            <!-- =================================================
-                 DASHBOARD GRID
-            ================================================== -->
+            <!-- DASHBOARD GRID -->
 
             <div class="dashboard-grid">
 
@@ -652,25 +550,9 @@
 
                     <div class="card-header">
 
-                        <div>
-
-                            <h3>
-                                ⚠️ Low Stock Products
-                            </h3>
-
-                            <p>
-                                Products that need attention
-                            </p>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            class="view-btn"
-                            onclick="openPage('inventory')"
-                        >
-                            View All
-                        </button>
+                        <h3>
+                            ⚠️ Low Stock Products
+                        </h3>
 
                     </div>
 
@@ -693,25 +575,9 @@
 
                     <div class="card-header">
 
-                        <div>
-
-                            <h3>
-                                📋 Recent Activity
-                            </h3>
-
-                            <p>
-                                Latest system activities
-                            </p>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            class="view-btn purple-btn"
-                            onclick="openPage('activity')"
-                        >
-                            View All
-                        </button>
+                        <h3>
+                            📋 Recent Activity
+                        </h3>
 
                     </div>
 
@@ -757,9 +623,9 @@
 
 
                 <button
-                    type="button"
                     id="inventoryAddBtn"
                     class="primary-btn small-btn"
+                    type="button"
                 >
                     + Add Product
                 </button>
@@ -768,7 +634,7 @@
 
 
 
-            <!-- SEARCH AND FILTER -->
+            <!-- SEARCH -->
 
             <div class="filter-bar">
 
@@ -1057,7 +923,7 @@
 
 
 
-                    <!-- SUBMIT -->
+                    <!-- BUTTON -->
 
                     <button
                         type="submit"
@@ -1178,81 +1044,65 @@
             <div class="account-card">
 
 
-                <!-- PROFILE -->
+                <!-- PROFILE IMAGE -->
 
-                <div class="profile-section">
+                <div class="profile-image">
 
-                    <div class="profile-image">
-
-                        <img
-                            src="MY PICTURE.jpg"
-                            alt="My Profile Picture"
-                        >
-
-                    </div>
-
-
-                    <div class="profile-heading">
-
-                        <h2 id="profileName">
-                            User
-                        </h2>
-
-                        <p id="profileEmail">
-                            user@email.com
-                        </p>
-
-                        <span
-                            id="profileRole"
-                            class="role-badge"
-                        >
-                            STAFF
-                        </span>
-
-                    </div>
+                    <img
+                        src="MY PICTURE.jpg"
+                        alt="My Profile Picture"
+                    >
 
                 </div>
 
 
 
-                <!-- ACCOUNT DETAILS -->
+                <!-- ACCOUNT INFORMATION -->
 
                 <div class="account-info">
 
 
-                    <div class="account-detail">
+                    <!-- NAME -->
+
+                    <div>
 
                         <span>
-                            Full Name
+                            Name
                         </span>
 
-                        <strong id="accountName">
+                        <strong id="profileName">
                             User
                         </strong>
 
                     </div>
 
 
-                    <div class="account-detail">
+
+                    <!-- EMAIL -->
+
+                    <div>
 
                         <span>
-                            Email Address
+                            Email
                         </span>
 
-                        <strong id="accountEmail">
+                        <strong id="profileEmail">
                             user@email.com
                         </strong>
 
                     </div>
 
 
-                    <div class="account-detail">
+
+                    <!-- ROLE -->
+
+                    <div>
 
                         <span>
-                            Account Role
+                            Role
                         </span>
 
-                        <strong>
+                        <strong id="profileRole">
                             STAFF
                         </strong>
 
@@ -1274,59 +1124,10 @@
      JAVASCRIPT
 ===================================================== -->
 
-<script type="module">
-
-    /*
-     * Import your main Firebase/system script.
-     */
-    import "./script.js";
-
-
-    /*
-     * These functions make the Login/Register buttons
-     * work even though script.js is a module.
-     */
-
-    window.showRegister = function () {
-
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.remove("hidden");
-
-    };
-
-
-    window.showLogin = function () {
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("loginPage")
-            .classList.remove("hidden");
-
-    };
-
-
-    /*
-     * Login/Register button events
-     */
-
-    document
-        .getElementById("showRegisterBtn")
-        .addEventListener("click", window.showRegister);
-
-
-    document
-        .getElementById("showLoginBtn")
-        .addEventListener("click", window.showLogin);
-
-</script>
+<script
+    type="module"
+    src="script.js"
+></script>
 
 </body>
 </html>
