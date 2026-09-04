@@ -49,7 +49,7 @@ button {
 
 
 /* =========================
-   ARBEES LOGO
+   ARBEES BAKESHOP LOGO
 ========================= */
 
 .logo-box {
@@ -57,24 +57,24 @@ button {
     margin-bottom: 28px;
 }
 
-/* Main bakery logo */
+/* MAIN LOGO */
 .bakery-logo {
     display: block;
-    width: 260px;
-    height: 130px;
+    width: 180px;
+    height: 90px;
     max-width: 100%;
     object-fit: contain;
-    margin: 0 auto 15px auto;
+    margin: 0 auto 10px auto;
 }
 
-/* Logo title */
+/* TITLE */
 .logo-box h1 {
     font-size: 28px;
     margin: 0 0 5px 0;
     color: #3d2b1f;
 }
 
-/* Logo subtitle */
+/* SUBTITLE */
 .logo-box p {
     color: #8b7566;
     margin: 0;
@@ -237,15 +237,6 @@ button {
     padding: 0 10px;
 }
 
-/* If using bakery logo in sidebar */
-.sidebar-bakery-logo {
-    width: 55px;
-    height: 55px;
-    object-fit: contain;
-    flex-shrink: 0;
-    border-radius: 8px;
-}
-
 .sidebar-logo h2 {
     font-size: 21px;
 }
@@ -253,6 +244,19 @@ button {
 .sidebar-logo span {
     font-size: 12px;
     color: #d9c7bb;
+}
+
+
+/* =========================
+   SIDEBAR LOGO
+========================= */
+
+.sidebar-bakery-logo {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 8px;
 }
 
 
@@ -710,7 +714,6 @@ td {
     .sidebar {
         width: 210px;
     }
-
 }
 
 
@@ -791,12 +794,11 @@ td {
         width: 100%;
     }
 
-    /* Smaller main logo on mobile */
+    /* LOGO SA MOBILE */
     .bakery-logo {
-        width: 230px;
-        height: 115px;
+        width: 170px;
+        height: 85px;
     }
-
 }
 
 
@@ -815,10 +817,11 @@ td {
         border-radius: 16px;
     }
 
+    /* SMALLER LOGO */
     .bakery-logo {
-        width: 210px;
-        height: 105px;
-        margin-bottom: 12px;
+        width: 150px;
+        height: 75px;
+        margin-bottom: 10px;
     }
 
     .logo-box h1 {
@@ -847,5 +850,4 @@ td {
     .account-card {
         padding: 15px;
     }
-
 }
