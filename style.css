@@ -1,1100 +1,1155 @@
-/* =========================================================
-   ARBEES BAKERY SHOP
-   FULL STYLE.CSS
-========================================================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f8f1eb;
-    color: #2b1b12;
-    min-height: 100vh;
-}
-
-/* =========================================================
-   GENERAL
-========================================================= */
-
-.hidden {
-    display: none !important;
-}
-
-button,
-input,
-select {
-    font-family: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.error-message {
-    color: #d32f2f;
-    font-size: 14px;
-    min-height: 20px;
-    margin: 8px 0;
-}
-
-.success-message {
-    color: #2e7d32;
-    font-size: 14px;
-    min-height: 20px;
-    margin: 10px 0;
-}
-
-.empty-text {
-    color: #8a766b;
-    text-align: center;
-    padding: 30px 10px;
-}
-
-/* =========================================================
-   LOGIN / REGISTER PAGE
-========================================================= */
-
-.auth-page {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px 20px;
-    background: #f8eee6;
-}
-
-/* =========================================================
-   AUTH CARD
-========================================================= */
-
-.auth-card {
-    width: 100%;
-    max-width: 460px;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 35px 40px 30px;
-    box-shadow: 0 10px 35px rgba(75, 42, 25, 0.12);
-    border: 1px solid #eadbd0;
-}
-
-/* =========================================================
-   LOGO ABOVE LOGIN / REGISTER FORM
-========================================================= */
-
-.logo-box {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 28px;
-}
-
-/* MAIN LOGO */
-
-.logo-box img {
-    display: block;
-    width: 180px;
-    height: 115px;
-    max-width: 100%;
-    object-fit: contain;
-    margin: 0 auto 18px;
-}
-
-/* TITLE */
-
-.logo-box h1 {
-    font-size: 30px;
-    font-weight: 700;
-    color: #3b2519;
-    margin-bottom: 5px;
-}
-
-/* SUBTITLE */
-
-.logo-box p {
-    font-size: 17px;
-    color: #8b6f60;
-}
-
-/* =========================================================
-   FORM
-========================================================= */
-
-form {
-    width: 100%;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #4a3022;
-    margin-bottom: 7px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    height: 48px;
-    padding: 0 14px;
-    border: 1px solid #d9c8bc;
-    border-radius: 9px;
-    background: #fff;
-    color: #2b1b12;
-    font-size: 15px;
-    outline: none;
-    transition: 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #9b4f20;
-    box-shadow: 0 0 0 3px rgba(155, 79, 32, 0.10);
-}
-
-.form-group input::placeholder {
-    color: #a99a91;
-}
-
-/* =========================================================
-   PRIMARY BUTTON
-========================================================= */
-
-.primary-btn {
-    width: 100%;
-    border: none;
-    border-radius: 9px;
-    background: #8b4318;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 13px 20px;
-    min-height: 48px;
-    transition: 0.2s ease;
-}
-
-.primary-btn:hover {
-    background: #6f3212;
-    transform: translateY(-1px);
-}
-
-.primary-btn:active {
-    transform: translateY(0);
-}
-
-.small-btn {
-    width: auto;
-    min-height: 42px;
-    padding: 10px 18px;
-}
-
-/* =========================================================
-   SWITCH LOGIN / REGISTER
-========================================================= */
-
-.switch-text {
-    text-align: center;
-    color: #806d62;
-    font-size: 14px;
-    margin-top: 22px;
-}
-
-.link-btn {
-    border: none;
-    background: transparent;
-    color: #8b4318;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 0;
-}
-
-.link-btn:hover {
-    text-decoration: underline;
-}
-
-/* =========================================================
-   SYSTEM LAYOUT
-========================================================= */
-
-.system {
-    min-height: 100vh;
-    display: flex;
-    background: #fafafa;
-}
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar {
-    width: 280px;
-    min-width: 280px;
-    min-height: 100vh;
-    background: #3b281e;
-    color: white;
-    padding: 22px 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* =========================================================
-   SIDEBAR LOGO
-========================================================= */
-
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 0 10px 30px;
-}
-
-.logo-icon.small {
-    width: 75px;
-    height: 75px;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.logo-icon.small img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-.sidebar-logo h2 {
-    font-size: 21px;
-    color: #fff;
-    margin-bottom: 4px;
-}
-
-.sidebar-logo span {
-    font-size: 13px;
-    color: #dfcfc5;
-}
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-.sidebar nav {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-}
-
-.nav-btn {
-    width: 100%;
-    border: none;
-    background: transparent;
-    color: #f5ebe5;
-    text-align: left;
-    padding: 15px 18px;
-    border-radius: 10px;
-    font-size: 16px;
-    transition: 0.2s ease;
-}
-
-.nav-btn:hover {
-    background: #5a3a2b;
-}
-
-.nav-btn.active {
-    background: #744b35;
-    color: white;
-}
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-.logout-btn {
-    width: 100%;
-    margin-top: auto;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    background: #70422f;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-    transition: 0.2s ease;
-}
-
-.logout-btn:hover {
-    background: #8a2f1e;
-}
-
-/* =========================================================
-   MAIN CONTENT
-========================================================= */
-
-.main-content {
-    flex: 1;
-    min-width: 0;
-    background: #fff;
-}
-
-/* =========================================================
-   TOPBAR
-========================================================= */
-
-.topbar {
-    min-height: 90px;
-    border-bottom: 1px solid #eadfd8;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 35px;
-    background: white;
-}
-
-.topbar h1 {
-    font-size: 30px;
-    color: #2b1b12;
-    margin-bottom: 3px;
-}
-
-.topbar p {
-    color: #8a6f61;
-    font-size: 16px;
-}
-
-/* =========================================================
-   USER MINI PROFILE
-========================================================= */
-
-.user-mini {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #f3e2d4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.user-details strong {
-    font-size: 16px;
-    color: #2d211b;
-}
-
-.user-details small {
-    font-size: 14px;
-    color: #876d5c;
-}
-
-/* =========================================================
-   PAGE
-========================================================= */
-
-.page {
-    padding: 35px;
-    width: 100%;
-}
-
-/* =========================================================
-   WELCOME CARD
-========================================================= */
-
-.welcome-card {
-    width: 100%;
-    background: #fff;
-    border-radius: 15px;
-    padding: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #eee1d8;
-    box-shadow: 0 6px 20px rgba(65, 39, 24, 0.06);
-    margin-bottom: 25px;
-}
-
-.welcome-card h2 {
-    font-size: 26px;
-    color: #2d1c13;
-    margin-bottom: 8px;
-}
-
-.welcome-card p {
-    color: #866f63;
-    font-size: 15px;
-}
-
-.role-badge {
-    background: #f3e1d1;
-    color: #743d1c;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 9px 16px;
-    border-radius: 20px;
-}
-
-/* =========================================================
-   STATISTICS
-========================================================= */
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.stat-card {
-    background: white;
-    border: 1px solid #eee2da;
-    border-radius: 15px;
-    padding: 22px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    box-shadow: 0 5px 18px rgba(65, 39, 24, 0.05);
-}
-
-.stat-icon {
-    width: 58px;
-    height: 58px;
-    border-radius: 12px;
-    background: #f4e4d7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 27px;
-    flex-shrink: 0;
-}
-
-.stat-card span {
-    color: #8b7468;
-    font-size: 14px;
-}
-
-.stat-card h2 {
-    color: #251810;
-    font-size: 25px;
-    margin-top: 4px;
-}
-
-/* =========================================================
-   DASHBOARD GRID
-========================================================= */
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-/* =========================================================
-   CONTENT CARD
-========================================================= */
-
-.content-card {
-    background: white;
-    border: 1px solid #eee1d8;
-    border-radius: 15px;
-    padding: 20px;
-    min-height: 300px;
-    box-shadow: 0 5px 18px rgba(65, 39, 24, 0.05);
-}
-
-.card-header {
-    padding-bottom: 14px;
-    border-bottom: 1px solid #eee4de;
-    margin-bottom: 5px;
-}
-
-.card-header h3 {
-    font-size: 18px;
-    color: #43281b;
-}
-
-/* =========================================================
-   LOW STOCK LIST
-========================================================= */
-
-.low-stock-item {
-    padding: 13px 0;
-    border-bottom: 1px solid #eee5df;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.low-stock-item:last-child {
-    border-bottom: none;
-}
-
-.low-stock-item strong {
-    display: block;
-    color: #2c1c14;
-    font-size: 14px;
-}
-
-.low-stock-item small {
-    color: #8a7469;
-    font-size: 12px;
-}
-
-.low-stock-item .stock-number {
-    color: #c62828;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-/* =========================================================
-   RECENT ACTIVITY
-========================================================= */
-
-.activity-item {
-    padding: 13px 0;
-    border-bottom: 1px solid #eee5df;
-}
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
-.activity-item strong {
-    display: block;
-    color: #2d1d15;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.activity-item small {
-    color: #8a7469;
-    font-size: 12px;
-}
-
-/* =========================================================
-   PAGE ACTIONS
-========================================================= */
-
-.page-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-    gap: 15px;
-}
-
-.page-actions h2 {
-    font-size: 25px;
-    color: #2c1b13;
-    margin-bottom: 5px;
-}
-
-.page-actions p {
-    color: #8b7468;
-    font-size: 14px;
-}
-
-/* =========================================================
-   FILTER BAR
-========================================================= */
-
-.filter-bar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.filter-bar input,
-.filter-bar select {
-    height: 45px;
-    border: 1px solid #dccbc0;
-    border-radius: 8px;
-    padding: 0 14px;
-    outline: none;
-    background: white;
-    color: #3a281e;
-    font-size: 14px;
-}
-
-.filter-bar input {
-    flex: 1;
-}
-
-.filter-bar select {
-    width: 220px;
-}
-
-.filter-bar input:focus,
-.filter-bar select:focus {
-    border-color: #9a4b1d;
-}
-
-/* =========================================================
-   TABLE CARD
-========================================================= */
-
-.table-card {
-    background: white;
-    border: 1px solid #eadfd8;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 18px rgba(65, 39, 24, 0.05);
-}
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 750px;
-}
-
-thead {
-    background: #f8eee8;
-}
-
-th {
-    color: #573322;
-    font-size: 13px;
-    font-weight: 700;
-    text-align: left;
-    padding: 14px 16px;
-    white-space: nowrap;
-}
-
-td {
-    color: #3c2a20;
-    font-size: 14px;
-    padding: 14px 16px;
-    border-top: 1px solid #eee7e2;
-    white-space: nowrap;
-}
-
-tbody tr:hover {
-    background: #fffaf7;
-}
-
-/* =========================================================
-   TABLE ACTION BUTTONS
-========================================================= */
-
-.action-btn {
-    border: none;
-    border-radius: 6px;
-    padding: 7px 10px;
-    margin-right: 4px;
-    font-size: 13px;
-}
-
-.edit-btn {
-    background: #f1e1d3;
-    color: #7b401e;
-}
-
-.delete-btn {
-    background: #fde1df;
-    color: #c62828;
-}
-
-.edit-btn:hover {
-    background: #e7cdbb;
-}
-
-.delete-btn:hover {
-    background: #f8c9c5;
-}
-
-/* =========================================================
-   STOCK STATUS
-========================================================= */
-
-.status-low {
-    display: inline-block;
-    background: #fde2df;
-    color: #c62828;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.status-good {
-    display: inline-block;
-    background: #e2f2e5;
-    color: #2e7d32;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-/* =========================================================
-   FORM CARD
-========================================================= */
-
-.form-card {
-    background: white;
-    border: 1px solid #eadfd8;
-    border-radius: 15px;
-    padding: 28px;
-    max-width: 900px;
-    box-shadow: 0 5px 18px rgba(65, 39, 24, 0.05);
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.form-grid .form-group {
-    margin-bottom: 0;
-}
-
-/* =========================================================
-   ACCOUNT
-========================================================= */
-
-.account-card {
-    background: white;
-    border: 1px solid #eadfd8;
-    border-radius: 15px;
-    padding: 35px;
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    max-width: 800px;
-    box-shadow: 0 5px 18px rgba(65, 39, 24, 0.05);
-}
-
-/* =========================================================
-   PROFILE IMAGE
-========================================================= */
-
-.profile-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #f4e3d6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    border: 3px solid #ead1bd;
-}
-
-.profile-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* =========================================================
-   ACCOUNT INFORMATION
-========================================================= */
-
-.account-info {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.account-info div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.account-info span {
-    font-size: 13px;
-    color: #947e72;
-}
-
-.account-info strong {
-    font-size: 16px;
-    color: #2d1d14;
-}
-
-/* =========================================================
-   RESPONSIVE - TABLET
-========================================================= */
-
-@media (max-width: 1100px) {
-
-    .sidebar {
-        width: 230px;
-        min-width: 230px;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .page {
-        padding: 25px;
-    }
-
-    .topbar {
-        padding: 18px 25px;
-    }
-}
-
-/* =========================================================
-   RESPONSIVE - MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
-    .auth-page {
-        padding: 20px 12px;
-        align-items: flex-start;
-    }
-
-    .auth-card {
-        margin-top: 20px;
-        padding: 28px 22px;
-        max-width: 430px;
-    }
-
-    /* SMALLER LOGIN LOGO */
-    .logo-box img {
-        width: 155px;
-        height: 95px;
-        margin-bottom: 15px;
-    }
-
-    .logo-box h1 {
-        font-size: 26px;
-    }
-
-    .logo-box p {
-        font-size: 15px;
-    }
-
-    /* SYSTEM */
-    .system {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        min-width: 100%;
-        min-height: auto;
-        padding: 12px;
-    }
-
-    .sidebar-logo {
-        padding: 5px 8px 15px;
-    }
-
-    .logo-icon.small {
-        width: 55px;
-        height: 55px;
-    }
-
-    .sidebar nav {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 5px;
-    }
-
-    .nav-btn {
-        font-size: 13px;
-        padding: 11px 8px;
-    }
-
-    .logout-btn {
-        margin-top: 10px;
-    }
-
-    .topbar {
-        padding: 18px;
-        min-height: auto;
-    }
-
-    .topbar h1 {
-        font-size: 25px;
-    }
-
-    .topbar p {
-        font-size: 13px;
-    }
-
-    .user-mini {
-        display: none;
-    }
-
-    .page {
-        padding: 18px 14px;
-    }
-
-    .welcome-card {
-        padding: 20px;
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .welcome-card h2 {
-        font-size: 22px;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .page-actions {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .small-btn {
-        width: 100%;
-    }
-
-    .filter-bar {
-        flex-direction: column;
-    }
-
-    .filter-bar select {
-        width: 100%;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-card {
-        padding: 20px;
-    }
-
-    .account-card {
-        flex-direction: column;
-        text-align: center;
-        padding: 25px;
-    }
-
-    .account-info {
-        width: 100%;
-    }
-}
-
-/* =========================================================
-   SMALL PHONE
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .auth-card {
-        padding: 25px 18px;
-        border-radius: 14px;
-    }
-
-    .logo-box img {
-        width: 140px;
-        height: 85px;
-    }
-
-    .logo-box h1 {
-        font-size: 24px;
-    }
-
-    .logo-box p {
-        font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group select {
-        height: 45px;
-    }
-
-    .sidebar-logo h2 {
-        font-size: 18px;
-    }
-
-    .sidebar-logo span {
-        font-size: 12px;
-    }
-
-    .sidebar nav {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .nav-btn {
-        font-size: 12px;
-    }
-
-    .stat-card {
-        padding: 17px;
-    }
-
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
-    }
-
-    .stat-card h2 {
-        font-size: 22px;
-    }
-
-    .content-card {
-        padding: 16px;
-    }
-
-    .account-card {
-        padding: 20px;
-    }
-
-    .profile-image {
-        width: 100px;
-        height: 100px;
-    }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Arbees Bakery Shop</title>
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN PAGE
+========================= -->
+
+<div id="loginPage" class="auth-page">
+
+    <div class="auth-card">
+
+        <img
+            src="arbees-bakeshop-logo1.png"
+            alt="Arbees Bakery Shop"
+            class="auth-logo"
+        >
+
+        <h1>Welcome Back!</h1>
+
+        <p class="auth-subtitle">
+            Login to your Arbees Bakery Shop account
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+
+                <label for="loginEmail">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+            <p id="loginError" class="error-message"></p>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Login
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+
+            Don't have an account?
+
+            <button
+                type="button"
+                class="link-btn"
+                onclick="showRegister()"
+            >
+                Register
+            </button>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     REGISTER PAGE
+========================= -->
+
+<div id="registerPage" class="auth-page hidden">
+
+    <div class="auth-card">
+
+        <img
+            src="arbees-bakeshop-logo1.png"
+            alt="Arbees Bakery Shop"
+            class="auth-logo"
+        >
+
+        <h1>Create Account</h1>
+
+        <p class="auth-subtitle">
+            Register your Arbees Bakery Shop account
+        </p>
+
+        <form id="registerForm">
+
+            <div class="input-group">
+
+                <label for="registerName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label for="registerEmail">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label for="registerPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Create a password"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    required
+                >
+
+            </div>
+
+            <p id="registerError" class="error-message"></p>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+
+            Already have an account?
+
+            <button
+                type="button"
+                class="link-btn"
+                onclick="showLogin()"
+            >
+                Login
+            </button>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN SYSTEM
+========================= -->
+
+<div id="systemPage" class="system-page hidden">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">
+
+                <img
+                    src="arbees-bakeshop-logo1.png"
+                    alt="Arbees Logo"
+                >
+
+            </div>
+
+            <div class="logo-text">
+
+                <h2>Arbees</h2>
+
+                <span>Bakery Shop</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+            <button
+                class="nav-item active"
+                data-page="dashboard"
+            >
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="inventory"
+            >
+                <span class="nav-icon">📦</span>
+                <span>Inventory</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="addProduct"
+            >
+                <span class="nav-icon">＋</span>
+                <span>Add Product</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="activity"
+            >
+                <span class="nav-icon">▣</span>
+                <span>Activity Logs</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="users"
+            >
+                <span class="nav-icon">♙</span>
+                <span>My Account</span>
+            </button>
+
+        </nav>
+
+
+        <!-- SIDEBAR DECORATION -->
+
+        <div class="sidebar-decoration">
+
+            <div class="bread">
+                🥖 🍞 🥐
+            </div>
+
+            <div class="wheat">
+                🌾 🌾
+            </div>
+
+            <div class="cupcake">
+                🧁
+            </div>
+
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            <span>↪</span>
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+
+        <!-- =========================
+             DASHBOARD
+        ========================= -->
+
+        <section
+            id="dashboard"
+            class="page-section"
+        >
+
+            <!-- HEADER -->
+
+            <div class="dashboard-header">
+
+                <div>
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                    <p>
+                        Welcome to Arbees Bakery Shop 🥖
+                    </p>
+
+                </div>
+
+
+                <!-- PROFILE -->
+
+                <div class="header-profile">
+
+                    <div class="header-avatar">
+
+                        <img
+                            src="profile.jpg"
+                            alt="Profile"
+                        >
+
+                    </div>
+
+                    <div class="header-user-info">
+
+                        <strong id="headerUserName">
+                            User
+                        </strong>
+
+                        <span id="headerUserEmail">
+                            user@email.com
+                        </span>
+
+                    </div>
+
+                    <span class="profile-arrow">
+                        ⌄
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 WELCOME BANNER
+            ========================= -->
+
+            <div class="welcome-banner">
+
+                <div class="welcome-text">
+
+                    <h2>
+                        Good day,
+                        <span id="dashboardUserName">
+                            User
+                        </span>! 👋
+                    </h2>
+
+                    <p>
+                        Here's what's happening in your bakery today.
+                    </p>
+
+                </div>
+
+
+                <div class="bakery-decoration">
+
+                    <div class="bakery-building">
+
+                        <div class="bakery-sign">
+                            ARBEE'S
+                        </div>
+
+                        <div class="bakery-awning">
+                            ▾ ▾ ▾ ▾ ▾
+                        </div>
+
+                        <div class="bakery-window">
+                            🍞 🥐 🍰
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 STAT CARDS
+            ========================= -->
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL PRODUCTS -->
+
+                <div class="stat-card purple-card">
+
+                    <div class="stat-icon">
+                        📦
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Total Products
+                        </span>
+
+                        <h2 id="totalProducts">
+                            0
+                        </h2>
+
+                        <small class="stat-positive">
+                            ↗ Products in inventory
+                        </small>
+
+                    </div>
+
+                    <div class="mini-chart purple-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL STOCK -->
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon">
+                        📊
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Total Stock
+                        </span>
+
+                        <h2 id="totalStock">
+                            0
+                        </h2>
+
+                        <small class="stat-positive">
+                            ↗ Available items
+                        </small>
+
+                    </div>
+
+                    <div class="mini-chart green-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <!-- LOW STOCK -->
+
+                <div class="stat-card yellow-card">
+
+                    <div class="stat-icon">
+                        ⚠️
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Low Stock
+                        </span>
+
+                        <h2 id="lowStock">
+                            0
+                        </h2>
+
+                        <small class="stat-warning">
+                            Needs restocking
+                        </small>
+
+                    </div>
+
+                    <div class="mini-chart yellow-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <!-- ESTIMATED VALUE -->
+
+                <div class="stat-card blue-card">
+
+                    <div class="stat-icon">
+                        ₱
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Estimated Value
+                        </span>
+
+                        <h2 id="estimatedValue">
+                            ₱0.00
+                        </h2>
+
+                        <small class="stat-blue">
+                            Total inventory value
+                        </small>
+
+                    </div>
+
+                    <div class="mini-chart blue-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 BOTTOM PANELS
+            ========================= -->
+
+            <div class="dashboard-columns">
+
+
+                <!-- LOW STOCK -->
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="title-icon warning-icon">
+                                ⚠
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Low Stock Products
+                                </h3>
+
+                                <p>
+                                    Products that need attention
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="view-all-btn red-btn"
+                            onclick="openPage('inventory')"
+                        >
+                            View all
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="lowStockList"
+                        class="low-stock-list"
+                    >
+
+                        <div class="empty-dashboard">
+
+                            <span>📦</span>
+
+                            <p>
+                                No low stock products
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECENT ACTIVITY -->
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="title-icon activity-icon">
+                                ▣
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Recent Activity
+                                </h3>
+
+                                <p>
+                                    Latest system activities
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="view-all-btn purple-btn"
+                            onclick="openPage('activity')"
+                        >
+                            View all
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="recentActivity"
+                        class="activity-list"
+                    >
+
+                        <div class="empty-dashboard">
+
+                            <span>📝</span>
+
+                            <p>
+                                No recent activity
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             INVENTORY
+        ========================= -->
+
+        <section
+            id="inventory"
+            class="page-section"
+        >
+
+            <div class="page-title">
+
+                <div>
+
+                    <h1>
+                        Inventory
+                    </h1>
+
+                    <p>
+                        Manage your bakery products
+                    </p>
+
+                </div>
+
+                <button
+                    id="inventoryAddBtn"
+                    class="primary-btn small-btn"
+                >
+                    + Add Product
+                </button>
+
+            </div>
+
+
+            <div class="inventory-toolbar">
+
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="🔍 Search product..."
+                >
+
+                <select id="categoryFilter">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <option value="Bread">
+                        Bread
+                    </option>
+
+                    <option value="Cake">
+                        Cake
+                    </option>
+
+                    <option value="Pastry">
+                        Pastry
+                    </option>
+
+                    <option value="Cookie">
+                        Cookie
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="inventory-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="inventoryTableBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADD PRODUCT
+        ========================= -->
+
+        <section
+            id="addProduct"
+            class="page-section"
+        >
+
+            <div class="page-title">
+
+                <div>
+
+                    <h1>
+                        Add Product
+                    </h1>
+
+                    <p>
+                        Add a new bakery product
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-card">
+
+                <form id="productForm">
+
+                    <div class="form-grid">
+
+                        <div class="input-group">
+
+                            <label>
+                                Product Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productName"
+                                placeholder="Chocolate Cake"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label>
+                                SKU
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productSKU"
+                                placeholder="CAKE-001"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label>
+                                Category
+                            </label>
+
+                            <select
+                                id="productCategory"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                <option value="Bread">
+                                    Bread
+                                </option>
+
+                                <option value="Cake">
+                                    Cake
+                                </option>
+
+                                <option value="Pastry">
+                                    Pastry
+                                </option>
+
+                                <option value="Cookie">
+                                    Cookie
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label>
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productQuantity"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label>
+                                Price
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productPrice"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label>
+                                Low Stock Threshold
+                            </label>
+
+                            <input
+                                type="number"
+                                id="lowStockThreshold"
+                                min="0"
+                                value="5"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        id="productMessage"
+                        class="success-message"
+                    ></p>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Add Product
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ACTIVITY LOGS
+        ========================= -->
+
+        <section
+            id="activity"
+            class="page-section"
+        >
+
+            <div class="page-title">
+
+                <div>
+
+                    <h1>
+                        Activity Logs
+                    </h1>
+
+                    <p>
+                        Track recent system activities
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="inventory-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="activityTableBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             MY ACCOUNT
+        ========================= -->
+
+        <section
+            id="users"
+            class="page-section"
+        >
+
+            <div class="page-title">
+
+                <div>
+
+                    <h1>
+                        My Account
+                    </h1>
+
+                    <p>
+                        Your profile information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="account-card">
+
+                <div class="account-profile">
+
+                    <div class="profile-image">
+
+                        <img
+                            src="profile.jpg"
+                            alt="Profile Picture"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <h2 id="profileName">
+                            User
+                        </h2>
+
+                        <p id="profileEmail">
+                            user@email.com
+                        </p>
+
+                        <span
+                            id="profileRole"
+                            class="role-badge"
+                        >
+                            STAFF
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="account-details">
+
+                    <div class="detail-box">
+
+                        <span>
+                            Full Name
+                        </span>
+
+                        <strong id="accountName">
+                            User
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong id="accountEmail">
+                            user@email.com
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            Role
+                        </span>
+
+                        <strong>
+                            STAFF
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
