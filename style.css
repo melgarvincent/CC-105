@@ -35,40 +35,47 @@ button {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: linear-gradient(135deg, #fff8f1, #f2dfd0);
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff8f1,
+            #f2dfd0
+        );
 }
 
 .auth-card {
     width: 100%;
     max-width: 430px;
+
     background: white;
+
     padding: 35px;
+
     border-radius: 20px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, .12);
 }
+
+
+/* LOGO */
 
 .logo-box {
     text-align: center;
     margin-bottom: 28px;
 }
 
-.logo-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: #f2dfd0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto auto 12px;
-    font-size: 35px;
-}
+.auth-logo {
+    width: 230px;
+    max-width: 100%;
+    height: auto;
 
-.logo-icon.small {
-    width: 45px;
-    height: 45px;
-    font-size: 23px;
-    margin: 0;
+    display: block;
+
+    margin: 0 auto 18px;
+
+    object-fit: contain;
 }
 
 .logo-box h1 {
@@ -80,13 +87,18 @@ button {
     color: #8b7566;
 }
 
+
+/* FORM */
+
 .form-group {
     margin-bottom: 18px;
 }
 
 .form-group label {
     display: block;
+
     margin-bottom: 7px;
+
     font-weight: 600;
 }
 
@@ -94,11 +106,18 @@ button {
 .form-group select,
 .filter-bar input,
 .filter-bar select {
+
     width: 100%;
+
     padding: 13px 14px;
-    border: 1px solid #ddd0c6;
+
+    border:
+        1px solid #ddd0c6;
+
     border-radius: 10px;
+
     outline: none;
+
     background: white;
 }
 
@@ -106,17 +125,29 @@ button {
 .form-group select:focus,
 .filter-bar input:focus,
 .filter-bar select:focus {
+
     border-color: #a66b45;
 }
 
+
+/* BUTTON */
+
 .primary-btn {
+
     width: 100%;
+
     border: none;
+
     padding: 13px 20px;
+
     border-radius: 10px;
+
     background: #8b5739;
+
     color: white;
+
     font-weight: bold;
+
     font-size: 15px;
 }
 
@@ -128,28 +159,47 @@ button {
     width: auto;
 }
 
+
+/* MESSAGES */
+
 .error-message {
+
     color: #d33;
+
     font-size: 14px;
+
     min-height: 20px;
+
     margin-bottom: 10px;
 }
 
 .success-message {
+
     color: #26834a;
+
     margin: 12px 0;
 }
 
+
+/* SWITCH */
+
 .switch-text {
+
     text-align: center;
+
     margin-top: 20px;
+
     color: #76675e;
 }
 
 .link-btn {
+
     border: none;
+
     background: none;
+
     color: #8b5739;
+
     font-weight: bold;
 }
 
@@ -159,117 +209,211 @@ button {
 ========================= */
 
 .system {
+
     min-height: 100vh;
+
     display: flex;
 }
+
+
+/* SIDEBAR */
 
 .sidebar {
+
     width: 250px;
+
     min-height: 100vh;
+
     background: #3d2b1f;
+
     color: white;
-    padding: 25px 15px;
+
+    padding: 20px 15px;
+
     display: flex;
+
     flex-direction: column;
 }
+
+
+/* SIDEBAR LOGO */
 
 .sidebar-logo {
+
     display: flex;
+
+    justify-content: center;
+
     align-items: center;
-    gap: 12px;
-    margin-bottom: 35px;
-    padding: 0 10px;
+
+    margin-bottom: 28px;
+
+    padding: 5px;
 }
 
-.sidebar-logo h2 {
-    font-size: 21px;
+.bakery-logo {
+
+    width: 205px;
+
+    max-width: 100%;
+
+    height: auto;
+
+    display: block;
+
+    object-fit: contain;
+
+    border-radius: 4px;
 }
 
-.sidebar-logo span {
-    font-size: 12px;
-    color: #d9c7bb;
-}
+
+/* NAV */
 
 .sidebar nav {
+
     display: flex;
+
     flex-direction: column;
+
     gap: 8px;
 }
 
 .nav-btn {
+
     border: none;
+
     background: transparent;
+
     color: #e9ded7;
+
     text-align: left;
+
     padding: 13px 15px;
+
     border-radius: 10px;
+
     font-size: 15px;
 }
 
 .nav-btn:hover,
 .nav-btn.active {
+
     background: #6f4935;
+
     color: white;
 }
 
+
+/* LOGOUT */
+
 .logout-btn {
+
     margin-top: auto;
+
     border: none;
+
     background: #5a3b2d;
+
     color: white;
+
     padding: 13px;
+
     border-radius: 10px;
+
     font-size: 15px;
 }
 
+.logout-btn:hover {
+
+    background: #70452e;
+}
+
+
+/* MAIN */
+
 .main-content {
+
     flex: 1;
+
     min-width: 0;
 }
 
+
+/* =========================
+   TOPBAR
+========================= */
+
 .topbar {
+
     min-height: 80px;
+
     background: white;
-    border-bottom: 1px solid #eadfd8;
+
+    border-bottom:
+        1px solid #eadfd8;
+
     padding: 18px 30px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 20px;
 }
 
 .topbar h1 {
+
     font-size: 25px;
 }
 
 .topbar p {
+
     color: #8b7566;
+
     margin-top: 4px;
 }
 
+
+/* USER */
+
 .user-mini {
+
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 }
 
 .user-avatar {
+
     width: 42px;
+
     height: 42px;
+
     background: #f0dfd1;
+
     border-radius: 50%;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 }
 
 .user-mini strong,
 .user-mini small {
+
     display: block;
 }
 
 .user-mini small {
+
     color: #8b7566;
+
     margin-top: 3px;
 }
 
@@ -279,31 +423,55 @@ button {
 ========================= */
 
 .page {
+
     padding: 30px;
 }
 
+
+/* WELCOME */
+
 .welcome-card {
+
     background: white;
+
     padding: 25px;
+
     border-radius: 15px;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     margin-bottom: 25px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, .05);
 }
 
 .welcome-card p {
+
     color: #8b7566;
+
     margin-top: 7px;
 }
 
+
+/* ROLE */
+
 .role-badge {
+
     background: #f2dfd0;
+
     color: #70452e;
+
     padding: 8px 14px;
+
     border-radius: 20px;
+
     font-weight: bold;
+
     font-size: 12px;
 }
 
@@ -313,39 +481,63 @@ button {
 ========================= */
 
 .stats-grid {
+
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
     gap: 18px;
+
     margin-bottom: 25px;
 }
 
 .stat-card {
+
     background: white;
+
     padding: 20px;
+
     border-radius: 15px;
+
     display: flex;
+
     align-items: center;
+
     gap: 15px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, .05);
 }
 
 .stat-icon {
+
     width: 50px;
+
     height: 50px;
+
     background: #f4e7dd;
+
     border-radius: 12px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-size: 23px;
 }
 
 .stat-card span {
+
     color: #8b7566;
+
     font-size: 13px;
 }
 
 .stat-card h2 {
+
     margin-top: 5px;
 }
 
@@ -355,8 +547,12 @@ button {
 ========================= */
 
 .dashboard-grid {
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap: 20px;
 }
 
@@ -364,41 +560,60 @@ button {
 .table-card,
 .form-card,
 .account-card {
+
     background: white;
+
     border-radius: 15px;
+
     padding: 20px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, .05);
 }
 
 .card-header {
+
     margin-bottom: 15px;
 }
 
 .empty-text {
+
     color: #999;
+
     text-align: center;
+
     padding: 25px 10px;
 }
 
+
+/* LOW STOCK */
+
 .low-stock-item,
 .activity-item {
+
     padding: 12px;
-    border-bottom: 1px solid #eee;
+
+    border-bottom:
+        1px solid #eee;
 }
 
 .low-stock-item:last-child,
 .activity-item:last-child {
+
     border-bottom: none;
 }
 
 .low-stock-item strong,
 .activity-item strong {
+
     display: block;
 }
 
 .low-stock-item span,
 .activity-item span {
+
     color: #8b7566;
+
     font-size: 13px;
 }
 
@@ -408,17 +623,23 @@ button {
 ========================= */
 
 .page-actions {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     margin-bottom: 20px;
 }
 
 .page-actions h2 {
+
     margin-bottom: 5px;
 }
 
 .page-actions p {
+
     color: #8b7566;
 }
 
@@ -428,9 +649,14 @@ button {
 ========================= */
 
 .filter-bar {
+
     display: grid;
-    grid-template-columns: 1fr 220px;
+
+    grid-template-columns:
+        1fr 220px;
+
     gap: 12px;
+
     margin-bottom: 18px;
 }
 
@@ -440,60 +666,91 @@ button {
 ========================= */
 
 .table-card {
+
     padding: 0;
+
     overflow: hidden;
 }
 
 .table-wrapper {
+
     width: 100%;
+
     overflow-x: auto;
 }
 
 table {
+
     width: 100%;
+
     border-collapse: collapse;
+
     min-width: 800px;
 }
 
 th,
 td {
+
     padding: 15px;
+
     text-align: left;
-    border-bottom: 1px solid #eee;
+
+    border-bottom:
+        1px solid #eee;
 }
 
 th {
+
     background: #faf6f3;
+
     font-size: 13px;
 }
 
 td {
+
     font-size: 14px;
 }
 
+
+/* STATUS */
+
 .status-low {
+
     color: #c0392b;
+
     font-weight: bold;
 }
 
 .status-good {
+
     color: #26834a;
+
     font-weight: bold;
 }
 
+
+/* ACTION */
+
 .action-btn {
+
     border: none;
+
     padding: 7px 10px;
+
     border-radius: 7px;
+
     margin-right: 5px;
 }
 
 .edit-btn {
+
     background: #eee2d8;
 }
 
 .delete-btn {
+
     background: #f5d5d1;
+
     color: #9b2c25;
 }
 
@@ -503,12 +760,17 @@ td {
 ========================= */
 
 .form-card {
+
     max-width: 850px;
 }
 
 .form-grid {
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap: 5px 20px;
 }
 
@@ -518,43 +780,67 @@ td {
 ========================= */
 
 .account-card {
+
     max-width: 700px;
+
     display: flex;
+
     align-items: center;
+
     gap: 30px;
 }
 
 .profile-image {
+
     width: 96px;
+
     height: 96px;
+
     border-radius: 50%;
+
     background: #f5e5d8;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     overflow: hidden;
+
     flex-shrink: 0;
 }
 
 .profile-image img {
+
     width: 100%;
+
     height: 100%;
+
     object-fit: cover;
 }
 
 .account-info {
+
     flex: 1;
 }
 
 .account-info div {
+
     padding: 12px 0;
-    border-bottom: 1px solid #eee;
+
+    border-bottom:
+        1px solid #eee;
 }
 
 .account-info span {
+
     display: block;
+
     color: #8b7566;
+
     font-size: 13px;
+
     margin-bottom: 4px;
 }
 
@@ -566,93 +852,142 @@ td {
 @media (max-width: 900px) {
 
     .stats-grid {
-        grid-template-columns: 1fr 1fr;
+
+        grid-template-columns:
+            1fr 1fr;
     }
 
     .dashboard-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
     .sidebar {
+
         width: 210px;
     }
 
+    .bakery-logo {
+
+        width: 175px;
+    }
+
 }
+
 
 @media (max-width: 700px) {
 
     .system {
+
         display: block;
     }
 
     .sidebar {
+
         width: 100%;
+
         min-height: auto;
+
         padding: 15px;
     }
 
     .sidebar-logo {
+
         margin-bottom: 15px;
     }
 
+    .bakery-logo {
+
+        width: 190px;
+    }
+
     .sidebar nav {
+
         display: grid;
-        grid-template-columns: 1fr 1fr;
+
+        grid-template-columns:
+            1fr 1fr;
     }
 
     .logout-btn {
+
         margin-top: 12px;
     }
 
     .topbar {
+
         padding: 15px;
     }
 
     .topbar h1 {
+
         font-size: 20px;
     }
 
     .user-mini {
+
         display: none;
     }
 
     .page {
+
         padding: 15px;
     }
 
     .stats-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
     .filter-bar {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
     .form-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
     .welcome-card {
+
         align-items: flex-start;
+
         gap: 15px;
+
         flex-direction: column;
     }
 
     .account-card {
+
         flex-direction: column;
+
         align-items: flex-start;
     }
 
 }
 
+
 @media (max-width: 450px) {
 
     .auth-card {
+
         padding: 25px 20px;
     }
 
+    .auth-logo {
+
+        width: 180px;
+    }
+
     .sidebar nav {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
 }
