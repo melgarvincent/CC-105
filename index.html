@@ -50,8 +50,13 @@
                 required
             >
 
-            <button type="submit" class="primary-btn">
+            <button
+                type="submit"
+                class="primary-btn"
+                id="loginBtn">
+
                 Login
+
             </button>
 
             <p id="loginError" class="error-message"></p>
@@ -62,8 +67,12 @@
 
             <span>Don't have an account?</span>
 
-            <button type="button" onclick="showRegister()">
+            <button
+                type="button"
+                id="showRegisterBtn">
+
                 Register
+
             </button>
 
         </div>
@@ -131,8 +140,13 @@
                 required
             >
 
-            <button type="submit" class="primary-btn">
+            <button
+                type="submit"
+                class="primary-btn"
+                id="registerBtn">
+
                 Register
+
             </button>
 
             <p id="registerError" class="error-message"></p>
@@ -143,8 +157,12 @@
 
             <span>Already have an account?</span>
 
-            <button type="button" onclick="showLogin()">
+            <button
+                type="button"
+                id="showLoginBtn">
+
                 Login
+
             </button>
 
         </div>
@@ -178,30 +196,54 @@
 
         <nav>
 
-            <button class="nav-btn active" data-page="dashboard">
+            <button
+                class="nav-btn active"
+                data-page="dashboard">
+
                 🏠 <span>Dashboard</span>
+
             </button>
 
-            <button class="nav-btn" data-page="inventory">
+            <button
+                class="nav-btn"
+                data-page="inventory">
+
                 📦 <span>Inventory</span>
+
             </button>
 
-            <button class="nav-btn" data-page="addProduct">
+            <button
+                class="nav-btn"
+                data-page="addProduct">
+
                 ➕ <span>Add Product</span>
+
             </button>
 
-            <button class="nav-btn" data-page="activity">
+            <button
+                class="nav-btn"
+                data-page="activity">
+
                 📋 <span>Activity Logs</span>
+
             </button>
 
-            <button class="nav-btn" data-page="users">
-                👤 <span>Users</span>
+            <button
+                class="nav-btn"
+                data-page="users">
+
+                👤 <span>My Account</span>
+
             </button>
 
         </nav>
 
-        <button id="logoutBtn" class="logout-btn">
+        <button
+            id="logoutBtn"
+            class="logout-btn">
+
             🚪 Logout
+
         </button>
 
     </aside>
@@ -211,11 +253,11 @@
 
     <main class="main-content">
 
-        <!-- MOBILE HEADER -->
-
         <div class="mobile-header">
 
-            <strong>🥐 Arbees Bakery</strong>
+            <strong>
+                🥐 Arbees Bakery
+            </strong>
 
             <button id="mobileLogout">
                 🚪
@@ -228,16 +270,20 @@
              DASHBOARD
         ================================================= -->
 
-        <section id="dashboardPage" class="content-page">
+        <section
+            id="dashboardPage"
+            class="content-page">
 
             <div class="page-header">
 
                 <div>
+
                     <h1>Dashboard</h1>
 
                     <p>
                         Welcome to Arbees Bakery Shop
                     </p>
+
                 </div>
 
             </div>
@@ -276,7 +322,9 @@
 
                     <div>
 
-                        <span>Total Products</span>
+                        <span>
+                            Total Products
+                        </span>
 
                         <strong id="totalProducts">
                             0
@@ -295,7 +343,9 @@
 
                     <div>
 
-                        <span>Total Stock</span>
+                        <span>
+                            Total Stock
+                        </span>
 
                         <strong id="totalStock">
                             0
@@ -314,7 +364,9 @@
 
                     <div>
 
-                        <span>Low Stock</span>
+                        <span>
+                            Low Stock
+                        </span>
 
                         <strong id="lowStock">
                             0
@@ -333,7 +385,9 @@
 
                     <div>
 
-                        <span>Estimated Value</span>
+                        <span>
+                            Estimated Value
+                        </span>
 
                         <strong id="estimatedValue">
                             ₱0.00
@@ -345,8 +399,6 @@
 
             </div>
 
-
-            <!-- DASHBOARD PANELS -->
 
             <div class="dashboard-grid">
 
@@ -360,8 +412,9 @@
 
                     </div>
 
-                    <div id="lowStockList"
-                         class="low-stock-list">
+                    <div
+                        id="lowStockList"
+                        class="low-stock-list">
 
                         <p class="empty-message">
                             No low stock products.
@@ -382,8 +435,9 @@
 
                     </div>
 
-                    <div id="recentActivity"
-                         class="activity-list">
+                    <div
+                        id="recentActivity"
+                        class="activity-list">
 
                         <p class="empty-message">
                             No recent activity.
@@ -402,8 +456,9 @@
              INVENTORY
         ================================================= -->
 
-        <section id="inventoryPage"
-                 class="content-page hidden">
+        <section
+            id="inventoryPage"
+            class="content-page hidden">
 
             <div class="page-header">
 
@@ -491,7 +546,8 @@
 
                         <tr>
 
-                            <td colspan="7"
+                            <td
+                                colspan="7"
                                 class="empty-table">
 
                                 No products found.
@@ -513,8 +569,9 @@
              ADD PRODUCT
         ================================================= -->
 
-        <section id="addProductPage"
-                 class="content-page hidden">
+        <section
+            id="addProductPage"
+            class="content-page hidden">
 
             <div class="page-header">
 
@@ -575,8 +632,9 @@
                                 Category
                             </label>
 
-                            <select id="productCategory"
-                                    required>
+                            <select
+                                id="productCategory"
+                                required>
 
                                 <option value="">
                                     Select Category
@@ -681,8 +739,9 @@
 
                     </div>
 
-                    <p id="productMessage"
-                       class="success-message">
+                    <p
+                        id="productMessage"
+                        class="success-message">
                     </p>
 
                 </form>
@@ -696,8 +755,9 @@
              ACTIVITY LOGS
         ================================================= -->
 
-        <section id="activityPage"
-                 class="content-page hidden">
+        <section
+            id="activityPage"
+            class="content-page hidden">
 
             <div class="page-header">
 
@@ -735,7 +795,8 @@
 
                         <tr>
 
-                            <td colspan="4"
+                            <td
+                                colspan="4"
                                 class="empty-table">
 
                                 No activity logs.
@@ -754,11 +815,12 @@
 
 
         <!-- =================================================
-             USERS / MY ACCOUNT
+             MY ACCOUNT
         ================================================= -->
 
-        <section id="usersPage"
-                 class="content-page hidden">
+        <section
+            id="usersPage"
+            class="content-page hidden">
 
             <div class="page-header">
 
@@ -782,8 +844,7 @@
                     <img
                         src="profile.jpg"
                         alt="Profile Picture"
-                        onerror="this.style.display='none'; this.parentElement.innerHTML='👤';"
-                    >
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='👤';">
 
                 </div>
 
@@ -814,7 +875,7 @@
 
 
 <!-- =====================================================
-     FIREBASE + JAVASCRIPT
+     FIREBASE SCRIPT
 ===================================================== -->
 
 <script type="module" src="script.js"></script>
