@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Arbee's Bakery Shop</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <!-- ================= LOGIN ================= -->
-<section id="loginPage" class="auth-page">
-    <div class="auth-card">
+<div id="loginPage" class="page">
 
-        <img src="assets/arbees-bakeshop-logo1.png"
-             class="logo"
-             alt="Arbee's Bakery Shop">
+    <div class="card">
 
-        <h1>Welcome Back</h1>
-        <p class="subtitle">Arbee's Bakery Shop Inventory System</p>
+        <img
+            src="assets/arbees-bakeshop-logo1.png"
+            class="logo"
+            alt="Arbee's Bakery Shop"
+        >
+
+        <h1>ARBEES BAKERY SHOP</h1>
+        <p class="subtitle">Inventory Management System</p>
 
         <form id="loginForm">
 
             <label>Email</label>
+
             <input
                 type="email"
                 id="loginEmail"
@@ -31,6 +37,7 @@
             >
 
             <label>Password</label>
+
             <input
                 type="password"
                 id="loginPassword"
@@ -38,54 +45,62 @@
                 required
             >
 
-            <button type="submit" class="main-btn">
+            <button type="submit">
                 Login
             </button>
 
             <p id="loginError" class="error"></p>
+
         </form>
 
-        <p class="register-text">
+        <p class="switch">
             Don't have an account?
-            <button type="button" id="showRegisterBtn" class="link-btn">
+
+            <span id="showRegister">
                 Register
-            </button>
+            </span>
         </p>
 
     </div>
-</section>
+
+</div>
 
 
 <!-- ================= REGISTER ================= -->
-<section id="registerPage" class="auth-page hidden">
-    <div class="auth-card">
+<div id="registerPage" class="page hidden">
 
-        <img src="assets/arbees-bakeshop-logo1.png"
-             class="logo"
-             alt="Arbee's Bakery Shop">
+    <div class="card">
+
+        <img
+            src="assets/arbees-bakeshop-logo1.png"
+            class="logo"
+            alt="Arbee's Bakery Shop"
+        >
 
         <h1>Create Account</h1>
-        <p class="subtitle">Register your bakery account</p>
 
         <form id="registerForm">
 
             <label>Full Name</label>
+
             <input
                 type="text"
                 id="registerName"
-                placeholder="Enter your name"
+                placeholder="Enter full name"
                 required
             >
 
             <label>Email</label>
+
             <input
                 type="email"
                 id="registerEmail"
-                placeholder="Enter your Gmail"
+                placeholder="Enter Gmail"
                 required
             >
 
             <label>Password</label>
+
             <input
                 type="password"
                 id="registerPassword"
@@ -94,6 +109,7 @@
             >
 
             <label>Confirm Password</label>
+
             <input
                 type="password"
                 id="confirmPassword"
@@ -101,169 +117,226 @@
                 required
             >
 
-            <button type="submit" class="main-btn">
+            <button type="submit">
                 Register
             </button>
 
             <p id="registerError" class="error"></p>
+
         </form>
 
-        <p class="register-text">
+        <p class="switch">
             Already have an account?
-            <button type="button" id="showLoginBtn" class="link-btn">
-                Back to Login
-            </button>
+
+            <span id="showLogin">
+                Login
+            </span>
         </p>
 
     </div>
-</section>
+
+</div>
 
 
 <!-- ================= OTP ================= -->
-<section id="otpPage" class="auth-page hidden">
+<div id="otpPage" class="page hidden">
 
-    <div class="auth-card otp-card">
+    <div class="card otp-card">
 
-        <div class="otp-icon">✉</div>
+        <div class="otp-icon">
+            ✉
+        </div>
 
-        <h1>Verify Your Email</h1>
+        <h1>Email Verification</h1>
 
         <p class="subtitle">
-            A 6-digit verification code has been sent to:
+            We sent a 6-digit OTP to:
         </p>
 
         <strong id="otpEmail">
-            your email
+            email@gmail.com
         </strong>
 
         <form id="otpForm">
 
-            <label>Enter OTP Code</label>
+            <label>Enter OTP</label>
 
             <input
                 type="text"
                 id="otpInput"
                 maxlength="6"
                 inputmode="numeric"
-                autocomplete="one-time-code"
                 placeholder="000000"
                 required
             >
 
-            <button type="submit" class="main-btn">
+            <button type="submit">
                 Verify OTP
             </button>
 
-            <p id="otpMessage" class="message"></p>
-            <p id="otpError" class="error"></p>
-
         </form>
 
-        <button id="resendOtpBtn" class="secondary-btn">
+        <p id="otpMessage" class="success"></p>
+        <p id="otpError" class="error"></p>
+
+        <button
+            type="button"
+            id="resendOtp"
+            class="secondary"
+        >
             Resend OTP
         </button>
 
-        <button id="backToLoginBtn" class="link-btn">
+        <p
+            id="backLogin"
+            class="switch"
+        >
             Back to Login
-        </button>
+        </p>
 
     </div>
-</section>
+
+</div>
 
 
 <!-- ================= DASHBOARD ================= -->
-<section id="dashboardPage" class="system-page hidden">
+<div id="dashboardPage" class="hidden">
 
-    <aside class="sidebar">
+    <div class="layout">
 
-        <div class="sidebar-logo">
-            <img src="assets/arbees-bakeshop-logo1.png">
-            <h2>ARBEES</h2>
-            <span>BAKERY SHOP</span>
-        </div>
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <nav>
-            <button class="nav-btn active">Dashboard</button>
-            <button class="nav-btn">Inventory</button>
-            <button class="nav-btn">Add Product</button>
-            <button class="nav-btn">Activity Logs</button>
-        </nav>
+            <div class="brand">
 
-        <button id="logoutBtn" class="logout-btn">
-            Logout
-        </button>
+                <img
+                    src="assets/arbees-bakeshop-logo1.png"
+                    alt="Arbee's"
+                >
 
-    </aside>
+                <h2>ARBEES</h2>
+                <span>BAKERY SHOP</span>
 
-
-    <main class="dashboard">
-
-        <header class="topbar">
-
-            <div>
-                <h1>Dashboard</h1>
-                <p>Welcome to Arbee's Bakery Shop</p>
             </div>
 
-            <div class="user-info">
-                <strong id="dashboardUserName">
-                    User
-                </strong>
+            <nav>
 
-                <small id="dashboardUserEmail">
-                    email@gmail.com
-                </small>
-            </div>
+                <button class="active">
+                    Dashboard
+                </button>
 
-        </header>
+                <button>
+                    Inventory
+                </button>
 
+                <button>
+                    Add Product
+                </button>
 
-        <div class="stats">
+                <button>
+                    Activity Logs
+                </button>
 
-            <div class="stat-card">
-                <h3>Total Products</h3>
-                <strong id="totalProducts">0</strong>
-            </div>
+            </nav>
 
-            <div class="stat-card">
-                <h3>Total Stock</h3>
-                <strong id="totalStock">0</strong>
-            </div>
+            <button
+                id="logoutBtn"
+                class="logout"
+            >
+                Logout
+            </button>
 
-            <div class="stat-card">
-                <h3>Low Stock Items</h3>
-                <strong id="lowStock">0</strong>
-            </div>
-
-            <div class="stat-card">
-                <h3>Estimated Value</h3>
-                <strong id="estimatedValue">
-                    ₱0.00
-                </strong>
-            </div>
-
-        </div>
+        </aside>
 
 
-        <div class="content-card">
+        <!-- MAIN -->
+        <main class="main">
 
-            <h2>Low Stock Products</h2>
+            <header>
 
-            <div id="lowStockList">
-                <p class="empty">
-                    No low stock products.
-                </p>
-            </div>
+                <div>
+                    <h1>Dashboard</h1>
 
-        </div>
+                    <p>
+                        Welcome to Arbee's Bakery Shop
+                    </p>
+                </div>
 
-    </main>
+                <div class="profile">
 
-</section>
+                    <strong id="userName">
+                        User
+                    </strong>
+
+                    <small id="userEmail">
+                        email@gmail.com
+                    </small>
+
+                </div>
+
+            </header>
 
 
-<!-- Firebase -->
-<script type="module" src="script.js"></script>
+            <!-- STATISTICS -->
+            <section class="stats">
+
+                <div class="stat">
+                    <p>Total Products</p>
+                    <h2 id="totalProducts">
+                        0
+                    </h2>
+                </div>
+
+                <div class="stat">
+                    <p>Total Stock</p>
+                    <h2 id="totalStock">
+                        0
+                    </h2>
+                </div>
+
+                <div class="stat">
+                    <p>Low Stock Items</p>
+                    <h2 id="lowStock">
+                        0
+                    </h2>
+                </div>
+
+                <div class="stat">
+                    <p>Estimated Value</p>
+                    <h2 id="estimatedValue">
+                        ₱0.00
+                    </h2>
+                </div>
+
+            </section>
+
+
+            <!-- LOW STOCK -->
+            <section class="panel">
+
+                <h2>
+                    Low Stock Products
+                </h2>
+
+                <div id="lowStockList">
+                    <p>
+                        No low stock products.
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script
+    type="module"
+    src="script.js"
+></script>
 
 </body>
 </html>
