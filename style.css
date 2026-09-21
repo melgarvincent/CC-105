@@ -1,72 +1,93 @@
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
+    min-height: 100vh;
     background: #fff7f0;
     color: #3b2417;
 }
+
+/* =========================
+   HIDDEN
+========================= */
 
 .hidden {
     display: none !important;
 }
 
-
-/* ================= AUTH ================= */
+/* =========================
+   LOGIN / REGISTER / OTP
+========================= */
 
 .page {
     min-height: 100vh;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(232, 200, 169, 0.35),
+            transparent 35%
+        ),
+        #fff7f0;
 }
 
 .card {
     width: 100%;
-    max-width: 420px;
+    max-width: 430px;
 
-    background: white;
+    padding: 35px;
 
-    padding: 32px;
+    background: #ffffff;
 
-    border-radius: 18px;
+    border-radius: 20px;
 
     box-shadow:
-        0 10px 35px
-        rgba(80, 40, 20, 0.15);
+        0 15px 45px rgba(70, 40, 20, 0.15);
 
     text-align: center;
 }
 
 .logo {
-    width: 120px;
-    height: 120px;
+    width: 125px;
+    height: 125px;
 
     object-fit: contain;
 
-    margin-bottom: 10px;
+    display: block;
+
+    margin: 0 auto 12px;
 }
 
 .card h1 {
-    color: #6b3517;
-    font-size: 23px;
+    color: #5a2d16;
 
-    margin-bottom: 8px;
+    font-size: 24px;
+
+    margin-bottom: 7px;
 }
 
 .subtitle {
     color: #8a7669;
+
     font-size: 14px;
 
-    margin-bottom: 22px;
+    margin-bottom: 25px;
 }
 
+
+/* =========================
+   FORM
+========================= */
 
 form {
     text-align: left;
@@ -75,45 +96,59 @@ form {
 label {
     display: block;
 
-    margin-top: 14px;
-    margin-bottom: 6px;
+    color: #573522;
+
+    font-size: 14px;
 
     font-weight: bold;
 
-    color: #573522;
+    margin-top: 15px;
+
+    margin-bottom: 7px;
 }
 
 input {
     width: 100%;
 
-    padding: 13px;
+    height: 45px;
 
-    border: 1px solid #d9c5b6;
+    padding: 0 13px;
+
+    border: 1px solid #d8c5b7;
 
     border-radius: 9px;
 
     outline: none;
 
-    font-size: 15px;
+    background: #fff;
+
+    color: #3b2417;
+
+    font-size: 14px;
+
+    transition: 0.2s;
 }
 
 input:focus {
     border-color: #8b4513;
 
     box-shadow:
-        0 0 0 3px
-        rgba(139, 69, 19, 0.1);
+        0 0 0 3px rgba(139, 69, 19, 0.10);
 }
 
+
+/* =========================
+   MAIN BUTTON
+========================= */
 
 button {
     width: 100%;
 
-    border: none;
-
-    padding: 13px;
+    height: 45px;
 
     margin-top: 20px;
+
+    border: none;
 
     border-radius: 9px;
 
@@ -121,17 +156,25 @@ button {
 
     color: white;
 
-    font-size: 16px;
+    font-size: 15px;
 
     font-weight: bold;
 
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 button:hover {
     background: #71370f;
+
+    transform: translateY(-1px);
 }
 
+
+/* =========================
+   SWITCH
+========================= */
 
 .switch {
     margin-top: 20px;
@@ -149,32 +192,46 @@ button:hover {
     cursor: pointer;
 }
 
+.switch span:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   ERROR / SUCCESS
+========================= */
 
 .error {
+    min-height: 18px;
+
+    margin-top: 12px;
+
     color: #d32f2f;
 
     text-align: center;
 
-    margin-top: 12px;
-
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .success {
+    min-height: 18px;
+
+    margin-top: 12px;
+
     color: #2e7d32;
 
     text-align: center;
 
-    margin-top: 12px;
-
-    font-size: 14px;
+    font-size: 13px;
 }
 
 
-/* ================= OTP ================= */
+/* =========================
+   OTP
+========================= */
 
 .otp-card {
-    max-width: 400px;
+    max-width: 420px;
 }
 
 .otp-icon {
@@ -185,7 +242,7 @@ button:hover {
     align-items: center;
     justify-content: center;
 
-    margin: 0 auto 15px;
+    margin: 0 auto 18px;
 
     border-radius: 50%;
 
@@ -199,25 +256,32 @@ button:hover {
 #otpEmail {
     display: block;
 
+    margin-bottom: 15px;
+
     color: #8b4513;
 
-    margin-bottom: 12px;
-
-    word-break: break-word;
+    word-break: break-all;
 }
 
 #otpInput {
+    height: 55px;
+
     text-align: center;
 
-    font-size: 24px;
-
-    letter-spacing: 7px;
+    font-size: 25px;
 
     font-weight: bold;
+
+    letter-spacing: 8px;
 }
 
+
+/* =========================
+   SECONDARY BUTTON
+========================= */
+
 .secondary {
-    background: white;
+    background: #ffffff;
 
     color: #8b4513;
 
@@ -226,236 +290,64 @@ button:hover {
 
 .secondary:hover {
     background: #fff1e5;
+
+    color: #71370f;
 }
 
 
-/* ================= DASHBOARD ================= */
+/* =========================
+   DASHBOARD
+========================= */
+
+#dashboardPage {
+    min-height: 100vh;
+}
 
 .layout {
     min-height: 100vh;
 
     display: flex;
+
+    background: #f7f1eb;
 }
 
+
+/* =========================
+   SIDEBAR
+========================= */
+
 .sidebar {
-    width: 240px;
+    width: 245px;
 
     min-height: 100vh;
-
-    background: #2c1810;
-
-    color: white;
 
     padding: 25px 15px;
 
     display: flex;
 
     flex-direction: column;
+
+    background: #2c1810;
+
+    color: white;
 }
 
 .brand {
     text-align: center;
 
-    margin-bottom: 30px;
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .brand img {
-    width: 75px;
-    height: 75px;
+    width: 80px;
+    height: 80px;
 
     object-fit: contain;
+
+    margin-bottom: 8px;
 }
 
 .brand h2 {
-    margin-top: 8px;
-}
-
-.brand span {
-    color: #e8c8a9;
-
-    font-size: 11px;
-}
-
-.sidebar nav button {
-    background: transparent;
-
-    text-align: left;
-
-    font-size: 14px;
-
-    margin-top: 5px;
-}
-
-.sidebar nav button:hover,
-.sidebar nav button.active {
-    background: #8b4513;
-}
-
-.logout {
-    margin-top: auto;
-
-    background: transparent;
-
-    border: 1px solid #d8a982;
-}
-
-.main {
-    flex: 1;
-
-    padding: 30px;
-}
-
-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 30px;
-}
-
-header h1 {
-    color: #3b2417;
-}
-
-header p {
-    color: #806b5d;
-
-    margin-top: 5px;
-}
-
-.profile {
-    text-align: right;
-}
-
-.profile small {
-    display: block;
-
-    color: #806b5d;
-
-    margin-top: 4px;
-}
-
-
-/* ================= STATS ================= */
-
-.stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 18px;
-}
-
-.stat {
-    background: white;
-
-    padding: 25px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(65, 35, 15, 0.08);
-}
-
-.stat p {
-    color: #806b5d;
-
-    font-size: 14px;
-
-    margin-bottom: 10px;
-}
-
-.stat h2 {
-    color: #8b4513;
-
-    font-size: 28px;
-}
-
-
-/* ================= PANEL ================= */
-
-.panel {
-    background: white;
-
-    margin-top: 25px;
-
-    padding: 25px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(65, 35, 15, 0.08);
-}
-
-.panel h2 {
-    margin-bottom: 20px;
-}
-
-
-/* ================= MOBILE ================= */
-
-@media (max-width: 800px) {
-
-    .layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        min-height: auto;
-    }
-
-    .sidebar nav {
-        display: grid;
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 5px;
-    }
-
-    .logout {
-        margin-top: 15px;
-    }
-
-    .main {
-        padding: 20px;
-    }
-
-    .stats {
-        grid-template-columns:
-            1fr 1fr;
-    }
-
-    header {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 15px;
-    }
-
-    .profile {
-        text-align: left;
-    }
-}
-
-
-@media (max-width: 500px) {
-
-    .card {
-        padding: 25px 20px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    #otpInput {
-        letter-spacing: 5px;
-    }
-}
+    fo
