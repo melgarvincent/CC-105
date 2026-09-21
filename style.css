@@ -1,19 +1,51 @@
-/* =========================================
+/* =====================================================
    RESET
-========================================= */
+===================================================== */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+:root {
+    --brown: #8b4513;
+    --brown-dark: #5b2f18;
+    --brown-light: #e8c8a9;
+    --cream: #fff7f0;
+    --cream-dark: #f5dfcc;
+    --text: #3b2417;
+    --muted: #806b5d;
+    --white: #ffffff;
+    --danger: #d32f2f;
+    --success: #2e7d32;
 }
 
 
 body {
     min-height: 100vh;
-    background: #fff7f0;
-    color: #3b2417;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: var(--cream);
+
+    color: var(--text);
+}
+
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+
+button {
+    cursor: pointer;
 }
 
 
@@ -22,60 +54,90 @@ body {
 }
 
 
-/* =========================================
-   LOGIN / REGISTER / OTP PAGE
-========================================= */
+/* =====================================================
+   AUTH PAGES
+===================================================== */
 
 .page {
     min-height: 100vh;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    padding: 20px;
+    padding: 25px;
 
     background:
         linear-gradient(
             135deg,
-            #fff7f0,
-            #f5dfcc
+            #fff7f0 0%,
+            #f7dfcc 100%
         );
 }
 
 
-.card {
+.auth-card {
     width: 100%;
+
     max-width: 430px;
 
-    background: #ffffff;
-
     padding: 35px;
+
+    background: white;
 
     border-radius: 22px;
 
     box-shadow:
-        0 15px 45px
-        rgba(74, 39, 20, 0.18);
+        0 18px 50px
+        rgba(75, 39, 20, 0.16);
 
     text-align: center;
 }
 
 
-.logo {
-    width: 120px;
-    height: 120px;
-
-    object-fit: contain;
-
-    display: block;
+.logo-box {
+    width: 125px;
+    height: 125px;
 
     margin: 0 auto 15px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
 }
 
 
-.card h1 {
-    color: #5b2f18;
+.logo-box img {
+    width: 125px;
+    height: 125px;
+
+    object-fit: contain;
+}
+
+
+.logo-fallback {
+    display: none;
+
+    font-size: 60px;
+}
+
+
+.logo-error img {
+    display: none;
+}
+
+
+.logo-error .logo-fallback {
+    display: block;
+}
+
+
+.auth-card h1 {
+    color: var(--brown-dark);
 
     font-size: 25px;
 
@@ -84,19 +146,17 @@ body {
 
 
 .subtitle {
-    color: #8a7669;
+    color: var(--muted);
 
     font-size: 14px;
-
-    line-height: 1.5;
 
     margin-bottom: 25px;
 }
 
 
-/* =========================================
-   FORM
-========================================= */
+/* =====================================================
+   FORMS
+===================================================== */
 
 form {
     text-align: left;
@@ -106,19 +166,20 @@ form {
 label {
     display: block;
 
-    color: #573522;
+    margin-top: 15px;
+
+    margin-bottom: 7px;
+
+    color: var(--text);
 
     font-size: 14px;
 
     font-weight: bold;
-
-    margin-top: 15px;
-
-    margin-bottom: 7px;
 }
 
 
-input {
+input,
+select {
     width: 100%;
 
     height: 46px;
@@ -129,18 +190,17 @@ input {
 
     border-radius: 9px;
 
-    background: #ffffff;
-
-    color: #3b2417;
-
     outline: none;
 
-    font-size: 14px;
+    background: white;
+
+    color: var(--text);
 }
 
 
-input:focus {
-    border-color: #8b4513;
+input:focus,
+select:focus {
+    border-color: var(--brown);
 
     box-shadow:
         0 0 0 3px
@@ -148,14 +208,14 @@ input:focus {
 }
 
 
-/* =========================================
-   BUTTON
-========================================= */
+/* =====================================================
+   BUTTONS
+===================================================== */
 
-.main-btn {
+.primary-btn {
     width: 100%;
 
-    height: 46px;
+    height: 47px;
 
     margin-top: 22px;
 
@@ -163,28 +223,24 @@ input:focus {
 
     border-radius: 9px;
 
-    background: #8b4513;
+    background: var(--brown);
 
     color: white;
 
-    font-size: 15px;
-
     font-weight: bold;
-
-    cursor: pointer;
 
     transition: 0.2s;
 }
 
 
-.main-btn:hover {
+.primary-btn:hover {
     background: #6f350f;
 
     transform: translateY(-1px);
 }
 
 
-.main-btn:disabled {
+.primary-btn:disabled {
     opacity: 0.6;
 
     cursor: not-allowed;
@@ -193,21 +249,41 @@ input:focus {
 }
 
 
-/* =========================================
-   REGISTER / LOGIN SWITCH
-========================================= */
+.secondary-btn {
+    width: 100%;
 
-.switch {
+    height: 44px;
+
+    margin-top: 10px;
+
+    border: 1px solid var(--brown);
+
+    border-radius: 9px;
+
+    background: white;
+
+    color: var(--brown);
+
+    font-weight: bold;
+}
+
+
+.secondary-btn:hover {
+    background: #fff1e5;
+}
+
+
+.switch-text {
     margin-top: 20px;
 
-    color: #806b5d;
+    color: var(--muted);
 
     font-size: 14px;
 }
 
 
-.switch span {
-    color: #8b4513;
+.switch-text span {
+    color: var(--brown);
 
     font-weight: bold;
 
@@ -215,21 +291,17 @@ input:focus {
 }
 
 
-.switch span:hover {
+.switch-text span:hover {
     text-decoration: underline;
 }
 
-
-/* =========================================
-   ERROR / SUCCESS
-========================================= */
 
 .error {
     min-height: 18px;
 
     margin-top: 12px;
 
-    color: #d32f2f;
+    color: var(--danger);
 
     text-align: center;
 
@@ -242,7 +314,7 @@ input:focus {
 
     margin-top: 12px;
 
-    color: #2e7d32;
+    color: var(--success);
 
     text-align: center;
 
@@ -250,9 +322,9 @@ input:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    OTP
-========================================= */
+===================================================== */
 
 .otp-icon {
     width: 70px;
@@ -269,7 +341,7 @@ input:focus {
 
     background: #fff0e3;
 
-    color: #8b4513;
+    color: var(--brown);
 
     font-size: 32px;
 }
@@ -278,9 +350,9 @@ input:focus {
 #otpEmail {
     display: block;
 
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 
-    color: #8b4513;
+    color: var(--brown);
 
     word-break: break-all;
 }
@@ -295,46 +367,15 @@ input:focus {
 
     font-weight: bold;
 
-    letter-spacing: 9px;
+    letter-spacing: 8px;
 }
 
 
-.secondary-btn {
-    width: 100%;
+/* =====================================================
+   APP LAYOUT
+===================================================== */
 
-    height: 44px;
-
-    margin-top: 12px;
-
-    border: 1px solid #8b4513;
-
-    border-radius: 9px;
-
-    background: white;
-
-    color: #8b4513;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-.secondary-btn:hover {
-    background: #fff2e7;
-}
-
-
-/* =========================================
-   DASHBOARD
-========================================= */
-
-#dashboardPage {
-    min-height: 100vh;
-}
-
-
-.layout {
+.app-layout {
     min-height: 100vh;
 
     display: flex;
@@ -343,9 +384,9 @@ input:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    SIDEBAR
-========================================= */
+===================================================== */
 
 .sidebar {
     width: 245px;
@@ -364,62 +405,86 @@ input:focus {
 }
 
 
-.brand {
+.sidebar-brand {
     text-align: center;
 
-    padding-bottom: 25px;
+    padding-bottom: 24px;
 
     border-bottom:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(255,255,255,0.12);
 }
 
 
-.brand img {
-    width: 78px;
-    height: 78px;
+.sidebar-logo {
+    width: 75px;
+    height: 75px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.sidebar-logo img {
+    width: 75px;
+    height: 75px;
 
     object-fit: contain;
 }
 
 
-.brand h2 {
-    margin-top: 8px;
+.sidebar-logo span {
+    display: none;
 
-    font-size: 20px;
+    font-size: 45px;
 }
 
 
-.brand span {
-    display: block;
+.sidebar-brand h2 {
+    margin-top: 8px;
 
+    font-size: 21px;
+}
+
+
+.sidebar-brand p {
     margin-top: 3px;
 
     color: #e8c8a9;
 
     font-size: 11px;
 
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
 
-/* =========================================
+/* =====================================================
    NAVIGATION
-========================================= */
+===================================================== */
 
-.nav {
+.sidebar-nav {
     margin-top: 25px;
 }
 
 
-.nav button {
+.nav-btn {
     width: 100%;
 
-    height: 44px;
+    height: 45px;
 
-    margin: 4px 0;
+    margin-bottom: 5px;
 
     padding: 0 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
 
     border: none;
 
@@ -430,29 +495,21 @@ input:focus {
     color: white;
 
     text-align: left;
-
-    font-size: 14px;
-
-    cursor: pointer;
 }
 
 
-.nav button:hover,
-.nav button.active {
-    background: #8b4513;
+.nav-btn:hover,
+.nav-btn.active {
+    background: var(--brown);
 }
 
 
-/* =========================================
-   LOGOUT
-========================================= */
-
-.logout {
-    margin-top: auto;
-
+.logout-btn {
     width: 100%;
 
     height: 44px;
+
+    margin-top: auto;
 
     border: 1px solid #c89570;
 
@@ -461,23 +518,19 @@ input:focus {
     background: transparent;
 
     color: white;
-
-    cursor: pointer;
 }
 
 
-.logout:hover {
-    background: #8b4513;
-
-    border-color: #8b4513;
+.logout-btn:hover {
+    background: var(--brown);
 }
 
 
-/* =========================================
+/* =====================================================
    MAIN
-========================================= */
+===================================================== */
 
-.main {
+.main-content {
     flex: 1;
 
     min-width: 0;
@@ -495,12 +548,12 @@ input:focus {
 
     gap: 20px;
 
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 
 .topbar h1 {
-    color: #3b2417;
+    color: var(--text);
 
     font-size: 30px;
 }
@@ -509,16 +562,20 @@ input:focus {
 .topbar p {
     margin-top: 5px;
 
-    color: #806b5d;
+    color: var(--muted);
+
+    font-size: 14px;
 }
 
 
-/* =========================================
-   PROFILE
-========================================= */
+.user-mini {
+    display: flex;
 
-.profile {
-    padding: 11px 15px;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 13px;
 
     background: white;
 
@@ -526,31 +583,49 @@ input:focus {
 
     box-shadow:
         0 4px 15px
-        rgba(60, 30, 10, 0.08);
-
-    text-align: right;
+        rgba(60,30,10,0.08);
 }
 
 
-.profile strong {
+.user-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--brown);
+
+    color: white;
+
+    font-weight: bold;
+}
+
+
+.user-mini strong,
+.user-mini small {
     display: block;
 }
 
 
-.profile small {
-    display: block;
+.user-mini small {
+    margin-top: 3px;
 
-    margin-top: 4px;
+    color: var(--muted);
 
-    color: #806b5d;
+    font-size: 11px;
 }
 
 
-/* =========================================
-   STATISTICS
-========================================= */
+/* =====================================================
+   STATS
+===================================================== */
 
-.stats {
+.stats-grid {
     display: grid;
 
     grid-template-columns:
@@ -560,8 +635,16 @@ input:focus {
 }
 
 
-.stat {
-    padding: 25px;
+.stat-card {
+    min-height: 125px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
 
     background: white;
 
@@ -569,34 +652,73 @@ input:focus {
 
     box-shadow:
         0 6px 20px
-        rgba(60, 30, 10, 0.08);
+        rgba(60,30,10,0.08);
 }
 
 
-.stat p {
-    color: #806b5d;
+.stat-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #fff0e3;
+
+    color: var(--brown);
+
+    font-size: 22px;
+}
+
+
+.stat-icon.warning {
+    background: #fff5dc;
+
+    color: #c77b00;
+}
+
+
+.stat-card p {
+    color: var(--muted);
 
     font-size: 13px;
 
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 
-.stat h2 {
-    color: #8b4513;
+.stat-card h2 {
+    color: var(--brown);
 
-    font-size: 28px;
+    font-size: 26px;
 }
 
 
-/* =========================================
-   PANEL
-========================================= */
+/* =====================================================
+   PANELS
+===================================================== */
 
-.panel {
-    margin-top: 25px;
+.dashboard-grid {
+    display: grid;
 
-    padding: 25px;
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+.panel,
+.form-panel {
+    padding: 24px;
 
     background: white;
 
@@ -604,38 +726,370 @@ input:focus {
 
     box-shadow:
         0 6px 20px
-        rgba(60, 30, 10, 0.08);
+        rgba(60,30,10,0.08);
 }
 
 
-.panel h2 {
+.panel-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
     margin-bottom: 18px;
-
-    color: #3b2417;
 }
 
 
-.low-item {
+.panel-header h2 {
+    color: var(--text);
+
+    font-size: 19px;
+}
+
+
+.panel-header p {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+.small-btn,
+.primary-small-btn,
+.cancel-btn {
+    height: 40px;
+
+    padding: 0 15px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+
+.small-btn,
+.primary-small-btn {
+    border: none;
+
+    background: var(--brown);
+
+    color: white;
+}
+
+
+.small-btn:hover,
+.primary-small-btn:hover {
+    background: #6f350f;
+}
+
+
+.cancel-btn {
+    border: 1px solid #c8b4a5;
+
+    background: white;
+
+    color: var(--text);
+}
+
+
+.empty {
+    padding: 20px;
+
+    color: var(--muted);
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   LOW STOCK
+===================================================== */
+
+.low-stock-item {
     padding: 13px;
 
     margin-bottom: 8px;
 
-    background: #fff3e8;
-
-    border-left:
-        4px solid #8b4513;
+    border-left: 4px solid var(--brown);
 
     border-radius: 7px;
+
+    background: #fff3e8;
 }
 
 
-/* =========================================
+.low-stock-item strong {
+    display: block;
+
+    margin-bottom: 4px;
+}
+
+
+.low-stock-item small {
+    color: var(--muted);
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filters {
+    display: grid;
+
+    grid-template-columns:
+        1fr 220px;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 750px;
+}
+
+
+th {
+    padding: 13px;
+
+    background: #fff3e8;
+
+    color: var(--text);
+
+    text-align: left;
+
+    font-size: 13px;
+}
+
+
+td {
+    padding: 13px;
+
+    border-bottom: 1px solid #eee2d9;
+
+    font-size: 13px;
+}
+
+
+tr:hover td {
+    background: #fffaf6;
+}
+
+
+.status {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+
+.status.in-stock {
+    background: #e8f5e9;
+
+    color: #2e7d32;
+}
+
+
+.status.low-stock {
+    background: #fff0e0;
+
+    color: #c45b00;
+}
+
+
+.action-btn {
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 6px 9px;
+
+    margin-right: 4px;
+
+    font-size: 12px;
+}
+
+
+.edit-btn {
+    background: #fff0e0;
+
+    color: #8b4513;
+}
+
+
+.delete-btn {
+    background: #ffebee;
+
+    color: #c62828;
+}
+
+
+/* =====================================================
+   PRODUCT FORM
+===================================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 5px 18px;
+}
+
+
+.form-group label {
+    margin-top: 14px;
+}
+
+
+.form-actions {
+    margin-top: 25px;
+
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.form-message {
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   ACCOUNT
+===================================================== */
+
+.account-card {
+    max-width: 500px;
+
+    padding: 35px;
+
+    background: white;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 6px 20px
+        rgba(60,30,10,0.08);
+
+    text-align: center;
+}
+
+
+.account-avatar {
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--brown);
+
+    color: white;
+
+    font-size: 35px;
+
+    font-weight: bold;
+}
+
+
+.account-card p {
+    margin-top: 7px;
+
+    color: var(--muted);
+}
+
+
+.role-badge {
+    display: inline-block;
+
+    margin-top: 15px;
+
+    padding: 7px 15px;
+
+    border-radius: 20px;
+
+    background: #fff0e3;
+
+    color: var(--brown);
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
    TABLET
-========================================= */
+===================================================== */
 
-@media (max-width: 850px) {
+@media (max-width: 1000px) {
 
-    .layout {
+    .stats-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .sidebar {
+        width: 210px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 750px) {
+
+    .app-layout {
         flex-direction: column;
     }
 
@@ -644,64 +1098,52 @@ input:focus {
         width: 100%;
 
         min-height: auto;
+
+        padding: 15px;
     }
 
 
-    .nav {
+    .sidebar-brand {
+        padding-bottom: 12px;
+    }
+
+
+    .sidebar-logo {
+        width: 55px;
+        height: 55px;
+    }
+
+
+    .sidebar-logo img {
+        width: 55px;
+        height: 55px;
+    }
+
+
+    .sidebar-nav {
+        margin-top: 15px;
+
         display: grid;
 
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+            1fr 1fr;
 
         gap: 5px;
     }
 
 
-    .nav button {
+    .nav-btn {
         margin: 0;
     }
 
 
-    .logout {
-        margin-top: 15px;
+    .logout-btn {
+        margin-top: 12px;
     }
 
 
-    .main {
-        padding: 20px;
-    }
-
-
-    .stats {
-        grid-template-columns:
-            1fr 1fr;
-    }
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 550px) {
-
-    .card {
-        padding: 25px 20px;
-    }
-
-
-    .logo {
-        width: 100px;
-        height: 100px;
-    }
-
-
-    .card h1 {
-        font-size: 21px;
-    }
-
-
-    .stats {
-        grid-template-columns: 1fr;
+    .main-content {
+        padding: 18px;
     }
 
 
@@ -712,14 +1154,76 @@ input:focus {
     }
 
 
-    .profile {
+    .user-mini {
         width: 100%;
+    }
 
-        text-align: left;
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+
+    .logo-box,
+    .logo-box img {
+        width: 95px;
+        height: 95px;
+    }
+
+
+    .auth-card h1 {
+        font-size: 21px;
+    }
+
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .panel,
+    .form-panel {
+        padding: 17px;
+    }
+
+
+    .panel-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+
+    .form-actions button {
+        width: 100%;
     }
 
 
     #otpInput {
         letter-spacing: 5px;
     }
+
 }
