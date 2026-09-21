@@ -1,5 +1,11 @@
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+/* =====================================================
+   FIREBASE IMPORTS
+===================================================== */
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
 
 import {
     getAuth,
@@ -7,25 +13,29 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
 
 import {
     getDatabase,
     ref,
     set,
     get
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-// =====================================================
-// FIREBASE CONFIG
-// =====================================================
+
+/* =====================================================
+   FIREBASE CONFIG
+
+   REPLACE THE PLACEHOLDERS WITH YOUR REAL
+   FIREBASE PROJECT CONFIG.
+===================================================== */
 
 const firebaseConfig = {
 
-    apiKey: "YOUR_API_KEY",
+    apiKey:
+        "YOUR_API_KEY",
 
     authDomain:
         "YOUR_PROJECT_ID.firebaseapp.com",
@@ -37,7 +47,7 @@ const firebaseConfig = {
         "YOUR_PROJECT_ID",
 
     storageBucket:
-        "YOUR_PROJECT_ID.firebasestorage.app",
+        "YOUR_STORAGE_BUCKET",
 
     messagingSenderId:
         "YOUR_MESSAGING_SENDER_ID",
@@ -47,148 +57,205 @@ const firebaseConfig = {
 };
 
 
-// =====================================================
-// GOOGLE APPS SCRIPT URL
-// =====================================================
+
+/* =====================================================
+   GOOGLE APPS SCRIPT OTP URL
+
+   PASTE YOUR DEPLOYED /exec URL HERE.
+===================================================== */
 
 const OTP_API_URL =
     "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
 
 
-// =====================================================
-// FIREBASE
-// =====================================================
+
+/* =====================================================
+   INITIALIZE FIREBASE
+===================================================== */
 
 const app =
-    initializeApp(firebaseConfig);
+    initializeApp(
+        firebaseConfig
+    );
+
 
 const auth =
     getAuth(app);
+
 
 const db =
     getDatabase(app);
 
 
-// =====================================================
-// PAGES
-// =====================================================
+
+/* =====================================================
+   PAGE ELEMENTS
+===================================================== */
 
 const loginPage =
-    document.getElementById("loginPage");
+    document.getElementById(
+        "loginPage"
+    );
+
 
 const registerPage =
-    document.getElementById("registerPage");
+    document.getElementById(
+        "registerPage"
+    );
+
 
 const otpPage =
-    document.getElementById("otpPage");
+    document.getElementById(
+        "otpPage"
+    );
+
 
 const dashboardPage =
-    document.getElementById("dashboardPage");
+    document.getElementById(
+        "dashboardPage"
+    );
 
 
-// =====================================================
-// VARIABLES
-// =====================================================
+
+/* =====================================================
+   VARIABLES
+===================================================== */
 
 let currentUser = null;
 
-let otpExpiration = 0;
+let otpExpiresAt = 0;
 
 
-// =====================================================
-// PAGE SWITCH
-// =====================================================
+
+/* =====================================================
+   PAGE SWITCHER
+===================================================== */
 
 function showPage(page) {
 
-    loginPage.classList.add("hidden");
-    registerPage.classList.add("hidden");
-    otpPage.classList.add("hidden");
-    dashboardPage.classList.add("hidden");
+    loginPage.classList.add(
+        "hidden"
+    );
 
-    page.classList.remove("hidden");
+    registerPage.classList.add(
+        "hidden"
+    );
+
+    otpPage.classList.add(
+        "hidden"
+    );
+
+    dashboardPage.classList.add(
+        "hidden"
+    );
+
+
+    page.classList.remove(
+        "hidden"
+    );
 }
 
 
-// =====================================================
-// LOGIN / REGISTER SWITCH
-// =====================================================
+
+/* =====================================================
+   REGISTER PAGE
+===================================================== */
 
 document
     .getElementById("showRegister")
-    .onclick = () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        document.getElementById("loginError")
-            .textContent = "";
+            document
+                .getElementById(
+                    "registerError"
+                )
+                .textContent = "";
 
-        showPage(registerPage);
-    };
+            showPage(
+                registerPage
+            );
+        }
+    );
 
+
+
+/* =====================================================
+   LOGIN PAGE
+===================================================== */
 
 document
     .getElementById("showLogin")
-    .onclick = () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        document.getElementById("registerError")
-            .textContent = "";
+            document
+                .getElementById(
+                    "loginError"
+                )
+                .textContent = "";
 
-        showPage(loginPage);
-    };
-
-
-document
-    .getElementById("backLogin")
-    .onclick = async () => {
-
-        currentUser = null;
-
-        await signOut(auth);
-
-        showPage(loginPage);
-    };
+            showPage(
+                loginPage
+            );
+        }
+    );
 
 
-// =====================================================
-// REGISTER
-// =====================================================
+
+/* =====================================================
+   REGISTER
+===================================================== */
 
 document
     .getElementById("registerForm")
     .addEventListener(
         "submit",
-        async function(event) {
+        async (event) => {
 
             event.preventDefault();
+
 
             const error =
                 document.getElementById(
                     "registerError"
                 );
 
+
             error.textContent = "";
+
 
             const name =
                 document.getElementById(
                     "registerName"
                 ).value.trim();
 
+
             const email =
                 document.getElementById(
                     "registerEmail"
-                ).value.trim();
+                ).value.trim()
+                .toLowerCase();
+
 
             const password =
                 document.getElementById(
                     "registerPassword"
                 ).value;
 
-            const confirm =
+
+            const confirmPassword =
                 document.getElementById(
                     "confirmPassword"
                 ).value;
 
 
-            if (password.length < 6) {
+
+            if (
+                password.length < 6
+            ) {
 
                 error.textContent =
                     "Password must be at least 6 characters.";
@@ -197,7 +264,11 @@ document
             }
 
 
-            if (password !== confirm) {
+
+            if (
+                password !==
+                confirmPassword
+            ) {
 
                 error.textContent =
                     "Passwords do not match.";
@@ -206,9 +277,10 @@ document
             }
 
 
+
             try {
 
-                const credential =
+                const result =
                     await createUserWithEmailAndPassword(
                         auth,
                         email,
@@ -217,38 +289,59 @@ document
 
 
                 const user =
-                    credential.user;
+                    result.user;
+
 
 
                 await updateProfile(
                     user,
                     {
-                        displayName: name
+                        displayName:
+                            name
                     }
                 );
 
+
+
+                /* SAVE USER TO RTDB */
 
                 await set(
                     ref(
                         db,
-                        "users/" + user.uid
+                        "users/" +
+                        user.uid
                     ),
                     {
-                        uid: user.uid,
-                        name: name,
-                        email: email,
-                        role: "staff",
+
+                        uid:
+                            user.uid,
+
+                        name:
+                            name,
+
+                        email:
+                            email,
+
+                        role:
+                            "staff",
+
                         createdAt:
-                            new Date().toISOString()
+                            new Date()
+                                .toISOString()
                     }
                 );
 
 
-                await signOut(auth);
+
+                await signOut(
+                    auth
+                );
 
 
                 document
-                    .getElementById("registerForm")
+                    .getElementById(
+                        "registerForm"
+                    )
                     .reset();
 
 
@@ -257,36 +350,57 @@ document
                 );
 
 
-                showPage(loginPage);
+                showPage(
+                    loginPage
+                );
 
-
-            } catch (e) {
-
-                console.error(e);
-
-                error.textContent =
-                    firebaseError(e.code);
             }
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                document
+                    .getElementById(
+                        "registerError"
+                    )
+                    .textContent =
+                    firebaseError(
+                        error.code
+                    );
+            }
+
         }
     );
 
 
-// =====================================================
-// LOGIN
-// =====================================================
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 document
     .getElementById("loginForm")
     .addEventListener(
         "submit",
-        async function(event) {
+        async (event) => {
 
             event.preventDefault();
+
 
             const error =
                 document.getElementById(
                     "loginError"
                 );
+
+
+            const button =
+                document.getElementById(
+                    "loginBtn"
+                );
+
 
             error.textContent = "";
 
@@ -294,7 +408,9 @@ document
             const email =
                 document.getElementById(
                     "loginEmail"
-                ).value.trim();
+                ).value.trim()
+                .toLowerCase();
+
 
             const password =
                 document.getElementById(
@@ -302,9 +418,17 @@ document
                 ).value;
 
 
+
+            button.disabled = true;
+
+            button.textContent =
+                "Checking...";
+
+
+
             try {
 
-                const credential =
+                const result =
                     await signInWithEmailAndPassword(
                         auth,
                         email,
@@ -313,7 +437,8 @@ document
 
 
                 currentUser =
-                    credential.user;
+                    result.user;
+
 
 
                 document
@@ -324,35 +449,53 @@ document
                     currentUser.email;
 
 
-                showPage(otpPage);
+
+                showPage(
+                    otpPage
+                );
 
 
                 await sendOTP(
                     currentUser.email
                 );
 
-
-            } catch (e) {
-
-                console.error(e);
-
-                error.textContent =
-                    firebaseError(e.code);
             }
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                document
+                    .getElementById(
+                        "loginError"
+                    )
+                    .textContent =
+                    firebaseError(
+                        error.code
+                    );
+
+            }
+            finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Login";
+            }
+
         }
     );
 
 
-// =====================================================
-// SEND OTP
-// =====================================================
+
+/* =====================================================
+   SEND OTP
+===================================================== */
 
 async function sendOTP(email) {
-
-    const error =
-        document.getElementById(
-            "otpError"
-        );
 
     const message =
         document.getElementById(
@@ -360,10 +503,17 @@ async function sendOTP(email) {
         );
 
 
+    const error =
+        document.getElementById(
+            "otpError"
+        );
+
+
     error.textContent = "";
 
     message.textContent =
-        "Sending OTP...";
+        "Sending OTP to your Gmail...";
+
 
 
     if (
@@ -371,13 +521,14 @@ async function sendOTP(email) {
         "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"
     ) {
 
-        error.textContent =
-            "Please configure the Google Apps Script URL in script.js.";
-
         message.textContent = "";
+
+        error.textContent =
+            "OTP service is not configured yet.";
 
         return;
     }
+
 
 
     try {
@@ -386,73 +537,99 @@ async function sendOTP(email) {
             await fetch(
                 OTP_API_URL,
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
                         "Content-Type":
                             "text/plain;charset=utf-8"
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        action: "sendOTP",
+                            action:
+                                "sendOTP",
 
-                        email: email
+                            email:
+                                email
 
-                    })
+                        })
                 }
             );
+
 
 
         const result =
             await response.json();
 
 
-        if (!result.success) {
+
+        if (
+            !result.success
+        ) {
 
             throw new Error(
-                result.message
+                result.message ||
+                "OTP failed."
             );
         }
 
 
-        otpExpiration =
+
+        otpExpiresAt =
             Date.now() +
-            5 * 60 * 1000;
+            (
+                5 *
+                60 *
+                1000
+            );
 
 
         message.textContent =
-            "OTP sent to your Gmail. Check Inbox or Spam.";
+            "OTP sent! Check your Gmail Inbox or Spam.";
 
-    } catch (e) {
+    }
+    catch (error) {
 
-        console.error(e);
+        console.error(
+            error
+        );
+
 
         message.textContent = "";
 
-        error.textContent =
-            "Unable to send OTP.";
+        document
+            .getElementById(
+                "otpError"
+            )
+            .textContent =
+            "Unable to send OTP. Check your Apps Script URL.";
     }
 }
 
 
-// =====================================================
-// VERIFY OTP
-// =====================================================
+
+/* =====================================================
+   VERIFY OTP
+===================================================== */
 
 document
     .getElementById("otpForm")
     .addEventListener(
         "submit",
-        async function(event) {
+        async (event) => {
 
             event.preventDefault();
 
 
             const code =
-                document.getElementById(
-                    "otpInput"
-                ).value.trim();
+                document
+                    .getElementById(
+                        "otpInput"
+                    )
+                    .value.trim();
 
 
             const error =
@@ -460,35 +637,67 @@ document
                     "otpError"
                 );
 
+
             const message =
                 document.getElementById(
                     "otpMessage"
                 );
 
 
+            const button =
+                document.getElementById(
+                    "verifyOtpBtn"
+                );
+
+
             error.textContent = "";
-            message.textContent = "";
 
 
-            if (!/^\d{6}$/.test(code)) {
+
+            if (
+                !/^\d{6}$/.test(
+                    code
+                )
+            ) {
 
                 error.textContent =
-                    "Enter the 6-digit OTP.";
+                    "Enter exactly 6 numbers.";
 
                 return;
             }
+
 
 
             if (
                 Date.now() >
-                otpExpiration
+                otpExpiresAt
             ) {
 
                 error.textContent =
-                    "OTP expired. Please resend.";
+                    "OTP expired. Request a new OTP.";
 
                 return;
             }
+
+
+
+            if (
+                !currentUser
+            ) {
+
+                error.textContent =
+                    "Session expired. Login again.";
+
+                return;
+            }
+
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Verifying...";
+
 
 
             try {
@@ -497,44 +706,56 @@ document
                     await fetch(
                         OTP_API_URL,
                         {
-                            method: "POST",
+
+                            method:
+                                "POST",
 
                             headers: {
                                 "Content-Type":
                                     "text/plain;charset=utf-8"
                             },
 
-                            body: JSON.stringify({
+                            body:
+                                JSON.stringify({
 
-                                action: "verifyOTP",
+                                    action:
+                                        "verifyOTP",
 
-                                email:
-                                    currentUser.email,
+                                    email:
+                                        currentUser.email,
 
-                                code: code
+                                    code:
+                                        code
 
-                            })
+                                })
                         }
                     );
+
 
 
                 const result =
                     await response.json();
 
 
-                if (!result.success) {
+
+                if (
+                    !result.success
+                ) {
 
                     throw new Error(
-                        result.message
+                        result.message ||
+                        "Invalid OTP."
                     );
                 }
 
 
+
                 message.textContent =
-                    "OTP verified!";
+                    "OTP verified successfully!";
 
 
                 await loadDashboard();
+
 
 
                 setTimeout(
@@ -545,106 +766,153 @@ document
                         );
 
                     },
-                    500
+                    600
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    error
                 );
 
 
-            } catch (e) {
+                error =
+                    document.getElementById(
+                        "otpError"
+                    );
 
-                console.error(e);
 
                 error.textContent =
-                    e.message ||
                     "Invalid OTP.";
             }
+            finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Verify OTP";
+            }
+
         }
     );
 
 
-// =====================================================
-// RESEND OTP
-// =====================================================
+
+/* =====================================================
+   RESEND OTP
+===================================================== */
 
 document
     .getElementById("resendOtp")
-    .onclick = async () => {
+    .addEventListener(
+        "click",
+        async () => {
 
-        if (!currentUser) {
+            if (
+                currentUser
+            ) {
 
-            showPage(loginPage);
+                await sendOTP(
+                    currentUser.email
+                );
+            }
 
-            return;
         }
+    );
 
 
-        await sendOTP(
-            currentUser.email
-        );
-    };
+
+/* =====================================================
+   BACK TO LOGIN
+===================================================== */
+
+document
+    .getElementById("backLogin")
+    .addEventListener(
+        "click",
+        async () => {
+
+            currentUser = null;
 
 
-// =====================================================
-// DASHBOARD
-// =====================================================
+            await signOut(
+                auth
+            );
+
+
+            showPage(
+                loginPage
+            );
+        }
+    );
+
+
+
+/* =====================================================
+   LOAD DASHBOARD
+===================================================== */
 
 async function loadDashboard() {
 
-    if (!currentUser) return;
+    if (
+        !currentUser
+    ) {
+        return;
+    }
+
 
 
     document
-        .getElementById("userName")
+        .getElementById(
+            "userName"
+        )
         .textContent =
         currentUser.displayName ||
         "Staff";
 
 
     document
-        .getElementById("userEmail")
+        .getElementById(
+            "userEmail"
+        )
         .textContent =
         currentUser.email;
+
 
 
     try {
 
         const snapshot =
             await get(
-                ref(db, "bakeryProducts")
+                ref(
+                    db,
+                    "bakeryProducts"
+                )
             );
 
 
-        if (!snapshot.exists()) {
 
-            document
-                .getElementById(
-                    "totalProducts"
-                )
-                .textContent = "0";
+        if (
+            !snapshot.exists()
+        ) {
 
-            document
-                .getElementById(
-                    "totalStock"
-                )
-                .textContent = "0";
-
-            document
-                .getElementById(
-                    "lowStock"
-                )
-                .textContent = "0";
-
-            document
-                .getElementById(
-                    "estimatedValue"
-                )
-                .textContent = "₱0.00";
+            setDashboard(
+                0,
+                0,
+                0,
+                0
+            );
 
             return;
         }
 
 
+
         const products =
             snapshot.val();
+
 
 
         let productCount = 0;
@@ -658,8 +926,11 @@ async function loadDashboard() {
         let lowProducts = [];
 
 
-        Object.values(products)
-            .forEach(product => {
+
+        Object.values(
+            products
+        ).forEach(
+            product => {
 
                 productCount++;
 
@@ -682,12 +953,15 @@ async function loadDashboard() {
                     ) || 5;
 
 
+
                 stockCount +=
                     quantity;
 
 
                 totalValue +=
-                    quantity * price;
+                    quantity *
+                    price;
+
 
 
                 if (
@@ -697,71 +971,101 @@ async function loadDashboard() {
 
                     lowCount++;
 
+
                     lowProducts.push(
                         product
                     );
                 }
-            });
+
+            }
+        );
 
 
-        document
-            .getElementById(
-                "totalProducts"
-            )
-            .textContent =
-            productCount;
 
-
-        document
-            .getElementById(
-                "totalStock"
-            )
-            .textContent =
-            stockCount;
-
-
-        document
-            .getElementById(
-                "lowStock"
-            )
-            .textContent =
-            lowCount;
-
-
-        document
-            .getElementById(
-                "estimatedValue"
-            )
-            .textContent =
-            "₱" +
-            totalValue.toLocaleString(
-                "en-PH",
-                {
-                    minimumFractionDigits: 2
-                }
-            );
+        setDashboard(
+            productCount,
+            stockCount,
+            lowCount,
+            totalValue
+        );
 
 
         displayLowStock(
             lowProducts
         );
 
-
-    } catch (e) {
+    }
+    catch (error) {
 
         console.error(
             "Dashboard error:",
-            e
+            error
         );
     }
 }
 
 
-// =====================================================
-// LOW STOCK
-// =====================================================
 
-function displayLowStock(products) {
+/* =====================================================
+   DASHBOARD VALUES
+===================================================== */
+
+function setDashboard(
+    products,
+    stock,
+    low,
+    value
+) {
+
+    document
+        .getElementById(
+            "totalProducts"
+        )
+        .textContent =
+        products;
+
+
+    document
+        .getElementById(
+            "totalStock"
+        )
+        .textContent =
+        stock;
+
+
+    document
+        .getElementById(
+            "lowStock"
+        )
+        .textContent =
+        low;
+
+
+    document
+        .getElementById(
+            "estimatedValue"
+        )
+        .textContent =
+        "₱" +
+        Number(value)
+            .toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits:
+                        2
+                }
+            );
+}
+
+
+
+/* =====================================================
+   LOW STOCK
+===================================================== */
+
+function displayLowStock(
+    products
+) {
 
     const box =
         document.getElementById(
@@ -769,7 +1073,10 @@ function displayLowStock(products) {
         );
 
 
-    if (products.length === 0) {
+
+    if (
+        products.length === 0
+    ) {
 
         box.innerHTML =
             "<p>No low stock products.</p>";
@@ -778,57 +1085,84 @@ function displayLowStock(products) {
     }
 
 
+
     box.innerHTML =
-        products.map(
-            product => {
+        products
+            .map(
+                product => {
 
-                return `
-                    <div style="
-                        padding:12px;
-                        margin-bottom:8px;
-                        background:#fff3e8;
-                        border-radius:8px;
-                    ">
+                    return `
 
-                        <strong>
-                            ${product.name || "Product"}
-                        </strong>
+                        <div class="low-item">
 
-                        <br>
+                            <strong>
+                                ${escapeHTML(
+                                    product.name ||
+                                    "Product"
+                                )}
+                            </strong>
 
-                        <small>
-                            Stock:
-                            ${product.quantity || 0}
-                        </small>
+                            <br>
 
-                    </div>
-                `;
-            }
-        ).join("");
+                            <small>
+                                Stock:
+                                ${
+                                    Number(
+                                        product.quantity
+                                    ) || 0
+                                }
+                            </small>
+
+                        </div>
+
+                    `;
+                }
+            )
+            .join("");
 }
 
 
-// =====================================================
-// LOGOUT
-// =====================================================
+
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 document
     .getElementById("logoutBtn")
-    .onclick = async () => {
+    .addEventListener(
+        "click",
+        async () => {
 
-        await signOut(auth);
-
-        currentUser = null;
-
-        showPage(loginPage);
-    };
+            await signOut(
+                auth
+            );
 
 
-// =====================================================
-// FIREBASE ERROR
-// =====================================================
+            currentUser = null;
 
-function firebaseError(code) {
+
+            document
+                .getElementById(
+                    "loginForm"
+                )
+                .reset();
+
+
+            showPage(
+                loginPage
+            );
+        }
+    );
+
+
+
+/* =====================================================
+   FIREBASE ERROR HANDLER
+===================================================== */
+
+function firebaseError(
+    code
+) {
 
     switch (code) {
 
@@ -842,10 +1176,10 @@ function firebaseError(code) {
             return "Incorrect password.";
 
         case "auth/invalid-email":
-            return "Invalid email.";
+            return "Invalid email address.";
 
         case "auth/email-already-in-use":
-            return "Email already registered.";
+            return "Email is already registered.";
 
         case "auth/weak-password":
             return "Password must be at least 6 characters.";
@@ -854,13 +1188,54 @@ function firebaseError(code) {
             return "Too many attempts. Try again later.";
 
         default:
-            return "Login failed. Please try again.";
+            return "Authentication failed.";
     }
 }
 
 
-// =====================================================
-// START
-// =====================================================
 
-showPage(loginPage);
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+showPage(
+    loginPage
+);
