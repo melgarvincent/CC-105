@@ -2,250 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Arbee's Bakery Shop</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="./style.css?v=10">
+    <title>Arbees Bakery Shop</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+    <link rel="icon"
+          href="./assets/arbees-bakeshop-logo1.png">
 </head>
 
 <body>
 
-<!-- =====================================================
+<!-- =========================================================
      LOGIN PAGE
-===================================================== -->
-<section id="loginPage" class="page auth-page">
+========================================================= -->
+<section id="loginPage" class="auth-page">
 
     <div class="auth-card">
 
-        <div class="brand">
-            <div class="logo-box">
-                <img
-                    src="./assets/arbees-bakeshop-logo1.png"
-                    alt="Arbee's Bakery Shop"
-                    onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
-                >
+        <div class="logo-container">
+            <img
+                src="./assets/arbees-bakeshop-logo1.png"
+                alt="Arbees Bakery Shop Logo"
+                onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+            >
 
-                <div id="logoFallback" class="logo-fallback">
-                    🍞
-                </div>
+            <div id="logoFallback" class="logo-fallback">
+                🥐
             </div>
-
-            <h1>ARBEES BAKERY SHOP</h1>
-            <p>Inventory Management System</p>
         </div>
+
+        <h1>ARBEES BAKERY SHOP</h1>
+        <p class="subtitle">Inventory Management System</p>
 
         <form id="loginForm">
 
-            <div class="form-group">
-                <label for="loginEmail">Email</label>
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                    required
-                >
-            </div>
+            <label>Email</label>
 
-            <div class="form-group">
-                <label for="loginPassword">Password</label>
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
-                    required
-                >
-            </div>
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Enter your email"
+                required
+            >
 
-            <button type="submit" id="loginBtn" class="btn primary">
-                Login
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button
+                type="submit"
+                id="loginBtn"
+                class="main-btn"
+            >
+                LOGIN
             </button>
 
             <p id="loginError" class="error-message"></p>
 
         </form>
 
-        <div class="auth-switch">
+        <p class="account-text">
             Don't have an account?
-            <button type="button" id="showRegisterBtn" class="link-btn">
+            <button
+                type="button"
+                id="showRegisterBtn"
+                class="link-btn"
+            >
                 Register
             </button>
-        </div>
+        </p>
 
     </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================================================
      REGISTER PAGE
-===================================================== -->
-<section id="registerPage" class="page auth-page hidden">
+========================================================= -->
+<section id="registerPage" class="auth-page hidden">
 
     <div class="auth-card">
 
-        <div class="brand">
-
-            <div class="logo-box">
-                <img
-                    src="./assets/arbees-bakeshop-logo1.png"
-                    alt="Arbee's Bakery Shop"
-                    onerror="this.style.display='none'; document.getElementById('registerLogoFallback').style.display='flex';"
-                >
-
-                <div id="registerLogoFallback" class="logo-fallback">
-                    🍞
-                </div>
-            </div>
-
-            <h1>CREATE ACCOUNT</h1>
-            <p>Arbee's Bakery Shop</p>
-
+        <div class="logo-container small-logo">
+            <img
+                src="./assets/arbees-bakeshop-logo1.png"
+                alt="Arbees Bakery Shop Logo"
+            >
         </div>
 
+        <h1>CREATE ACCOUNT</h1>
+        <p class="subtitle">Arbees Bakery Shop</p>
 
         <form id="registerForm">
 
-            <div class="form-group">
-                <label for="registerName">Full Name</label>
+            <label>Full Name</label>
 
-                <input
-                    type="text"
-                    id="registerName"
-                    placeholder="Enter your full name"
-                    required
-                >
-            </div>
+            <input
+                type="text"
+                id="registerName"
+                placeholder="Enter your full name"
+                required
+            >
 
+            <label>Email</label>
 
-            <div class="form-group">
-                <label for="registerEmail">Email</label>
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Enter your Gmail"
+                required
+            >
 
-                <input
-                    type="email"
-                    id="registerEmail"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                    required
-                >
-            </div>
+            <label>Password</label>
 
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Minimum 6 characters"
+                minlength="6"
+                required
+            >
 
-            <div class="form-group">
-                <label for="registerPassword">Password</label>
+            <label>Confirm Password</label>
 
-                <input
-                    type="password"
-                    id="registerPassword"
-                    placeholder="Minimum 6 characters"
-                    autocomplete="new-password"
-                    required
-                >
-            </div>
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm your password"
+                minlength="6"
+                required
+            >
 
-
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm password"
-                    autocomplete="new-password"
-                    required
-                >
-            </div>
-
-
-            <button type="submit" id="registerBtn" class="btn primary">
-                Create Account
+            <button
+                type="submit"
+                id="registerBtn"
+                class="main-btn"
+            >
+                REGISTER
             </button>
 
             <p id="registerError" class="error-message"></p>
 
         </form>
 
-
-        <div class="auth-switch">
-
+        <p class="account-text">
             Already have an account?
 
-            <button type="button" id="showLoginBtn" class="link-btn">
+            <button
+                type="button"
+                id="showLoginBtn"
+                class="link-btn"
+            >
                 Login
             </button>
-
-        </div>
+        </p>
 
     </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================================================
      OTP PAGE
-===================================================== -->
-<section id="otpPage" class="page auth-page hidden">
+========================================================= -->
+<section id="otpPage" class="auth-page hidden">
 
     <div class="auth-card otp-card">
 
         <div class="otp-icon">
-            ✉
+            ✉️
         </div>
 
-        <h1>Email Verification</h1>
+        <h1>EMAIL VERIFICATION</h1>
 
-        <p class="otp-description">
-            A 6-digit verification code has been sent to:
+        <p class="subtitle">
+            Enter the 6-digit verification code sent to:
         </p>
 
         <strong id="otpEmail">
             your email
         </strong>
 
+        <p id="otpMessage" class="info-message">
+            We sent a verification code to your email.
+        </p>
 
         <form id="otpForm">
 
-            <div class="form-group">
+            <input
+                type="text"
+                id="otpInput"
+                class="otp-input"
+                placeholder="000000"
+                maxlength="6"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                required
+            >
 
-                <label for="otpInput">
-                    Enter OTP
-                </label>
-
-                <input
-                    type="text"
-                    id="otpInput"
-                    class="otp-input"
-                    maxlength="6"
-                    inputmode="numeric"
-                    autocomplete="one-time-code"
-                    placeholder="000000"
-                    required
-                >
-
-            </div>
-
-
-            <button type="submit" id="verifyOtpBtn" class="btn primary">
-                Verify OTP
+            <button
+                type="submit"
+                id="verifyOtpBtn"
+                class="main-btn"
+            >
+                VERIFY OTP
             </button>
 
             <p id="otpError" class="error-message"></p>
 
-            <p id="otpMessage" class="success-message"></p>
-
         </form>
-
 
         <button
             type="button"
             id="resendOtp"
             class="secondary-btn"
         >
-            Resend OTP
+            RESEND OTP
         </button>
-
 
         <button
             type="button"
@@ -260,23 +243,23 @@
 </section>
 
 
-<!-- =====================================================
+<!-- =========================================================
      MAIN SYSTEM
-===================================================== -->
-<section id="systemPage" class="system-page hidden">
+========================================================= -->
+<section id="systemPage" class="system hidden">
 
     <!-- SIDEBAR -->
-
     <aside class="sidebar">
 
         <div class="sidebar-logo">
 
-            <div class="small-logo">
-                🍞
-            </div>
+            <img
+                src="./assets/arbees-bakeshop-logo1.png"
+                alt="Logo"
+            >
 
             <div>
-                <strong>ARBEES</strong>
+                <h2>ARBEES</h2>
                 <span>BAKERY SHOP</span>
             </div>
 
@@ -289,10 +272,9 @@
                 class="nav-btn active"
                 data-page="dashboard"
             >
-                <span>📊</span>
+                <span>🏠</span>
                 Dashboard
             </button>
-
 
             <button
                 class="nav-btn"
@@ -302,7 +284,6 @@
                 Inventory
             </button>
 
-
             <button
                 class="nav-btn"
                 data-page="addProduct"
@@ -311,7 +292,6 @@
                 Add Product
             </button>
 
-
             <button
                 class="nav-btn"
                 data-page="activity"
@@ -319,7 +299,6 @@
                 <span>📋</span>
                 Activity Logs
             </button>
-
 
             <button
                 class="nav-btn"
@@ -334,7 +313,10 @@
 
         <div class="sidebar-bottom">
 
-            <button id="logoutBtn" class="logout-btn">
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+            >
                 🚪 Logout
             </button>
 
@@ -343,43 +325,37 @@
     </aside>
 
 
-    <!-- MAIN -->
-
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
-        <!-- HEADER -->
-
-        <header class="topbar">
+        <!-- TOP HEADER -->
+        <header class="top-header">
 
             <div>
-
                 <h2 id="pageTitle">
                     Dashboard
                 </h2>
 
                 <p>
-                    Welcome to Arbee's Bakery Shop
+                    Welcome to Arbees Bakery Shop
                 </p>
-
             </div>
 
 
-            <div class="user-mini">
+            <div class="header-user">
 
                 <div class="user-avatar">
                     👤
                 </div>
 
                 <div>
-
                     <strong id="headerUserName">
                         User
                     </strong>
 
-                    <span id="headerUserEmail">
+                    <small id="headerUserEmail">
                         email
-                    </span>
-
+                    </small>
                 </div>
 
             </div>
@@ -387,31 +363,34 @@
         </header>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              DASHBOARD
-        ================================================== -->
-
-        <section id="dashboardPage" class="content-page">
+        ====================================================== -->
+        <section
+            id="dashboardPage"
+            class="content-page"
+        >
 
             <div class="welcome-box">
 
                 <div>
-
                     <h1>
                         Welcome,
                         <span id="currentUserName">
                             User
-                        </span>
+                        </span>!
                     </h1>
 
                     <p>
-                        Here's what's happening in your bakery inventory today.
+                        Here's what's happening with your bakery inventory.
                     </p>
-
                 </div>
 
-                <span id="userRole" class="role-badge">
-                    Staff
+                <span
+                    id="userRole"
+                    class="role-badge"
+                >
+                    STAFF
                 </span>
 
             </div>
@@ -428,7 +407,6 @@
                     </div>
 
                     <div>
-
                         <span>
                             Total Products
                         </span>
@@ -436,7 +414,6 @@
                         <strong id="totalProducts">
                             0
                         </strong>
-
                     </div>
 
                 </div>
@@ -445,11 +422,10 @@
                 <div class="stat-card">
 
                     <div class="stat-icon">
-                        🧺
+                        📊
                     </div>
 
                     <div>
-
                         <span>
                             Total Stock
                         </span>
@@ -457,20 +433,18 @@
                         <strong id="totalStock">
                             0
                         </strong>
-
                     </div>
 
                 </div>
 
 
-                <div class="stat-card">
+                <div class="stat-card warning">
 
-                    <div class="stat-icon warning">
+                    <div class="stat-icon">
                         ⚠️
                     </div>
 
                     <div>
-
                         <span>
                             Low Stock Items
                         </span>
@@ -478,7 +452,6 @@
                         <strong id="lowStock">
                             0
                         </strong>
-
                     </div>
 
                 </div>
@@ -486,12 +459,11 @@
 
                 <div class="stat-card">
 
-                    <div class="stat-icon money">
-                        ₱
+                    <div class="stat-icon">
+                        💰
                     </div>
 
                     <div>
-
                         <span>
                             Estimated Value
                         </span>
@@ -499,7 +471,6 @@
                         <strong id="estimatedValue">
                             ₱0.00
                         </strong>
-
                     </div>
 
                 </div>
@@ -507,7 +478,7 @@
             </div>
 
 
-            <!-- DASHBOARD PANELS -->
+            <!-- DASHBOARD TABLES -->
 
             <div class="dashboard-grid">
 
@@ -521,12 +492,13 @@
 
                     </div>
 
-                    <div id="lowStockList" class="stock-list">
-
-                        <p class="empty-text">
+                    <div
+                        id="lowStockList"
+                        class="list-container"
+                    >
+                        <p class="empty-message">
                             No low stock products.
                         </p>
-
                     </div>
 
                 </div>
@@ -542,12 +514,13 @@
 
                     </div>
 
-                    <div id="recentActivity">
-
-                        <p class="empty-text">
-                            No recent activity.
+                    <div
+                        id="recentActivity"
+                        class="list-container"
+                    >
+                        <p class="empty-message">
+                            No activity yet.
                         </p>
-
                     </div>
 
                 </div>
@@ -557,29 +530,27 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              INVENTORY
-        ================================================== -->
-
-        <section id="inventoryPage" class="content-page hidden">
+        ====================================================== -->
+        <section
+            id="inventoryPage"
+            class="content-page hidden"
+        >
 
             <div class="section-header">
 
                 <div>
-
-                    <h2>
-                        Inventory
-                    </h2>
+                    <h2>Inventory</h2>
 
                     <p>
-                        Manage bakery products and stock.
+                        Manage all bakery products.
                     </p>
-
                 </div>
 
                 <button
                     id="inventoryAddBtn"
-                    class="btn primary"
+                    class="main-btn small-btn"
                 >
                     + Add Product
                 </button>
@@ -587,18 +558,18 @@
             </div>
 
 
-            <div class="filters">
+            <div class="filter-bar">
 
                 <input
                     type="text"
                     id="searchProduct"
-                    placeholder="Search product..."
+                    placeholder="🔍 Search product..."
                 >
 
 
                 <select id="categoryFilter">
 
-                    <option value="all">
+                    <option value="">
                         All Categories
                     </option>
 
@@ -618,12 +589,12 @@
                         Cookies
                     </option>
 
-                    <option value="Drinks">
-                        Drinks
+                    <option value="Donut">
+                        Donut
                     </option>
 
-                    <option value="Other">
-                        Other
+                    <option value="Others">
+                        Others
                     </option>
 
                 </select>
@@ -631,7 +602,7 @@
             </div>
 
 
-            <div class="table-container">
+            <div class="table-wrapper">
 
                 <table>
 
@@ -639,38 +610,17 @@
 
                         <tr>
 
-                            <th>
-                                Product
-                            </th>
-
-                            <th>
-                                SKU
-                            </th>
-
-                            <th>
-                                Category
-                            </th>
-
-                            <th>
-                                Quantity
-                            </th>
-
-                            <th>
-                                Price
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Actions
-                            </th>
+                            <th>SKU</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
 
                         </tr>
 
                     </thead>
-
 
                     <tbody id="inventoryTableBody">
 
@@ -683,11 +633,13 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              ADD / EDIT PRODUCT
-        ================================================== -->
-
-        <section id="addProductPage" class="content-page hidden">
+        ====================================================== -->
+        <section
+            id="addProductPage"
+            class="content-page hidden"
+        >
 
             <div class="section-header">
 
@@ -698,7 +650,7 @@
                     </h2>
 
                     <p>
-                        Add or update bakery product information.
+                        Add a bakery product to your inventory.
                     </p>
 
                 </div>
@@ -720,14 +672,14 @@
 
                         <div class="form-group">
 
-                            <label for="productName">
+                            <label>
                                 Product Name
                             </label>
 
                             <input
                                 type="text"
                                 id="productName"
-                                placeholder="e.g. Spanish Bread"
+                                placeholder="Example: Spanish Bread"
                                 required
                             >
 
@@ -736,14 +688,14 @@
 
                         <div class="form-group">
 
-                            <label for="productSKU">
+                            <label>
                                 SKU
                             </label>
 
                             <input
                                 type="text"
                                 id="productSKU"
-                                placeholder="e.g. BRD-001"
+                                placeholder="Example: BRD-001"
                                 required
                             >
 
@@ -752,14 +704,17 @@
 
                         <div class="form-group">
 
-                            <label for="productCategory">
+                            <label>
                                 Category
                             </label>
 
-                            <select id="productCategory" required>
+                            <select
+                                id="productCategory"
+                                required
+                            >
 
                                 <option value="">
-                                    Select Category
+                                    Select category
                                 </option>
 
                                 <option value="Bread">
@@ -778,12 +733,12 @@
                                     Cookies
                                 </option>
 
-                                <option value="Drinks">
-                                    Drinks
+                                <option value="Donut">
+                                    Donut
                                 </option>
 
-                                <option value="Other">
-                                    Other
+                                <option value="Others">
+                                    Others
                                 </option>
 
                             </select>
@@ -793,7 +748,7 @@
 
                         <div class="form-group">
 
-                            <label for="productQuantity">
+                            <label>
                                 Quantity
                             </label>
 
@@ -801,6 +756,7 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
+                                placeholder="0"
                                 required
                             >
 
@@ -809,7 +765,7 @@
 
                         <div class="form-group">
 
-                            <label for="productPrice">
+                            <label>
                                 Price
                             </label>
 
@@ -818,6 +774,7 @@
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
+                                placeholder="0.00"
                                 required
                             >
 
@@ -826,7 +783,7 @@
 
                         <div class="form-group">
 
-                            <label for="lowStockThreshold">
+                            <label>
                                 Low Stock Threshold
                             </label>
 
@@ -843,6 +800,12 @@
                     </div>
 
 
+                    <p
+                        id="productMessage"
+                        class="success-message"
+                    ></p>
+
+
                     <div class="form-actions">
 
                         <button
@@ -853,19 +816,15 @@
                             Cancel
                         </button>
 
-
                         <button
                             type="submit"
                             id="saveProductBtn"
-                            class="btn primary"
+                            class="main-btn"
                         >
                             Save Product
                         </button>
 
                     </div>
-
-
-                    <p id="productMessage"></p>
 
                 </form>
 
@@ -874,11 +833,13 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              ACTIVITY LOGS
-        ================================================== -->
-
-        <section id="activityPage" class="content-page hidden">
+        ====================================================== -->
+        <section
+            id="activityPage"
+            class="content-page hidden"
+        >
 
             <div class="section-header">
 
@@ -889,7 +850,7 @@
                     </h2>
 
                     <p>
-                        Record of inventory activities.
+                        Track inventory activities.
                     </p>
 
                 </div>
@@ -897,7 +858,7 @@
             </div>
 
 
-            <div class="table-container">
+            <div class="table-wrapper">
 
                 <table>
 
@@ -905,26 +866,14 @@
 
                         <tr>
 
-                            <th>
-                                Date & Time
-                            </th>
-
-                            <th>
-                                User
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
-                            <th>
-                                Details
-                            </th>
+                            <th>Date & Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
 
                         </tr>
 
                     </thead>
-
 
                     <tbody id="activityTableBody">
 
@@ -937,18 +886,20 @@
         </section>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              ACCOUNT
-        ================================================== -->
-
-        <section id="usersPage" class="content-page hidden">
+        ====================================================== -->
+        <section
+            id="usersPage"
+            class="content-page hidden"
+        >
 
             <div class="section-header">
 
                 <div>
 
                     <h2>
-                        Account
+                        My Account
                     </h2>
 
                     <p>
@@ -968,7 +919,7 @@
 
                 <div class="profile-info">
 
-                    <div>
+                    <div class="profile-row">
 
                         <span>
                             Name
@@ -981,7 +932,7 @@
                     </div>
 
 
-                    <div>
+                    <div class="profile-row">
 
                         <span>
                             Email
@@ -994,14 +945,14 @@
                     </div>
 
 
-                    <div>
+                    <div class="profile-row">
 
                         <span>
                             Role
                         </span>
 
                         <strong id="profileRole">
-                            Staff
+                            -
                         </strong>
 
                     </div>
@@ -1017,7 +968,11 @@
 </section>
 
 
-<script type="module" src="./script.js?v=10"></script>
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script type="module" src="./script.js"></script>
 
 </body>
 </html>
