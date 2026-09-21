@@ -1,390 +1,465 @@
 // ======================================================
-// FIREBASE REALTIME DATABASE - ARBEE'S BAKESHOP
+// ARBEES BAKERY SHOP
+// Firebase Realtime Database Only
+// Login + Register + Security PIN
 // ======================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
 import {
     getDatabase,
     ref,
-    get,
     set,
+    get,
     push,
     remove
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-
 
 // ======================================================
 // FIREBASE CONFIG
 // ======================================================
 
 const firebaseConfig = {
-    databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/"
+    databaseURL:
+        "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/"
 };
-
-
-// ======================================================
-// INITIALIZE FIREBASE
-// ======================================================
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-
-// ======================================================
-// DATABASE REFERENCES
-// ======================================================
-
+// Firebase references
 const usersRef = ref(db, "users");
 const productsRef = ref(db, "bakeryProducts");
 const activityRef = ref(db, "activityLogs");
 
+// ======================================================
+// SECURITY PIN
+// ======================================================
+
+// CHANGE THIS PIN IF YOU WANT
+const SECURITY_PIN = "123456";
 
 // ======================================================
-// CURRENT USER
+// VARIABLES
 // ======================================================
 
 let currentUser = null;
-
+let products = [];
 
 // ======================================================
-// HELPER FUNCTIONS
+// PAGE ELEMENTS
 // ======================================================
 
-function getUserKey(email) {
-    return email
-        .toLowerCase()
-        .trim()
-        .replace(/[.#$[\]/]/g, "_");
+const loginPage = document.getElementById("loginPage");
+const registerPage = document.getElementById("registerPage");
+const securityPage = document.getElementById("securityPage");
+const systemPage = document.getElementById("systemPage");
+
+// ======================================================
+// PAGE FUNCTIONS
+// ======================================================
+
+function hideAllPages() {
+    if (loginPage) loginPage.classList.add("hidden");
+    if (registerPage) registerPage.classList.add("hidden");
+    if (securityPage) securityPage.classList.add("hidden");
+    if (systemPage) systemPage.classList.add("hidden");
 }
 
+function showLogin() {
+    hideAllPages();
 
-function formatMoney(value) {
-    return Number(value || 0).toLocaleString("en-PH", {
-        style: "currency",
-        currency: "PHP"
-    });
-}
-
-
-function formatDate(timestamp) {
-    if (!timestamp) {
-        return "-";
+    if (loginPage) {
+        loginPage.classList.remove("hidden");
     }
 
-    return new Date(timestamp).toLocaleString("en-PH");
+    const email = document.getElementById("loginEmail");
+    const password = document.getElementById("loginPassword");
+    const error = document.getElementById("loginError");
+
+    if (email) email.value = "";
+    if (password) password.value = "";
+    if (error) error.textContent = "";
 }
 
+function showRegister() {
+    hideAllPages();
 
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    if (registerPage) {
+        registerPage.classList.remove("hidden");
+    }
+
+    const error = document.getElementById("registerError");
+
+    if (error) {
+        error.textContent = "";
+    }
 }
 
+function showSecurityPage() {
+    hideAllPages();
 
-// ======================================================
-// SHOW REGISTER
-// ======================================================
+    if (securityPage) {
+        securityPage.classList.remove("hidden");
+    }
 
-window.showRegister = function () {
+    const pin = document.getElementById("securityPin");
+    const error = document.getElementById("securityError");
 
-    document.getElementById("loginPage").classList.add("hidden");
+    if (pin) {
+        pin.value = "";
+        setTimeout(() => pin.focus(), 100);
+    }
 
-    document.getElementById("registerPage").classList.remove("hidden");
+    if (error) {
+        error.textContent = "";
+    }
+}
 
-    document.getElementById("loginError").textContent = "";
+function showSystem() {
+    hideAllPages();
 
-};
+    if (systemPage) {
+        systemPage.classList.remove("hidden");
+    }
 
+    updateUserInformation();
+    loadProducts();
+    loadActivityLogs();
 
-// ======================================================
-// SHOW LOGIN
-// ======================================================
+    showPage("dashboard");
+}
 
-window.showLogin = function () {
-
-    document.getElementById("registerPage").classList.add("hidden");
-
-    document.getElementById("loginPage").classList.remove("hidden");
-
-    document.getElementById("registerError").textContent = "";
-
-};
-
+// Make available to HTML onclick if needed
+window.showLogin = showLogin;
+window.showRegister = showRegister;
+window.showSecurityPage = showSecurityPage;
 
 // ======================================================
 // REGISTER
 // ======================================================
 
-document.getElementById("registerForm").addEventListener("submit", async function (event) {
+const registerForm = document.getElementById("registerForm");
 
-    event.preventDefault();
+if (registerForm) {
+    registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    const name = document
-        .getElementById("registerName")
-        .value
-        .trim();
+        const name = document.getElementById("registerName").value.trim();
+        const email = document.getElementById("registerEmail").value.trim().toLowerCase();
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
 
-    const email = document
-        .getElementById("registerEmail")
-        .value
-        .trim()
-        .toLowerCase();
+        const error = document.getElementById("registerError");
 
-    const password = document
-        .getElementById("registerPassword")
-        .value;
+        if (error) {
+            error.textContent = "";
+        }
 
-    const confirmPassword = document
-        .getElementById("confirmPassword")
-        .value;
-
-    const error = document.getElementById("registerError");
-
-    error.textContent = "";
-
-
-    // CHECK PASSWORD
-    if (password !== confirmPassword) {
-
-        error.textContent = "Passwords do not match.";
-
-        return;
-    }
-
-
-    if (password.length < 6) {
-
-        error.textContent = "Password must be at least 6 characters.";
-
-        return;
-    }
-
-
-    const userKey = getUserKey(email);
-
-
-    try {
-
-        // CHECK IF USER EXISTS
-        const userSnapshot = await get(
-            ref(db, "users/" + userKey)
-        );
-
-
-        if (userSnapshot.exists()) {
-
-            error.textContent =
-                "An account with this email already exists.";
-
+        // Validation
+        if (!name || !email || !password || !confirmPassword) {
+            error.textContent = "Please complete all fields.";
             return;
         }
 
+        if (password.length < 6) {
+            error.textContent =
+                "Password must be at least 6 characters.";
+            return;
+        }
 
-        // SAVE USER TO FIREBASE
-        await set(
-            ref(db, "users/" + userKey),
-            {
+        if (password !== confirmPassword) {
+            error.textContent =
+                "Passwords do not match.";
+            return;
+        }
+
+        try {
+            // Convert email into safe Firebase key
+            const userKey = email.replace(/\./g, "_");
+
+            const userRef = ref(db, "users/" + userKey);
+
+            // Check if user already exists
+            const snapshot = await get(userRef);
+
+            if (snapshot.exists()) {
+                error.textContent =
+                    "An account with this email already exists.";
+                return;
+            }
+
+            // Save user
+            await set(userRef, {
                 name: name,
                 email: email,
                 password: password,
-                role: "STAFF",
-                createdAt: Date.now()
-            }
-        );
+                role: "staff",
+                createdAt: new Date().toISOString()
+            });
 
+            alert("Registration successful! You can now login.");
 
-        // SAVE ACTIVITY
-        await addActivity(
-            "Registered Account",
-            name + " created a new account."
-        );
+            // Clear form
+            registerForm.reset();
 
+            // Go back to login
+            showLogin();
 
-        alert("Registration successful! You can now login.");
+        } catch (err) {
+            console.error("Registration Error:", err);
 
-
-        document
-            .getElementById("registerForm")
-            .reset();
-
-
-        showLogin();
-
-
-    } catch (err) {
-
-        console.error("REGISTER ERROR:", err);
-
-        error.textContent =
-            "Registration failed: " + err.message;
-
-    }
-
-});
-
+            error.textContent =
+                "Registration failed. Please check your Firebase connection.";
+        }
+    });
+}
 
 // ======================================================
 // LOGIN
 // ======================================================
 
-document.getElementById("loginForm").addEventListener("submit", async function (event) {
+const loginForm = document.getElementById("loginForm");
 
-    event.preventDefault();
+if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    const email = document
-        .getElementById("loginEmail")
-        .value
-        .trim()
-        .toLowerCase();
+        const email = document
+            .getElementById("loginEmail")
+            .value
+            .trim()
+            .toLowerCase();
 
-    const password = document
-        .getElementById("loginPassword")
-        .value;
+        const password = document
+            .getElementById("loginPassword")
+            .value;
 
-    const error = document.getElementById("loginError");
+        const error = document.getElementById("loginError");
 
-    error.textContent = "";
+        if (error) {
+            error.textContent = "";
+        }
 
+        if (!email || !password) {
+            error.textContent =
+                "Please enter your email and password.";
+            return;
+        }
 
-    try {
+        try {
+            const userKey = email.replace(/\./g, "_");
 
-        const userKey = getUserKey(email);
+            const userRef = ref(db, "users/" + userKey);
 
-        const userSnapshot = await get(
-            ref(db, "users/" + userKey)
-        );
+            const snapshot = await get(userRef);
 
+            if (!snapshot.exists()) {
+                error.textContent =
+                    "Account not found.";
+                return;
+            }
 
-        if (!userSnapshot.exists()) {
+            const userData = snapshot.val();
 
-            error.textContent = "Account not found.";
+            // Check password
+            if (userData.password !== password) {
+                error.textContent =
+                    "Incorrect email or password.";
+                return;
+            }
+
+            // ==========================================
+            // ACCOUNT VERIFIED
+            // ==========================================
+
+            currentUser = {
+                key: userKey,
+                name: userData.name,
+                email: userData.email,
+                role: userData.role || "staff"
+            };
+
+            // Save login session
+            sessionStorage.setItem(
+                "arbeesCurrentUser",
+                JSON.stringify(currentUser)
+            );
+
+            // Record login activity
+            await addActivity(
+                "Login",
+                "User " + currentUser.name + " logged in."
+            );
+
+            // ==========================================
+            // IMPORTANT:
+            // DO NOT GO DIRECTLY TO DASHBOARD
+            // GO TO SECURITY PIN FIRST
+            // ==========================================
+
+            showSecurityPage();
+
+        } catch (err) {
+            console.error("Login Error:", err);
+
+            error.textContent =
+                "Login failed. Please check your Firebase connection.";
+        }
+    });
+}
+
+// ======================================================
+// SECURITY PIN
+// ======================================================
+
+const securityForm = document.getElementById("securityForm");
+
+if (securityForm) {
+    securityForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const pinInput =
+            document.getElementById("securityPin");
+
+        const error =
+            document.getElementById("securityError");
+
+        const pin = pinInput.value.trim();
+
+        if (error) {
+            error.textContent = "";
+        }
+
+        if (!pin) {
+            error.textContent =
+                "Please enter your security PIN.";
+            return;
+        }
+
+        // Check PIN
+        if (pin !== SECURITY_PIN) {
+            error.textContent =
+                "Incorrect security PIN. Please try again.";
+
+            pinInput.value = "";
+            pinInput.focus();
 
             return;
         }
 
+        // ==========================================
+        // SECURITY VERIFIED
+        // ==========================================
 
-        const user = userSnapshot.val();
-
-
-        // CHECK PASSWORD
-        if (user.password !== password) {
-
-            error.textContent = "Invalid email or password.";
-
-            return;
+        if (error) {
+            error.textContent = "";
         }
 
-
-        // SAVE CURRENT USER
-        currentUser = {
-            key: userKey,
-            name: user.name,
-            email: user.email,
-            role: user.role || "STAFF"
-        };
-
-
-        sessionStorage.setItem(
-            "bakeryUser",
-            JSON.stringify(currentUser)
-        );
-
-
-        // HIDE LOGIN
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-
-        // SHOW SYSTEM
-        document
-            .getElementById("systemPage")
-            .classList.remove("hidden");
-
-
-        updateUserInformation();
-
-        updateDashboard();
-
-
-        // ACTIVITY
         await addActivity(
-            "Login",
-            email + " logged into the system."
+            "Security Verification",
+            "Security PIN verified for " +
+            (currentUser ? currentUser.name : "User") +
+            "."
         );
 
+        pinInput.value = "";
 
-    } catch (err) {
+        // Now allow access to the system
+        showSystem();
+    });
+}
 
-        console.error("LOGIN ERROR:", err);
+// ======================================================
+// SECURITY BACK BUTTON
+// ======================================================
 
-        error.textContent =
-            "Login failed: " + err.message;
+const securityBackBtn =
+    document.getElementById("securityBackBtn");
 
-    }
+if (securityBackBtn) {
+    securityBackBtn.addEventListener("click", function () {
+
+        currentUser = null;
+
+        sessionStorage.removeItem("arbeesCurrentUser");
+
+        showLogin();
+    });
+}
+
+// ======================================================
+// NAVIGATION
+// ======================================================
+
+const navButtons =
+    document.querySelectorAll("[data-page]");
+
+navButtons.forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        const pageName =
+            this.getAttribute("data-page");
+
+        showPage(pageName);
+    });
 
 });
 
-
 // ======================================================
-// RESTORE SESSION
+// SHOW SYSTEM PAGE
 // ======================================================
 
-function restoreSession() {
+function showPage(pageName) {
 
-    const savedUser = sessionStorage.getItem("bakeryUser");
+    // All pages
+    const pages = document.querySelectorAll(".content-page");
 
+    pages.forEach(page => {
+        page.classList.add("hidden");
+    });
 
-    if (!savedUser) {
-        return;
+    const selectedPage =
+        document.getElementById(pageName + "Page");
+
+    if (selectedPage) {
+        selectedPage.classList.remove("hidden");
     }
 
+    // Update active navigation
+    navButtons.forEach(button => {
 
-    try {
+        button.classList.remove("active");
 
-        currentUser = JSON.parse(savedUser);
+        if (
+            button.getAttribute("data-page") === pageName
+        ) {
+            button.classList.add("active");
+        }
 
+    });
 
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("systemPage")
-            .classList.remove("hidden");
-
-
-        updateUserInformation();
-
+    // Refresh data when opening pages
+    if (pageName === "dashboard") {
         updateDashboard();
-
-
-    } catch (err) {
-
-        console.error("SESSION ERROR:", err);
-
-        sessionStorage.removeItem("bakeryUser");
-
     }
 
+    if (pageName === "inventory") {
+        renderInventory();
+    }
+
+    if (pageName === "activity") {
+        loadActivityLogs();
+    }
+
+    if (pageName === "users") {
+        updateUserInformation();
+    }
 }
 
-
 // ======================================================
-// USER INFORMATION
+// UPDATE USER INFORMATION
 // ======================================================
 
 function updateUserInformation() {
@@ -393,1132 +468,928 @@ function updateUserInformation() {
         return;
     }
 
+    // Dashboard
+    const currentUserName =
+        document.getElementById("currentUserName");
 
-    document.getElementById("headerUserName").textContent =
-        currentUser.name;
+    const userRole =
+        document.getElementById("userRole");
 
+    // Header
+    const headerUserName =
+        document.getElementById("headerUserName");
 
-    document.getElementById("headerUserEmail").textContent =
-        currentUser.email;
+    const headerUserEmail =
+        document.getElementById("headerUserEmail");
 
+    // Account
+    const profileName =
+        document.getElementById("profileName");
 
-    document.getElementById("currentUserName").textContent =
-        currentUser.name;
+    const profileEmail =
+        document.getElementById("profileEmail");
 
+    const profileRole =
+        document.getElementById("profileRole");
 
-    document.getElementById("userRole").textContent =
-        currentUser.role;
+    if (currentUserName) {
+        currentUserName.textContent =
+            currentUser.name;
+    }
 
+    if (userRole) {
+        userRole.textContent =
+            currentUser.role;
+    }
 
-    document.getElementById("profileName").textContent =
-        currentUser.name;
+    if (headerUserName) {
+        headerUserName.textContent =
+            currentUser.name;
+    }
 
+    if (headerUserEmail) {
+        headerUserEmail.textContent =
+            currentUser.email;
+    }
 
-    document.getElementById("profileEmail").textContent =
-        currentUser.email;
+    if (profileName) {
+        profileName.textContent =
+            currentUser.name;
+    }
 
+    if (profileEmail) {
+        profileEmail.textContent =
+            currentUser.email;
+    }
 
-    document.getElementById("profileRole").textContent =
-        currentUser.role;
-
+    if (profileRole) {
+        profileRole.textContent =
+            currentUser.role;
+    }
 }
 
-
 // ======================================================
-// LOGOUT
+// LOAD PRODUCTS
 // ======================================================
 
-document.getElementById("logoutBtn").addEventListener("click", async function () {
+async function loadProducts() {
 
-    if (currentUser) {
+    try {
 
-        await addActivity(
-            "Logout",
-            currentUser.email + " logged out."
+        const snapshot =
+            await get(productsRef);
+
+        products = [];
+
+        if (snapshot.exists()) {
+
+            const data = snapshot.val();
+
+            Object.keys(data).forEach(key => {
+
+                products.push({
+                    id: key,
+                    ...data[key]
+                });
+
+            });
+
+        }
+
+        renderInventory();
+        updateDashboard();
+
+    } catch (err) {
+
+        console.error(
+            "Load Products Error:",
+            err
         );
 
     }
-
-
-    currentUser = null;
-
-    sessionStorage.removeItem("bakeryUser");
-
-
-    document
-        .getElementById("systemPage")
-        .classList.add("hidden");
-
-
-    document
-        .getElementById("loginPage")
-        .classList.remove("hidden");
-
-
-    document
-        .getElementById("loginForm")
-        .reset();
-
-});
-
-
-// ======================================================
-// NAVIGATION
-// ======================================================
-
-document.querySelectorAll(".nav-btn").forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-        const page = this.dataset.page;
-
-        showPage(page, this);
-
-    });
-
-});
-
-
-function showPage(page, button) {
-
-    document.querySelectorAll(".page").forEach(function (section) {
-
-        section.classList.add("hidden");
-
-    });
-
-
-    const target = document.getElementById(page + "Page");
-
-
-    if (target) {
-
-        target.classList.remove("hidden");
-
-    }
-
-
-    document.querySelectorAll(".nav-btn").forEach(function (btn) {
-
-        btn.classList.remove("active");
-
-    });
-
-
-    if (button) {
-
-        button.classList.add("active");
-
-    }
-
-
-    const titles = {
-
-        dashboard: "Dashboard",
-
-        inventory: "Inventory",
-
-        addProduct: "Add Product",
-
-        activity: "Activity Logs",
-
-        users: "My Account"
-
-    };
-
-
-    document.getElementById("pageTitle").textContent =
-        titles[page] || "Dashboard";
-
-
-    if (page === "dashboard") {
-
-        updateDashboard();
-
-    }
-
-
-    if (page === "inventory") {
-
-        renderInventory();
-
-    }
-
-
-    if (page === "activity") {
-
-        renderActivities();
-
-    }
-
 }
-
-
-// ======================================================
-// INVENTORY ADD BUTTON
-// ======================================================
-
-document.getElementById("inventoryAddBtn").addEventListener("click", function () {
-
-    const addButton = document.querySelector(
-        '.nav-btn[data-page="addProduct"]'
-    );
-
-
-    showPage("addProduct", addButton);
-
-});
-
 
 // ======================================================
 // ADD PRODUCT
 // ======================================================
 
-document.getElementById("productForm").addEventListener("submit", async function (event) {
+const productForm =
+    document.getElementById("productForm");
 
-    event.preventDefault();
+if (productForm) {
 
+    productForm.addEventListener(
+        "submit",
+        async function (event) {
 
-    const name = document
-        .getElementById("productName")
-        .value
-        .trim();
+            event.preventDefault();
 
+            const name =
+                document.getElementById("productName")
+                    .value.trim();
 
-    const sku = document
-        .getElementById("productSKU")
-        .value
-        .trim();
+            const sku =
+                document.getElementById("productSKU")
+                    .value.trim();
 
+            const category =
+                document.getElementById("productCategory")
+                    .value;
 
-    const category = document
-        .getElementById("productCategory")
-        .value;
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "productQuantity"
+                    ).value
+                );
 
+            const price =
+                Number(
+                    document.getElementById(
+                        "productPrice"
+                    ).value
+                );
 
-    const quantity = Number(
-        document
-            .getElementById("productQuantity")
-            .value
-    );
+            const threshold =
+                Number(
+                    document.getElementById(
+                        "lowStockThreshold"
+                    ).value
+                );
 
+            const message =
+                document.getElementById(
+                    "productMessage"
+                );
 
-    const price = Number(
-        document
-            .getElementById("productPrice")
-            .value
-    );
+            if (message) {
+                message.textContent = "";
+            }
 
+            // Validation
+            if (
+                !name ||
+                !sku ||
+                !category ||
+                quantity < 0 ||
+                price < 0 ||
+                threshold < 0
+            ) {
 
-    const threshold = Number(
-        document
-            .getElementById("lowStockThreshold")
-            .value
-    );
-
-
-    const message = document.getElementById("productMessage");
-
-    message.textContent = "";
-
-
-    if (!name || !sku || !category) {
-
-        message.textContent =
-            "Please complete all fields.";
-
-        return;
-    }
-
-
-    if (Number.isNaN(quantity) || Number.isNaN(price)) {
-
-        message.textContent =
-            "Please enter valid numbers.";
-
-        return;
-    }
-
-
-    try {
-
-        // CHECK DUPLICATE SKU
-        const snapshot = await get(productsRef);
-
-
-        let duplicateSKU = false;
-
-
-        if (snapshot.exists()) {
-
-            const data = snapshot.val();
-
-
-            Object.values(data).forEach(function (product) {
-
-                if (
-                    String(product.sku || "")
-                        .toLowerCase() ===
-                    sku.toLowerCase()
-                ) {
-
-                    duplicateSKU = true;
-
+                if (message) {
+                    message.textContent =
+                        "Please complete all product fields correctly.";
                 }
 
-            });
-
-        }
-
-
-        if (duplicateSKU) {
-
-            message.textContent =
-                "SKU already exists.";
-
-            return;
-        }
-
-
-        // CREATE PRODUCT
-        const newProductRef = push(productsRef);
-
-
-        await set(
-            newProductRef,
-            {
-                name: name,
-                sku: sku,
-                category: category,
-                quantity: quantity,
-                price: price,
-                threshold: threshold,
-                createdAt: Date.now(),
-                createdBy: currentUser
-                    ? currentUser.email
-                    : "Unknown"
+                return;
             }
-        );
 
+            try {
 
-        // ACTIVITY
-        await addActivity(
-            "Added Product",
-            name + " (" + sku + ") was added."
-        );
+                const newProductRef =
+                    push(productsRef);
 
+                await set(newProductRef, {
 
-        message.textContent =
-            "Product added successfully!";
+                    name: name,
+                    sku: sku,
+                    category: category,
+                    quantity: quantity,
+                    price: price,
+                    threshold: threshold,
 
+                    createdAt:
+                        new Date().toISOString(),
 
-        document
-            .getElementById("productForm")
-            .reset();
+                    createdBy:
+                        currentUser
+                            ? currentUser.email
+                            : "Unknown"
 
+                });
 
-        document
-            .getElementById("productQuantity")
-            .value = 0;
+                await addActivity(
+                    "Add Product",
+                    name +
+                    " was added to inventory."
+                );
 
+                if (message) {
+                    message.textContent =
+                        "Product added successfully!";
+                }
 
-        document
-            .getElementById("lowStockThreshold")
-            .value = 5;
+                productForm.reset();
 
+                await loadProducts();
 
-        updateDashboard();
+            } catch (err) {
 
+                console.error(
+                    "Add Product Error:",
+                    err
+                );
 
-        setTimeout(function () {
-
-            message.textContent = "";
-
-        }, 3000);
-
-
-    } catch (err) {
-
-        console.error("ADD PRODUCT ERROR:", err);
-
-        message.textContent =
-            "Failed to add product: " + err.message;
-
-    }
-
-});
-
+                if (message) {
+                    message.textContent =
+                        "Failed to add product.";
+                }
+            }
+        }
+    );
+}
 
 // ======================================================
 // RENDER INVENTORY
 // ======================================================
 
-async function renderInventory() {
+function renderInventory() {
 
-    const table =
-        document.getElementById("inventoryTableBody");
+    const tableBody =
+        document.getElementById(
+            "inventoryTableBody"
+        );
 
+    if (!tableBody) {
+        return;
+    }
 
-    table.innerHTML = "";
+    tableBody.innerHTML = "";
 
+    const searchInput =
+        document.getElementById(
+            "searchProduct"
+        );
 
-    try {
+    const categoryFilter =
+        document.getElementById(
+            "categoryFilter"
+        );
 
-        const snapshot = await get(productsRef);
+    const search =
+        searchInput
+            ? searchInput.value.toLowerCase().trim()
+            : "";
 
+    const category =
+        categoryFilter
+            ? categoryFilter.value
+            : "all";
 
-        if (!snapshot.exists()) {
-
-            table.innerHTML = `
-                <tr>
-                    <td colspan="7" style="text-align:center;">
-                        No products found.
-                    </td>
-                </tr>
-            `;
-
-            return;
-        }
-
-
-        const data = snapshot.val();
-
-
-        const search = document
-            .getElementById("searchProduct")
-            .value
-            .toLowerCase()
-            .trim();
-
-
-        const category =
-            document.getElementById("categoryFilter").value;
-
-
-        let count = 0;
-
-
-        Object.entries(data).forEach(function ([id, product]) {
-
-            const name = String(product.name || "");
-
-            const sku = String(product.sku || "");
-
-            const productCategory =
-                String(product.category || "");
-
+    const filteredProducts =
+        products.filter(product => {
 
             const matchesSearch =
-                name.toLowerCase().includes(search) ||
-                sku.toLowerCase().includes(search);
-
+                product.name
+                    .toLowerCase()
+                    .includes(search) ||
+                product.sku
+                    .toLowerCase()
+                    .includes(search);
 
             const matchesCategory =
                 category === "all" ||
-                productCategory === category;
+                product.category === category;
 
-
-            if (!matchesSearch || !matchesCategory) {
-
-                return;
-
-            }
-
-
-            count++;
-
-
-            const quantity =
-                Number(product.quantity || 0);
-
-
-            const threshold =
-                Number(product.threshold ?? 5);
-
-
-            const price =
-                Number(product.price || 0);
-
-
-            const low =
-                quantity <= threshold;
-
-
-            const row =
-                document.createElement("tr");
-
-
-            row.innerHTML = `
-                <td>
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(sku)}
-                </td>
-
-                <td>
-                    ${escapeHTML(productCategory)}
-                </td>
-
-                <td>
-                    ${quantity}
-                </td>
-
-                <td>
-                    ${formatMoney(price)}
-                </td>
-
-                <td>
-                    <span class="${low ? "status-low" : "status-good"}">
-                        ${low ? "⚠ Low Stock" : "✓ In Stock"}
-                    </span>
-                </td>
-
-                <td>
-                    <button
-                        class="action-btn edit-btn"
-                        data-id="${id}">
-                        ✏️ Edit
-                    </button>
-
-                    <button
-                        class="action-btn delete-btn"
-                        data-id="${id}">
-                        🗑 Delete
-                    </button>
-                </td>
-            `;
-
-
-            row
-                .querySelector(".edit-btn")
-                .addEventListener("click", function () {
-
-                    editProduct(id, product);
-
-                });
-
-
-            row
-                .querySelector(".delete-btn")
-                .addEventListener("click", function () {
-
-                    deleteProduct(id, product);
-
-                });
-
-
-            table.appendChild(row);
+            return (
+                matchesSearch &&
+                matchesCategory
+            );
 
         });
 
+    if (filteredProducts.length === 0) {
 
-        if (count === 0) {
-
-            table.innerHTML = `
-                <tr>
-                    <td colspan="7" style="text-align:center;">
-                        No matching products found.
-                    </td>
-                </tr>
-            `;
-
-        }
-
-
-    } catch (err) {
-
-        console.error("INVENTORY ERROR:", err);
-
-
-        table.innerHTML = `
+        tableBody.innerHTML = `
             <tr>
-                <td colspan="7"
-                    style="text-align:center;color:#c0392b;">
-                    Error loading inventory.
+                <td colspan="7" style="text-align:center;">
+                    No products found.
                 </td>
             </tr>
         `;
 
-    }
-
-}
-
-
-// ======================================================
-// SEARCH
-// ======================================================
-
-document.getElementById("searchProduct").addEventListener("input", function () {
-
-    renderInventory();
-
-});
-
-
-document.getElementById("categoryFilter").addEventListener("change", function () {
-
-    renderInventory();
-
-});
-
-
-// ======================================================
-// EDIT PRODUCT
-// ======================================================
-
-async function editProduct(id, product) {
-
-    const newName = prompt(
-        "Product Name:",
-        product.name || ""
-    );
-
-
-    if (newName === null) {
         return;
     }
 
+    filteredProducts.forEach(product => {
 
-    const newSKU = prompt(
-        "SKU:",
-        product.sku || ""
-    );
+        const row =
+            document.createElement("tr");
 
+        const isLowStock =
+            Number(product.quantity) <=
+            Number(product.threshold);
 
-    if (newSKU === null) {
-        return;
-    }
+        row.innerHTML = `
 
+            <td>${escapeHTML(product.sku)}</td>
 
-    const newQuantity = prompt(
-        "Quantity:",
-        product.quantity ?? 0
-    );
+            <td>${escapeHTML(product.name)}</td>
 
+            <td>${escapeHTML(product.category)}</td>
 
-    if (newQuantity === null) {
-        return;
-    }
+            <td>${product.quantity}</td>
 
+            <td>₱${Number(product.price).toFixed(2)}</td>
 
-    const newPrice = prompt(
-        "Price:",
-        product.price ?? 0
-    );
+            <td>
+                <span class="status ${isLowStock
+                    ? "low-stock"
+                    : "in-stock"}">
+                    ${isLowStock
+                        ? "LOW STOCK"
+                        : "IN STOCK"}
+                </span>
+            </td>
 
+            <td>
+                <button
+                    class="delete-btn"
+                    data-id="${product.id}">
+                    Delete
+                </button>
+            </td>
+        `;
 
-    if (newPrice === null) {
-        return;
-    }
+        tableBody.appendChild(row);
+    });
 
+    // Delete buttons
+    const deleteButtons =
+        tableBody.querySelectorAll(
+            ".delete-btn"
+        );
 
-    const quantity = Number(newQuantity);
+    deleteButtons.forEach(button => {
 
-    const price = Number(newPrice);
+        button.addEventListener(
+            "click",
+            async function () {
 
+                const productId =
+                    this.getAttribute("data-id");
 
-    if (
-        Number.isNaN(quantity) ||
-        Number.isNaN(price)
-    ) {
+                await deleteProduct(productId);
 
-        alert("Please enter valid numbers.");
-
-        return;
-    }
-
-
-    try {
-
-        await set(
-            ref(db, "bakeryProducts/" + id),
-            {
-                ...product,
-
-                name: newName.trim(),
-
-                sku: newSKU.trim(),
-
-                quantity: quantity,
-
-                price: price,
-
-                updatedAt: Date.now(),
-
-                updatedBy: currentUser
-                    ? currentUser.email
-                    : "Unknown"
             }
         );
 
-
-        await addActivity(
-            "Updated Product",
-            newName + " was updated."
-        );
-
-
-        alert("Product updated successfully.");
-
-
-        renderInventory();
-
-        updateDashboard();
-
-
-    } catch (err) {
-
-        console.error("UPDATE ERROR:", err);
-
-        alert(
-            "Update failed: " + err.message
-        );
-
-    }
-
+    });
 }
-
 
 // ======================================================
 // DELETE PRODUCT
 // ======================================================
 
-async function deleteProduct(id, product) {
+async function deleteProduct(productId) {
 
-    const confirmDelete = confirm(
-        "Are you sure you want to delete " +
-        product.name +
-        "?"
-    );
+    const product =
+        products.find(
+            item => item.id === productId
+        );
 
+    if (!product) {
+        return;
+    }
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete " +
+            product.name +
+            "?"
+        );
 
     if (!confirmDelete) {
         return;
     }
 
-
     try {
 
-        await remove(
-            ref(db, "bakeryProducts/" + id)
-        );
+        const productRef =
+            ref(
+                db,
+                "bakeryProducts/" +
+                productId
+            );
 
+        await remove(productRef);
 
         await addActivity(
-            "Deleted Product",
-            product.name + " was deleted."
+            "Delete Product",
+            product.name +
+            " was deleted from inventory."
         );
 
-
-        alert("Product deleted successfully.");
-
-
-        renderInventory();
-
-        updateDashboard();
-
+        await loadProducts();
 
     } catch (err) {
 
-        console.error("DELETE ERROR:", err);
-
-        alert(
-            "Delete failed: " + err.message
+        console.error(
+            "Delete Product Error:",
+            err
         );
 
+        alert(
+            "Failed to delete product."
+        );
     }
-
 }
 
+// ======================================================
+// SEARCH INVENTORY
+// ======================================================
+
+const searchProduct =
+    document.getElementById(
+        "searchProduct"
+    );
+
+if (searchProduct) {
+
+    searchProduct.addEventListener(
+        "input",
+        renderInventory
+    );
+}
+
+// ======================================================
+// CATEGORY FILTER
+// ======================================================
+
+const categoryFilter =
+    document.getElementById(
+        "categoryFilter"
+    );
+
+if (categoryFilter) {
+
+    categoryFilter.addEventListener(
+        "change",
+        renderInventory
+    );
+}
+
+// ======================================================
+// INVENTORY ADD BUTTON
+// ======================================================
+
+const inventoryAddBtn =
+    document.getElementById(
+        "inventoryAddBtn"
+    );
+
+if (inventoryAddBtn) {
+
+    inventoryAddBtn.addEventListener(
+        "click",
+        function () {
+
+            showPage("addProduct");
+
+        }
+    );
+}
 
 // ======================================================
 // DASHBOARD
 // ======================================================
 
-async function updateDashboard() {
+function updateDashboard() {
+
+    const totalProducts =
+        document.getElementById(
+            "totalProducts"
+        );
+
+    const totalStock =
+        document.getElementById(
+            "totalStock"
+        );
+
+    const lowStock =
+        document.getElementById(
+            "lowStock"
+        );
+
+    const estimatedValue =
+        document.getElementById(
+            "estimatedValue"
+        );
+
+    const lowStockList =
+        document.getElementById(
+            "lowStockList"
+        );
+
+    // Total products
+    if (totalProducts) {
+        totalProducts.textContent =
+            products.length;
+    }
+
+    // Total stock
+    const stockTotal =
+        products.reduce(
+            (total, product) =>
+                total +
+                Number(product.quantity || 0),
+            0
+        );
+
+    if (totalStock) {
+        totalStock.textContent =
+            stockTotal;
+    }
+
+    // Low stock
+    const lowStockProducts =
+        products.filter(product =>
+            Number(product.quantity) <=
+            Number(product.threshold)
+        );
+
+    if (lowStock) {
+        lowStock.textContent =
+            lowStockProducts.length;
+    }
+
+    // Estimated value
+    const totalValue =
+        products.reduce(
+            (total, product) =>
+                total +
+                (
+                    Number(product.quantity || 0) *
+                    Number(product.price || 0)
+                ),
+            0
+        );
+
+    if (estimatedValue) {
+
+        estimatedValue.textContent =
+            "₱" +
+            totalValue.toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+    // Low stock list
+    if (lowStockList) {
+
+        lowStockList.innerHTML = "";
+
+        if (lowStockProducts.length === 0) {
+
+            lowStockList.innerHTML =
+                "<p>No low stock products.</p>";
+
+        } else {
+
+            lowStockProducts.forEach(product => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "low-stock-item";
+
+                item.innerHTML = `
+                    <strong>
+                        ${escapeHTML(product.name)}
+                    </strong>
+                    <span>
+                        ${product.quantity} left
+                    </span>
+                `;
+
+                lowStockList.appendChild(item);
+
+            });
+        }
+    }
+}
+
+// ======================================================
+// ACTIVITY LOG
+// ======================================================
+
+async function addActivity(action, description) {
 
     try {
 
-        const snapshot = await get(productsRef);
+        const newActivityRef =
+            push(activityRef);
 
+        await set(newActivityRef, {
 
-        let totalProducts = 0;
+            action: action,
 
-        let totalStock = 0;
+            description: description,
 
-        let lowStockCount = 0;
+            user:
+                currentUser
+                    ? currentUser.email
+                    : "Unknown",
 
-        let estimatedValue = 0;
+            timestamp:
+                new Date().toISOString()
 
-        const lowProducts = [];
+        });
 
+    } catch (err) {
+
+        console.error(
+            "Activity Error:",
+            err
+        );
+
+    }
+}
+
+// ======================================================
+// LOAD ACTIVITY LOGS
+// ======================================================
+
+async function loadActivityLogs() {
+
+    const tableBody =
+        document.getElementById(
+            "activityTableBody"
+        );
+
+    const recentActivity =
+        document.getElementById(
+            "recentActivity"
+        );
+
+    try {
+
+        const snapshot =
+            await get(activityRef);
+
+        const activities = [];
 
         if (snapshot.exists()) {
 
-            const data = snapshot.val();
+            const data =
+                snapshot.val();
 
+            Object.keys(data).forEach(key => {
 
-            Object.values(data).forEach(function (product) {
-
-                totalProducts++;
-
-
-                const quantity =
-                    Number(product.quantity || 0);
-
-
-                const price =
-                    Number(product.price || 0);
-
-
-                const threshold =
-                    Number(product.threshold ?? 5);
-
-
-                totalStock += quantity;
-
-
-                estimatedValue += quantity * price;
-
-
-                if (quantity <= threshold) {
-
-                    lowStockCount++;
-
-                    lowProducts.push(product);
-
-                }
+                activities.push({
+                    id: key,
+                    ...data[key]
+                });
 
             });
 
         }
 
+        // Newest first
+        activities.sort(
+            (a, b) =>
+                new Date(b.timestamp) -
+                new Date(a.timestamp)
+        );
 
-        document.getElementById("totalProducts").textContent =
-            totalProducts;
+        // ==========================================
+        // ACTIVITY TABLE
+        // ==========================================
 
+        if (tableBody) {
 
-        document.getElementById("totalStock").textContent =
-            totalStock;
+            tableBody.innerHTML = "";
 
+            if (activities.length === 0) {
 
-        document.getElementById("lowStock").textContent =
-            lowStockCount;
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5"
+                            style="text-align:center;">
+                            No activity yet.
+                        </td>
+                    </tr>
+                `;
 
+            } else {
 
-        document.getElementById("estimatedValue").textContent =
-            formatMoney(estimatedValue);
+                activities.forEach(activity => {
 
+                    const row =
+                        document.createElement("tr");
 
-        renderLowStock(lowProducts);
+                    const date =
+                        new Date(
+                            activity.timestamp
+                        );
 
-        renderRecentActivity();
+                    row.innerHTML = `
 
+                        <td>
+                            ${date.toLocaleDateString()}
+                        </td>
+
+                        <td>
+                            ${date.toLocaleTimeString()}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                activity.action || ""
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                activity.description || ""
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                activity.user || ""
+                            )}
+                        </td>
+
+                    `;
+
+                    tableBody.appendChild(row);
+
+                });
+
+            }
+        }
+
+        // ==========================================
+        // RECENT ACTIVITY DASHBOARD
+        // ==========================================
+
+        if (recentActivity) {
+
+            recentActivity.innerHTML = "";
+
+            const recent =
+                activities.slice(0, 5);
+
+            if (recent.length === 0) {
+
+                recentActivity.innerHTML =
+                    "<p>No recent activity.</p>";
+
+            } else {
+
+                recent.forEach(activity => {
+
+                    const item =
+                        document.createElement("div");
+
+                    item.className =
+                        "activity-item";
+
+                    item.innerHTML = `
+                        <strong>
+                            ${escapeHTML(
+                                activity.action || ""
+                            )}
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(
+                                activity.description || ""
+                            )}
+                        </p>
+                    `;
+
+                    recentActivity.appendChild(item);
+
+                });
+
+            }
+        }
 
     } catch (err) {
 
         console.error(
-            "DASHBOARD ERROR:",
+            "Load Activity Error:",
             err
         );
 
     }
-
 }
 
+// ======================================================
+// LOGOUT
+// ======================================================
+
+const logoutButtons =
+    document.querySelectorAll(
+        "#logoutBtn, .logout-btn, [data-action='logout']"
+    );
+
+logoutButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        async function () {
+
+            if (currentUser) {
+
+                await addActivity(
+                    "Logout",
+                    "User " +
+                    currentUser.name +
+                    " logged out."
+                );
+
+            }
+
+            currentUser = null;
+
+            sessionStorage.removeItem(
+                "arbeesCurrentUser"
+            );
+
+            products = [];
+
+            showLogin();
+
+        }
+    );
+
+});
 
 // ======================================================
-// LOW STOCK
+// RESTORE SESSION
 // ======================================================
 
-function renderLowStock(products) {
+function restoreSession() {
 
-    const container =
-        document.getElementById("lowStockList");
+    const savedUser =
+        sessionStorage.getItem(
+            "arbeesCurrentUser"
+        );
 
+    if (!savedUser) {
 
-    container.innerHTML = "";
-
-
-    if (products.length === 0) {
-
-        container.innerHTML = `
-            <p class="empty-text">
-                No low stock products.
-            </p>
-        `;
+        showLogin();
 
         return;
     }
 
-
-    products.forEach(function (product) {
-
-        const item =
-            document.createElement("div");
-
-
-        item.className =
-            "low-stock-item";
-
-
-        item.innerHTML = `
-            <strong>
-                ${escapeHTML(product.name)}
-            </strong>
-
-            <span>
-                ${Number(product.quantity || 0)}
-                stock remaining
-                • Threshold:
-                ${Number(product.threshold ?? 5)}
-            </span>
-        `;
-
-
-        container.appendChild(item);
-
-    });
-
-}
-
-
-// ======================================================
-// ADD ACTIVITY
-// ======================================================
-
-async function addActivity(action, details) {
-
     try {
 
-        const newActivity =
-            push(activityRef);
+        currentUser =
+            JSON.parse(savedUser);
 
-
-        await set(
-            newActivity,
-            {
-                timestamp: Date.now(),
-
-                user: currentUser
-                    ? currentUser.email
-                    : "System",
-
-                action: action,
-
-                details: details
-            }
-        );
-
+        // IMPORTANT:
+        // Existing session still needs PIN
+        // before entering the system.
+        showSecurityPage();
 
     } catch (err) {
 
         console.error(
-            "ACTIVITY LOG ERROR:",
+            "Session Error:",
             err
         );
 
-    }
-
-}
-
-
-// ======================================================
-// RENDER ACTIVITY LOGS
-// ======================================================
-
-async function renderActivities() {
-
-    const table =
-        document.getElementById("activityTableBody");
-
-
-    table.innerHTML = "";
-
-
-    try {
-
-        const snapshot =
-            await get(activityRef);
-
-
-        if (!snapshot.exists()) {
-
-            table.innerHTML = `
-                <tr>
-                    <td colspan="4" style="text-align:center;">
-                        No activity logs.
-                    </td>
-                </tr>
-            `;
-
-            return;
-        }
-
-
-        const data =
-            snapshot.val();
-
-
-        const activities =
-            Object.values(data).sort(function (a, b) {
-
-                return Number(b.timestamp || 0) -
-                       Number(a.timestamp || 0);
-
-            });
-
-
-        activities.forEach(function (activity) {
-
-            const row =
-                document.createElement("tr");
-
-
-            row.innerHTML = `
-                <td>
-                    ${formatDate(activity.timestamp)}
-                </td>
-
-                <td>
-                    ${escapeHTML(activity.user)}
-                </td>
-
-                <td>
-                    <strong>
-                        ${escapeHTML(activity.action)}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(activity.details)}
-                </td>
-            `;
-
-
-            table.appendChild(row);
-
-        });
-
-
-    } catch (err) {
-
-        console.error(
-            "ACTIVITY ERROR:",
-            err
+        sessionStorage.removeItem(
+            "arbeesCurrentUser"
         );
 
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="4"
-                    style="text-align:center;color:#c0392b;">
-                    Error loading activity logs.
-                </td>
-            </tr>
-        `;
-
+        showLogin();
     }
-
 }
 
-
 // ======================================================
-// RECENT ACTIVITY
+// ESCAPE HTML
 // ======================================================
 
-async function renderRecentActivity() {
+function escapeHTML(value) {
 
-    const container =
-        document.getElementById("recentActivity");
-
-
-    container.innerHTML = "";
-
-
-    try {
-
-        const snapshot =
-            await get(activityRef);
-
-
-        if (!snapshot.exists()) {
-
-            container.innerHTML = `
-                <p class="empty-text">
-                    No recent activity.
-                </p>
-            `;
-
-            return;
-        }
-
-
-        const data =
-            snapshot.val();
-
-
-        const activities =
-            Object.values(data)
-                .sort(function (a, b) {
-
-                    return Number(b.timestamp || 0) -
-                           Number(a.timestamp || 0);
-
-                })
-                .slice(0, 5);
-
-
-        activities.forEach(function (activity) {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "activity-item";
-
-
-            item.innerHTML = `
-                <strong>
-                    ${escapeHTML(activity.action)}
-                </strong>
-
-                <span>
-                    ${escapeHTML(activity.details)}
-                </span>
-
-                <span>
-                    ${formatDate(activity.timestamp)}
-                </span>
-            `;
-
-
-            container.appendChild(item);
-
-        });
-
-
-    } catch (err) {
-
-        console.error(
-            "RECENT ACTIVITY ERROR:",
-            err
-        );
-
-    }
-
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-
 // ======================================================
-// START SYSTEM
+// START APPLICATION
 // ======================================================
 
-restoreSession();
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-console.log("Arbees Bakery Firebase System Loaded Successfully!");
+        restoreSession();
+
+    }
+);
