@@ -12,6 +12,7 @@
 
 <body>
 
+
 <!-- =====================================================
      LOGIN PAGE
 ===================================================== -->
@@ -20,7 +21,6 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -36,7 +36,6 @@
         </div>
 
 
-        <!-- LOGIN FORM -->
         <form id="loginForm">
 
             <div class="form-group">
@@ -87,7 +86,6 @@
         </form>
 
 
-        <!-- REGISTER LINK -->
         <p class="switch-text">
 
             Don't have an account?
@@ -119,7 +117,6 @@
 
     <div class="auth-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
 
             <img
@@ -135,7 +132,6 @@
         </div>
 
 
-        <!-- REGISTER FORM -->
         <form id="registerForm">
 
             <div class="form-group">
@@ -218,7 +214,6 @@
         </form>
 
 
-        <!-- LOGIN LINK -->
         <p class="switch-text">
 
             Already have an account?
@@ -240,6 +235,84 @@
 
 
 <!-- =====================================================
+     SECURITY PIN PAGE
+===================================================== -->
+
+<section
+    id="securityPage"
+    class="auth-page hidden"
+>
+
+    <div class="auth-card security-card">
+
+        <div class="security-icon">
+            🔐
+        </div>
+
+
+        <div class="logo-box">
+
+            <h1>Security Verification</h1>
+
+            <p>
+                Enter your security PIN to continue.
+            </p>
+
+        </div>
+
+
+        <form id="securityForm">
+
+            <div class="form-group">
+
+                <label for="securityPin">
+                    Security PIN
+                </label>
+
+                <input
+                    type="password"
+                    id="securityPin"
+                    placeholder="Enter 6-digit PIN"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <p
+                id="securityError"
+                class="error-message"
+            ></p>
+
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                🔓 Verify & Continue
+            </button>
+
+        </form>
+
+
+        <button
+            type="button"
+            id="securityBackBtn"
+            class="link-btn security-back"
+        >
+            ← Back to Login
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
      SYSTEM PAGE
 ===================================================== -->
 
@@ -248,13 +321,16 @@
     class="system hidden"
 >
 
+
     <!-- =================================================
          SIDEBAR
     ================================================== -->
 
     <aside class="sidebar">
 
+
         <!-- SIDEBAR LOGO -->
+
         <div class="sidebar-logo">
 
             <div class="logo-icon small">
@@ -278,6 +354,7 @@
 
 
         <!-- NAVIGATION -->
+
         <nav>
 
             <button
@@ -328,6 +405,7 @@
 
 
         <!-- LOGOUT -->
+
         <button
             id="logoutBtn"
             class="logout-btn"
@@ -348,6 +426,7 @@
 
 
         <!-- TOPBAR -->
+
         <header class="topbar">
 
             <div>
@@ -403,6 +482,7 @@
             id="dashboardPage"
             class="page"
         >
+
 
             <!-- WELCOME -->
 
@@ -770,8 +850,6 @@
                     <div class="form-grid">
 
 
-                        <!-- PRODUCT NAME -->
-
                         <div class="form-group">
 
                             <label for="productName">
@@ -789,8 +867,6 @@
 
 
 
-                        <!-- SKU -->
-
                         <div class="form-group">
 
                             <label for="productSKU">
@@ -807,8 +883,6 @@
                         </div>
 
 
-
-                        <!-- CATEGORY -->
 
                         <div class="form-group">
 
@@ -851,8 +925,6 @@
 
 
 
-                        <!-- QUANTITY -->
-
                         <div class="form-group">
 
                             <label for="productQuantity">
@@ -870,8 +942,6 @@
                         </div>
 
 
-
-                        <!-- PRICE -->
 
                         <div class="form-group">
 
@@ -891,8 +961,6 @@
                         </div>
 
 
-
-                        <!-- LOW STOCK THRESHOLD -->
 
                         <div class="form-group">
 
@@ -914,16 +982,12 @@
 
 
 
-                    <!-- MESSAGE -->
-
                     <p
                         id="productMessage"
                         class="success-message"
                     ></p>
 
 
-
-                    <!-- BUTTON -->
 
                     <button
                         type="submit"
@@ -1039,12 +1103,8 @@
 
 
 
-            <!-- ACCOUNT CARD -->
-
             <div class="account-card">
 
-
-                <!-- PROFILE IMAGE -->
 
                 <div class="profile-image">
 
@@ -1057,12 +1117,8 @@
 
 
 
-                <!-- ACCOUNT INFORMATION -->
-
                 <div class="account-info">
 
-
-                    <!-- NAME -->
 
                     <div>
 
@@ -1078,8 +1134,6 @@
 
 
 
-                    <!-- EMAIL -->
-
                     <div>
 
                         <span>
@@ -1093,8 +1147,6 @@
                     </div>
 
 
-
-                    <!-- ROLE -->
 
                     <div>
 
@@ -1121,13 +1173,215 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     SECURITY + PAGE JAVASCRIPT
 ===================================================== -->
 
-<script
-    type="module"
-    src="script.js"
-></script>
+<script type="module" src="script.js"></script>
+
+
+<!-- SECURITY PIN SCRIPT -->
+
+<script>
+
+    /*
+     * DEMO SECURITY PIN
+     *
+     * Change this number to your preferred 6-digit PIN.
+     */
+
+    const SECURITY_PIN = "123456";
+
+
+    /*
+     * Show Register
+     */
+
+    window.showRegister = function () {
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("securityPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("registerPage")
+            .classList.remove("hidden");
+
+    };
+
+
+    /*
+     * Show Login
+     */
+
+    window.showLogin = function () {
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("securityPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("systemPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("loginPage")
+            .classList.remove("hidden");
+
+    };
+
+
+    /*
+     * Show Security Page
+     *
+     * Call this after successful login.
+     */
+
+    window.showSecurityPage = function () {
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("registerPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("systemPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("securityPage")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("securityPin")
+            .value = "";
+
+        document
+            .getElementById("securityError")
+            .textContent = "";
+
+        document
+            .getElementById("securityPin")
+            .focus();
+
+    };
+
+
+    /*
+     * SECURITY PIN VERIFICATION
+     */
+
+    document
+        .getElementById("securityForm")
+        .addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+
+            const pin =
+                document
+                    .getElementById("securityPin")
+                    .value;
+
+
+            const error =
+                document
+                    .getElementById("securityError");
+
+
+            if (pin === SECURITY_PIN) {
+
+                /*
+                 * Correct PIN
+                 */
+
+                error.textContent = "";
+
+
+                document
+                    .getElementById("securityPage")
+                    .classList.add("hidden");
+
+
+                document
+                    .getElementById("systemPage")
+                    .classList.remove("hidden");
+
+
+                document
+                    .getElementById("securityPin")
+                    .value = "";
+
+
+            } else {
+
+                /*
+                 * Wrong PIN
+                 */
+
+                error.textContent =
+                    "Incorrect security PIN. Please try again.";
+
+
+                document
+                    .getElementById("securityPin")
+                    .value = "";
+
+
+                document
+                    .getElementById("securityPin")
+                    .focus();
+
+            }
+
+        });
+
+
+    /*
+     * BACK TO LOGIN
+     */
+
+    document
+        .getElementById("securityBackBtn")
+        .addEventListener("click", function () {
+
+            document
+                .getElementById("securityPage")
+                .classList.add("hidden");
+
+
+            document
+                .getElementById("systemPage")
+                .classList.add("hidden");
+
+
+            document
+                .getElementById("loginPage")
+                .classList.remove("hidden");
+
+
+            document
+                .getElementById("securityPin")
+                .value = "";
+
+
+            document
+                .getElementById("securityError")
+                .textContent = "";
+
+        });
+
+</script>
 
 </body>
 </html>
