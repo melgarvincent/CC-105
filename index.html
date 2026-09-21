@@ -7,11 +7,10 @@
 
     <title>Arbee's Bakery Shop</title>
 
-   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-
 
 <!-- =====================================================
      LOGIN PAGE
@@ -24,7 +23,7 @@
         <div class="logo-box">
 
             <img
-                src="arbees-bakeshop-logo1.png"
+                src="./arbees-bakeshop-logo1.png"
                 alt="Arbee's Bakeshop Logo"
                 class="auth-logo"
             >
@@ -120,7 +119,7 @@
         <div class="logo-box">
 
             <img
-                src="arbees-bakeshop-logo1.png"
+                src="./arbees-bakeshop-logo1.png"
                 alt="Arbee's Bakeshop Logo"
                 class="auth-logo"
             >
@@ -176,6 +175,7 @@
                     type="password"
                     id="registerPassword"
                     placeholder="Create a password"
+                    minlength="6"
                     required
                 >
 
@@ -192,6 +192,7 @@
                     type="password"
                     id="confirmPassword"
                     placeholder="Confirm your password"
+                    minlength="6"
                     required
                 >
 
@@ -336,7 +337,7 @@
             <div class="logo-icon small">
 
                 <img
-                    src="arbees-bakeshop-logo1.png"
+                    src="./arbees-bakeshop-logo1.png"
                     alt="Arbees Bakeshop Logo"
                 >
 
@@ -449,7 +450,7 @@
                 <div class="user-avatar">
 
                     <img
-                        src="MY PICTURE.jpg"
+                        src="./MY PICTURE.jpg"
                         alt="Profile Picture"
                     >
 
@@ -495,7 +496,7 @@
                         <span id="currentUserName">
                             User
                         </span>
-                        ! 👋
+                       ! 👋
                     </h2>
 
                     <p>
@@ -679,7 +680,7 @@
 
 
         <!-- =================================================
-             INVENTORY PAGE
+             INVENTORY
         ================================================== -->
 
         <section
@@ -769,33 +770,19 @@
 
                             <tr>
 
-                                <th>
-                                    Product
-                                </th>
+                                <th>Product</th>
 
-                                <th>
-                                    SKU
-                                </th>
+                                <th>SKU</th>
 
-                                <th>
-                                    Category
-                                </th>
+                                <th>Category</th>
 
-                                <th>
-                                    Quantity
-                                </th>
+                                <th>Quantity</th>
 
-                                <th>
-                                    Price
-                                </th>
+                                <th>Price</th>
 
-                                <th>
-                                    Stock Status
-                                </th>
+                                <th>Stock Status</th>
 
-                                <th>
-                                    Actions
-                                </th>
+                                <th>Actions</th>
 
                             </tr>
 
@@ -817,7 +804,7 @@
 
 
         <!-- =================================================
-             ADD PRODUCT PAGE
+             ADD PRODUCT
         ================================================== -->
 
         <section
@@ -829,7 +816,7 @@
 
                 <div>
 
-                    <h2>
+                    <h2 id="productPageTitle">
                         Add Product
                     </h2>
 
@@ -981,20 +968,31 @@
                     </div>
 
 
-
                     <p
                         id="productMessage"
                         class="success-message"
                     ></p>
 
 
+                    <div class="form-buttons">
 
-                    <button
-                        type="submit"
-                        class="primary-btn"
-                    >
-                        Add Product
-                    </button>
+                        <button
+                            type="submit"
+                            id="productSubmitBtn"
+                            class="primary-btn"
+                        >
+                            Add Product
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelEditBtn"
+                            class="secondary-btn hidden"
+                        >
+                            Cancel Edit
+                        </button>
+
+                    </div>
 
                 </form>
 
@@ -1109,7 +1107,7 @@
                 <div class="profile-image">
 
                     <img
-                        src="MY PICTURE.jpg"
+                        src="./MY PICTURE.jpg"
                         alt="My Profile Picture"
                     >
 
@@ -1166,6 +1164,7 @@
 
         </section>
 
+
     </main>
 
 </section>
@@ -1173,215 +1172,13 @@
 
 
 <!-- =====================================================
-     SECURITY + PAGE JAVASCRIPT
+     JAVASCRIPT
 ===================================================== -->
 
-<script type="module" src="script.js"></script>
-
-
-<!-- SECURITY PIN SCRIPT -->
-
-<script>
-
-    /*
-     * DEMO SECURITY PIN
-     *
-     * Change this number to your preferred 6-digit PIN.
-     */
-
-    const SECURITY_PIN = "123456";
-
-
-    /*
-     * Show Register
-     */
-
-    window.showRegister = function () {
-
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("securityPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.remove("hidden");
-
-    };
-
-
-    /*
-     * Show Login
-     */
-
-    window.showLogin = function () {
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("securityPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("systemPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("loginPage")
-            .classList.remove("hidden");
-
-    };
-
-
-    /*
-     * Show Security Page
-     *
-     * Call this after successful login.
-     */
-
-    window.showSecurityPage = function () {
-
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("registerPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("systemPage")
-            .classList.add("hidden");
-
-        document
-            .getElementById("securityPage")
-            .classList.remove("hidden");
-
-        document
-            .getElementById("securityPin")
-            .value = "";
-
-        document
-            .getElementById("securityError")
-            .textContent = "";
-
-        document
-            .getElementById("securityPin")
-            .focus();
-
-    };
-
-
-    /*
-     * SECURITY PIN VERIFICATION
-     */
-
-    document
-        .getElementById("securityForm")
-        .addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-
-            const pin =
-                document
-                    .getElementById("securityPin")
-                    .value;
-
-
-            const error =
-                document
-                    .getElementById("securityError");
-
-
-            if (pin === SECURITY_PIN) {
-
-                /*
-                 * Correct PIN
-                 */
-
-                error.textContent = "";
-
-
-                document
-                    .getElementById("securityPage")
-                    .classList.add("hidden");
-
-
-                document
-                    .getElementById("systemPage")
-                    .classList.remove("hidden");
-
-
-                document
-                    .getElementById("securityPin")
-                    .value = "";
-
-
-            } else {
-
-                /*
-                 * Wrong PIN
-                 */
-
-                error.textContent =
-                    "Incorrect security PIN. Please try again.";
-
-
-                document
-                    .getElementById("securityPin")
-                    .value = "";
-
-
-                document
-                    .getElementById("securityPin")
-                    .focus();
-
-            }
-
-        });
-
-
-    /*
-     * BACK TO LOGIN
-     */
-
-    document
-        .getElementById("securityBackBtn")
-        .addEventListener("click", function () {
-
-            document
-                .getElementById("securityPage")
-                .classList.add("hidden");
-
-
-            document
-                .getElementById("systemPage")
-                .classList.add("hidden");
-
-
-            document
-                .getElementById("loginPage")
-                .classList.remove("hidden");
-
-
-            document
-                .getElementById("securityPin")
-                .value = "";
-
-
-            document
-                .getElementById("securityError")
-                .textContent = "";
-
-        });
-
-</script>
+<script
+    type="module"
+    src="./script.js"
+></script>
 
 </body>
 </html>
