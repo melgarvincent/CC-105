@@ -6,94 +6,59 @@
 
     <title>Arbee's Bakery Shop</title>
 
-    <link rel="stylesheet" href="./style.css">
-
-    <link rel="icon" href="./arbees-bakeshop-logo1.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- ================= LOGIN PAGE ================= -->
+<!-- =========================
+     GOOGLE LOGIN
+========================= -->
 <section id="loginPage" class="auth-page">
 
     <div class="auth-card">
 
-        <img
-            src="./arbees-bakeshop-logo1.png"
-            class="auth-logo"
-            alt="Arbee's Bakery Shop"
-        >
+        <img src="MY PICTURE.jpg"
+             class="auth-logo"
+             alt="Arbee's Bakery Shop">
 
         <h1>ARBEES BAKERY SHOP</h1>
 
-        <p class="auth-subtitle">
-            Bakery Inventory Management System
+        <p class="subtitle">
+            Inventory Management System
         </p>
 
-        <div class="google-login-box">
+        <button id="googleLoginBtn" class="google-btn">
+            <span class="google-icon">G</span>
+            Continue with Google
+        </button>
 
-            <div class="google-icon">
-                G
-            </div>
-
-            <h2>Login with Google</h2>
-
-            <p>
-                Use your Google account to continue.
-            </p>
-
-            <button id="googleLoginBtn" class="google-btn">
-                <span class="google-letter">G</span>
-                Continue with Google
-            </button>
-
-            <p id="loginError" class="error-message"></p>
-
-        </div>
-
-        <p class="security-note">
-            🔒 Secure authentication powered by Firebase
-        </p>
+        <p id="loginError" class="error"></p>
 
     </div>
 
 </section>
 
 
-<!-- ================= OTP PAGE ================= -->
+<!-- =========================
+     OTP VERIFICATION
+========================= -->
 <section id="otpPage" class="auth-page hidden">
 
     <div class="auth-card otp-card">
 
         <div class="security-icon">
-            📱
+            🔐
         </div>
 
-        <h1>Phone Verification</h1>
+        <h1>OTP Verification</h1>
 
-        <p class="auth-subtitle">
-            Verify your phone number to continue
+        <p class="subtitle">
+            Verify your phone number before entering the system.
         </p>
 
-        <div id="googleUserInfo" class="google-user-info">
-
-            <img id="googleUserPhoto" src="./MY PICTURE.jpg" alt="User">
-
-            <div>
-                <strong id="googleUserName">
-                    Google User
-                </strong>
-
-                <small id="googleUserEmail">
-                    user@gmail.com
-                </small>
-            </div>
-
-        </div>
-
-
         <!-- PHONE NUMBER -->
-        <form id="phoneForm">
+        <div id="phoneStep">
 
             <label for="phoneNumber">
                 Phone Number
@@ -103,48 +68,43 @@
                 type="tel"
                 id="phoneNumber"
                 placeholder="+639XXXXXXXXX"
-                required
             >
 
-            <small class="input-help">
-                Example: +639123456789
-            </small>
-
-            <div id="recaptcha-container"></div>
-
-            <button type="submit" class="primary-btn">
+            <button id="sendOtpBtn" class="main-btn">
                 Send OTP
             </button>
 
-        </form>
+            <div id="recaptcha-container"></div>
+
+        </div>
 
 
         <!-- OTP -->
-        <form id="otpForm" class="hidden">
+        <div id="otpStep" class="hidden">
 
             <label for="otpCode">
-                Enter 6-digit OTP
+                Enter OTP Code
             </label>
 
             <input
                 type="text"
                 id="otpCode"
                 maxlength="6"
-                inputmode="numeric"
-                placeholder="123456"
-                required
+                placeholder="Enter 6-digit OTP"
             >
 
-            <p id="otpMessage" class="success-message"></p>
-
-            <button type="submit" class="primary-btn">
+            <button id="verifyOtpBtn" class="main-btn">
                 Verify OTP
             </button>
 
-        </form>
+            <button id="resendOtpBtn" class="secondary-btn">
+                Send OTP Again
+            </button>
 
+        </div>
 
-        <p id="otpError" class="error-message"></p>
+        <p id="otpMessage" class="message"></p>
+        <p id="otpError" class="error"></p>
 
         <button id="otpBackBtn" class="back-btn">
             Back to Login
@@ -155,26 +115,23 @@
 </section>
 
 
-<!-- ================= MAIN SYSTEM ================= -->
-<section id="systemPage" class="system-page hidden">
+<!-- =========================
+     MAIN SYSTEM
+========================= -->
+<section id="systemPage" class="hidden">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
-        <div class="sidebar-logo">
-
-            <img
-                src="./arbees-bakeshop-logo1.png"
-                alt="Arbee's Bakery Shop"
-            >
-
-            <h2>ARBEES</h2>
-            <span>BAKERY SHOP</span>
-
+        <div class="brand">
+            <img src="MY PICTURE.jpg" alt="Logo">
+            <div>
+                <h2>ARBEES</h2>
+                <span>BAKERY SHOP</span>
+            </div>
         </div>
 
-
-        <nav class="sidebar-nav">
+        <nav>
 
             <button class="nav-btn active" data-page="dashboard">
                 🏠 Dashboard
@@ -193,11 +150,10 @@
             </button>
 
             <button class="nav-btn" data-page="users">
-                👤 Account
+                👤 My Account
             </button>
 
         </nav>
-
 
         <button id="logoutBtn" class="logout-btn">
             🚪 Logout
@@ -206,22 +162,27 @@
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="main-content">
 
         <!-- HEADER -->
         <header class="top-header">
 
             <div>
-                <h2>Arbee's Bakery Shop</h2>
-                <p>Inventory Management System</p>
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+                <p>
+                    Welcome to Arbee's Bakery Shop
+                </p>
             </div>
 
-            <div class="header-user">
+            <div class="user-mini">
 
                 <img
                     id="headerUserPhoto"
-                    src="./MY PICTURE.jpg"
+                    src="MY PICTURE.jpg"
                     alt="User"
                 >
 
@@ -240,12 +201,24 @@
         </header>
 
 
-        <!-- ================= DASHBOARD ================= -->
-        <section id="dashboardPage" class="content-page">
+        <!-- =========================
+             DASHBOARD
+        ========================= -->
+        <section id="dashboardPage" class="page">
 
-            <div class="page-title">
-                <h1>Dashboard</h1>
-                <p>Overview of your bakery inventory</p>
+            <div class="welcome-box">
+
+                <h2>
+                    Welcome,
+                    <span id="currentUserName">
+                        User
+                    </span>!
+                </h2>
+
+                <p>
+                    Manage your bakery products and inventory here.
+                </p>
+
             </div>
 
 
@@ -253,37 +226,28 @@
 
                 <div class="stat-card">
                     <span>📦</span>
-                    <div>
-                        <p>Total Products</p>
-                        <h2 id="totalProducts">0</h2>
-                    </div>
+                    <h3>Total Products</h3>
+                    <strong id="totalProducts">0</strong>
                 </div>
-
 
                 <div class="stat-card">
-                    <span>🍞</span>
-                    <div>
-                        <p>Total Stock</p>
-                        <h2 id="totalStock">0</h2>
-                    </div>
+                    <span>🥖</span>
+                    <h3>Total Stock</h3>
+                    <strong id="totalStock">0</strong>
                 </div>
-
 
                 <div class="stat-card">
                     <span>⚠️</span>
-                    <div>
-                        <p>Low Stock Items</p>
-                        <h2 id="lowStock">0</h2>
-                    </div>
+                    <h3>Low Stock</h3>
+                    <strong id="lowStock">0</strong>
                 </div>
 
-
                 <div class="stat-card">
-                    <span>₱</span>
-                    <div>
-                        <p>Estimated Value</p>
-                        <h2 id="estimatedValue">₱0.00</h2>
-                    </div>
+                    <span>💰</span>
+                    <h3>Estimated Value</h3>
+                    <strong id="estimatedValue">
+                        ₱0.00
+                    </strong>
                 </div>
 
             </div>
@@ -297,9 +261,9 @@
                         <h2>Low Stock Products</h2>
                     </div>
 
-                    <div id="lowStockList" class="low-stock-list">
-                        <p class="empty-message">
-                            No low stock products.
+                    <div id="lowStockList">
+                        <p class="empty">
+                            No low-stock products.
                         </p>
                     </div>
 
@@ -313,7 +277,7 @@
                     </div>
 
                     <div id="recentActivity">
-                        <p class="empty-message">
+                        <p class="empty">
                             No recent activity.
                         </p>
                     </div>
@@ -325,20 +289,24 @@
         </section>
 
 
-        <!-- ================= INVENTORY ================= -->
-        <section id="inventoryPage" class="content-page hidden">
+        <!-- =========================
+             INVENTORY
+        ========================= -->
+        <section id="inventoryPage" class="page hidden">
 
-            <div class="page-title-row">
+            <div class="page-toolbar">
 
                 <div>
-                    <h1>Inventory</h1>
-                    <p>Manage bakery products</p>
+
+                    <h2>Inventory</h2>
+
+                    <p>
+                        Manage bakery products.
+                    </p>
+
                 </div>
 
-                <button
-                    id="inventoryAddBtn"
-                    class="primary-btn"
-                >
+                <button id="inventoryAddBtn" class="main-btn">
                     + Add Product
                 </button>
 
@@ -363,20 +331,20 @@
                         Bread
                     </option>
 
-                    <option value="Cake">
-                        Cake
-                    </option>
-
                     <option value="Pastry">
                         Pastry
+                    </option>
+
+                    <option value="Cake">
+                        Cake
                     </option>
 
                     <option value="Cookies">
                         Cookies
                     </option>
 
-                    <option value="Other">
-                        Other
+                    <option value="Others">
+                        Others
                     </option>
 
                 </select>
@@ -413,18 +381,24 @@
         </section>
 
 
-        <!-- ================= ADD PRODUCT ================= -->
-        <section id="addProductPage" class="content-page hidden">
+        <!-- =========================
+             ADD / EDIT PRODUCT
+        ========================= -->
+        <section id="addProductPage" class="page hidden">
 
-            <div class="page-title">
+            <div class="page-toolbar">
 
-                <h1 id="productFormTitle">
-                    Add Product
-                </h1>
+                <div>
 
-                <p>
-                    Add a new bakery product
-                </p>
+                    <h2 id="productFormTitle">
+                        Add Product
+                    </h2>
+
+                    <p>
+                        Add or update bakery products.
+                    </p>
+
+                </div>
 
             </div>
 
@@ -432,6 +406,11 @@
             <div class="form-card">
 
                 <form id="productForm">
+
+                    <input
+                        type="hidden"
+                        id="editingProductId"
+                    >
 
                     <div class="form-grid">
 
@@ -484,20 +463,20 @@
                                     Bread
                                 </option>
 
-                                <option value="Cake">
-                                    Cake
-                                </option>
-
                                 <option value="Pastry">
                                     Pastry
+                                </option>
+
+                                <option value="Cake">
+                                    Cake
                                 </option>
 
                                 <option value="Cookies">
                                     Cookies
                                 </option>
 
-                                <option value="Other">
-                                    Other
+                                <option value="Others">
+                                    Others
                                 </option>
 
                             </select>
@@ -561,7 +540,7 @@
 
                         <button
                             type="submit"
-                            class="primary-btn"
+                            class="main-btn"
                         >
                             Save Product
                         </button>
@@ -586,16 +565,22 @@
         </section>
 
 
-        <!-- ================= ACTIVITY ================= -->
-        <section id="activityPage" class="content-page hidden">
+        <!-- =========================
+             ACTIVITY
+        ========================= -->
+        <section id="activityPage" class="page hidden">
 
-            <div class="page-title">
+            <div class="page-toolbar">
 
-                <h1>Activity Logs</h1>
+                <div>
 
-                <p>
-                    Record of system activities
-                </p>
+                    <h2>Activity Logs</h2>
+
+                    <p>
+                        System activity history.
+                    </p>
+
+                </div>
 
             </div>
 
@@ -626,25 +611,16 @@
         </section>
 
 
-        <!-- ================= ACCOUNT ================= -->
-        <section id="usersPage" class="content-page hidden">
-
-            <div class="page-title">
-
-                <h1>My Account</h1>
-
-                <p>
-                    Google authenticated account
-                </p>
-
-            </div>
-
+        <!-- =========================
+             ACCOUNT
+        ========================= -->
+        <section id="usersPage" class="page hidden">
 
             <div class="profile-card">
 
                 <img
                     id="profilePhoto"
-                    src="./MY PICTURE.jpg"
+                    src="MY PICTURE.jpg"
                     alt="Profile"
                 >
 
@@ -660,6 +636,12 @@
                     Staff
                 </span>
 
+                <div class="verified-box">
+                    ✓ Google Verified
+                    <br>
+                    ✓ Phone OTP Verified
+                </div>
+
             </div>
 
         </section>
@@ -669,7 +651,7 @@
 </section>
 
 
-<script type="module" src="./script.js"></script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>
