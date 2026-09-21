@@ -32,15 +32,16 @@ import {
 // FIREBASE CONFIG
 // =====================================================
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
-    authDomain: "crudfirebase-b2a1f.firebaseapp.com",
-    databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
-    projectId: "crudfirebase-b2a1f",
-    storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
-    messagingSenderId: "383674756572",
-    appId: "1:383674756572:web:0585f268fb2cc8f5a6b319",
-    measurementId: "G-QJXMR8ZQH8"
+  apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
+  authDomain: "crudfirebase-b2a1f.firebaseapp.com",
+  databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
+  projectId: "crudfirebase-b2a1f",
+  storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
+  messagingSenderId: "383674756572",
+  appId: "1:383674756572:web:0585f268fb2cc8f5a6b319",
+  measurementId: "G-QJXMR8ZQH8"
 };
 
 
