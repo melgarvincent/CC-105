@@ -1,18 +1,744 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Arbee's Bakery Shop</title>
 
-    <link rel="stylesheet" href="style.css">
+
+    <!-- =================================================
+         ALL CSS IS INSIDE THIS FILE
+         NO style.css NEEDED
+    ================================================== -->
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+            min-height: 100vh;
+            background: #fff7f0;
+            color: #3b2417;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+
+        /* ==============================================
+           LOGIN / REGISTER / OTP
+        ============================================== */
+
+        .page {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7f0,
+                    #f5dfcc
+                );
+        }
+
+
+        .card {
+            width: 100%;
+            max-width: 430px;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(74, 39, 20, 0.18);
+
+            text-align: center;
+        }
+
+
+        .logo {
+            width: 125px;
+            height: 125px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto 15px;
+        }
+
+
+        .card h1 {
+            color: #5b2f18;
+
+            font-size: 25px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .subtitle {
+            color: #8a7669;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ==============================================
+           FORM
+        ============================================== */
+
+        form {
+            text-align: left;
+        }
+
+
+        label {
+            display: block;
+
+            color: #573522;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-top: 15px;
+
+            margin-bottom: 7px;
+        }
+
+
+        input {
+            width: 100%;
+
+            height: 46px;
+
+            padding: 0 13px;
+
+            border: 1px solid #d8c5b7;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #3b2417;
+
+            outline: none;
+
+            font-size: 14px;
+        }
+
+
+        input:focus {
+            border-color: #8b4513;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139,69,19,0.10);
+        }
+
+
+        /* ==============================================
+           MAIN BUTTON
+        ============================================== */
+
+        .main-btn {
+            width: 100%;
+
+            height: 46px;
+
+            margin-top: 22px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #8b4513;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .main-btn:hover {
+            background: #6f350f;
+
+            transform: translateY(-1px);
+        }
+
+
+        .main-btn:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* ==============================================
+           SWITCH
+        ============================================== */
+
+        .switch {
+            margin-top: 20px;
+
+            color: #806b5d;
+
+            font-size: 14px;
+        }
+
+
+        .switch span {
+            color: #8b4513;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .switch span:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ==============================================
+           ERROR / SUCCESS
+        ============================================== */
+
+        .error {
+            min-height: 18px;
+
+            margin-top: 12px;
+
+            color: #d32f2f;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+
+        .success {
+            min-height: 18px;
+
+            margin-top: 12px;
+
+            color: #2e7d32;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+
+        /* ==============================================
+           OTP
+        ============================================== */
+
+        .otp-icon {
+            width: 70px;
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            background: #fff0e3;
+
+            color: #8b4513;
+
+            font-size: 32px;
+        }
+
+
+        #otpEmail {
+            display: block;
+
+            margin-bottom: 15px;
+
+            color: #8b4513;
+
+            word-break: break-all;
+        }
+
+
+        #otpInput {
+            height: 58px;
+
+            text-align: center;
+
+            font-size: 26px;
+
+            font-weight: bold;
+
+            letter-spacing: 9px;
+        }
+
+
+        .secondary-btn {
+            width: 100%;
+
+            height: 44px;
+
+            margin-top: 12px;
+
+            border: 1px solid #8b4513;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #8b4513;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .secondary-btn:hover {
+            background: #fff2e7;
+        }
+
+
+        /* ==============================================
+           DASHBOARD
+        ============================================== */
+
+        #dashboardPage {
+            min-height: 100vh;
+        }
+
+
+        .layout {
+            min-height: 100vh;
+
+            display: flex;
+
+            background: #f7f1eb;
+        }
+
+
+        /* ==============================================
+           SIDEBAR
+        ============================================== */
+
+        .sidebar {
+            width: 245px;
+
+            min-height: 100vh;
+
+            padding: 25px 15px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            background: #2c1810;
+
+            color: white;
+        }
+
+
+        .brand {
+            text-align: center;
+
+            padding-bottom: 25px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.12);
+        }
+
+
+        .brand img {
+            width: 78px;
+            height: 78px;
+
+            object-fit: contain;
+        }
+
+
+        .brand h2 {
+            margin-top: 8px;
+
+            font-size: 20px;
+        }
+
+
+        .brand span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #e8c8a9;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* ==============================================
+           NAVIGATION
+        ============================================== */
+
+        .nav {
+            margin-top: 25px;
+        }
+
+
+        .nav button {
+            width: 100%;
+
+            height: 44px;
+
+            margin: 4px 0;
+
+            padding: 0 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: white;
+
+            text-align: left;
+
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+
+        .nav button:hover,
+        .nav button.active {
+            background: #8b4513;
+        }
+
+
+        .logout {
+            margin-top: auto;
+
+            width: 100%;
+
+            height: 44px;
+
+            border: 1px solid #c89570;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+
+        .logout:hover {
+            background: #8b4513;
+
+            border-color: #8b4513;
+        }
+
+
+        /* ==============================================
+           MAIN
+        ============================================== */
+
+        .main {
+            flex: 1;
+
+            min-width: 0;
+
+            padding: 30px;
+        }
+
+
+        .topbar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .topbar h1 {
+            color: #3b2417;
+
+            font-size: 30px;
+        }
+
+
+        .topbar p {
+            margin-top: 5px;
+
+            color: #806b5d;
+        }
+
+
+        .profile {
+            padding: 11px 15px;
+
+            background: white;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(60,30,10,0.08);
+
+            text-align: right;
+        }
+
+
+        .profile strong {
+            display: block;
+        }
+
+
+        .profile small {
+            display: block;
+
+            margin-top: 4px;
+
+            color: #806b5d;
+        }
+
+
+        /* ==============================================
+           STATS
+        ============================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0,1fr));
+
+            gap: 18px;
+        }
+
+
+        .stat {
+            padding: 25px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(60,30,10,0.08);
+        }
+
+
+        .stat p {
+            color: #806b5d;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .stat h2 {
+            color: #8b4513;
+
+            font-size: 28px;
+        }
+
+
+        /* ==============================================
+           PANEL
+        ============================================== */
+
+        .panel {
+            margin-top: 25px;
+
+            padding: 25px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(60,30,10,0.08);
+        }
+
+
+        .panel h2 {
+            margin-bottom: 18px;
+
+            color: #3b2417;
+        }
+
+
+        .low-item {
+            padding: 13px;
+
+            margin-bottom: 8px;
+
+            background: #fff3e8;
+
+            border-left:
+                4px solid #8b4513;
+
+            border-radius: 7px;
+        }
+
+
+        /* ==============================================
+           MOBILE
+        ============================================== */
+
+        @media(max-width:850px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+
+            .sidebar {
+                width: 100%;
+
+                min-height: auto;
+            }
+
+
+            .nav {
+                display: grid;
+
+                grid-template-columns: 1fr 1fr;
+
+                gap: 5px;
+            }
+
+
+            .nav button {
+                margin: 0;
+            }
+
+
+            .logout {
+                margin-top: 15px;
+            }
+
+
+            .main {
+                padding: 20px;
+            }
+
+
+            .stats {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+        }
+
+
+        @media(max-width:550px) {
+
+            .card {
+                padding: 25px 20px;
+            }
+
+
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+
+            .card h1 {
+                font-size: 21px;
+            }
+
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+
+            .topbar {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .profile {
+                width: 100%;
+
+                text-align: left;
+            }
+
+
+            #otpInput {
+                letter-spacing: 5px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div id="loginPage" class="page">
+
+<!-- =====================================================
+     LOGIN PAGE
+====================================================== -->
+
+<section id="loginPage" class="page">
 
     <div class="card">
 
@@ -20,10 +746,15 @@
             src="assets/arbees-bakeshop-logo1.png"
             class="logo"
             alt="Arbee's Bakery Shop"
+            onerror="this.style.display='none'"
         >
 
         <h1>ARBEES BAKERY SHOP</h1>
-        <p class="subtitle">Inventory Management System</p>
+
+        <p class="subtitle">
+            Inventory Management System
+        </p>
+
 
         <form id="loginForm">
 
@@ -36,6 +767,7 @@
                 required
             >
 
+
             <label>Password</label>
 
             <input
@@ -45,29 +777,48 @@
                 required
             >
 
-            <button type="submit">
+
+            <button
+                type="submit"
+                class="main-btn"
+                id="loginBtn"
+            >
                 Login
             </button>
 
-            <p id="loginError" class="error"></p>
+
+            <p
+                id="loginError"
+                class="error"
+            ></p>
 
         </form>
 
+
         <p class="switch">
+
             Don't have an account?
 
             <span id="showRegister">
                 Register
             </span>
+
         </p>
 
     </div>
 
-</div>
+</section>
 
 
-<!-- ================= REGISTER ================= -->
-<div id="registerPage" class="page hidden">
+
+<!-- =====================================================
+     REGISTER PAGE
+====================================================== -->
+
+<section
+    id="registerPage"
+    class="page hidden"
+>
 
     <div class="card">
 
@@ -75,9 +826,15 @@
             src="assets/arbees-bakeshop-logo1.png"
             class="logo"
             alt="Arbee's Bakery Shop"
+            onerror="this.style.display='none'"
         >
 
         <h1>Create Account</h1>
+
+        <p class="subtitle">
+            Register your bakery account
+        </p>
+
 
         <form id="registerForm">
 
@@ -86,18 +843,20 @@
             <input
                 type="text"
                 id="registerName"
-                placeholder="Enter full name"
+                placeholder="Enter your full name"
                 required
             >
+
 
             <label>Email</label>
 
             <input
                 type="email"
                 id="registerEmail"
-                placeholder="Enter Gmail"
+                placeholder="Enter your Gmail"
                 required
             >
+
 
             <label>Password</label>
 
@@ -108,6 +867,7 @@
                 required
             >
 
+
             <label>Confirm Password</label>
 
             <input
@@ -117,109 +877,168 @@
                 required
             >
 
-            <button type="submit">
+
+            <button
+                type="submit"
+                class="main-btn"
+            >
                 Register
             </button>
 
-            <p id="registerError" class="error"></p>
+
+            <p
+                id="registerError"
+                class="error"
+            ></p>
 
         </form>
 
+
         <p class="switch">
+
             Already have an account?
 
             <span id="showLogin">
                 Login
             </span>
+
         </p>
 
     </div>
 
-</div>
+</section>
 
 
-<!-- ================= OTP ================= -->
-<div id="otpPage" class="page hidden">
 
-    <div class="card otp-card">
+<!-- =====================================================
+     OTP PAGE
+====================================================== -->
+
+<section
+    id="otpPage"
+    class="page hidden"
+>
+
+    <div class="card">
 
         <div class="otp-icon">
             ✉
         </div>
 
-        <h1>Email Verification</h1>
+
+        <h1>
+            Email Verification
+        </h1>
+
 
         <p class="subtitle">
-            We sent a 6-digit OTP to:
+            A 6-digit OTP has been sent to:
         </p>
+
 
         <strong id="otpEmail">
             email@gmail.com
         </strong>
 
+
         <form id="otpForm">
 
-            <label>Enter OTP</label>
+            <label>
+                Enter OTP Code
+            </label>
+
 
             <input
                 type="text"
                 id="otpInput"
                 maxlength="6"
                 inputmode="numeric"
+                autocomplete="one-time-code"
                 placeholder="000000"
                 required
             >
 
-            <button type="submit">
+
+            <button
+                type="submit"
+                class="main-btn"
+                id="verifyOtpBtn"
+            >
                 Verify OTP
             </button>
 
         </form>
 
-        <p id="otpMessage" class="success"></p>
-        <p id="otpError" class="error"></p>
+
+        <p
+            id="otpMessage"
+            class="success"
+        ></p>
+
+
+        <p
+            id="otpError"
+            class="error"
+        ></p>
+
 
         <button
-            type="button"
             id="resendOtp"
-            class="secondary"
+            class="secondary-btn"
+            type="button"
         >
             Resend OTP
         </button>
 
-        <p
-            id="backLogin"
-            class="switch"
-        >
-            Back to Login
+
+        <p class="switch">
+
+            <span id="backLogin">
+                Back to Login
+            </span>
+
         </p>
 
     </div>
 
-</div>
+</section>
 
 
-<!-- ================= DASHBOARD ================= -->
-<div id="dashboardPage" class="hidden">
+
+<!-- =====================================================
+     DASHBOARD
+====================================================== -->
+
+<section
+    id="dashboardPage"
+    class="hidden"
+>
 
     <div class="layout">
 
+
         <!-- SIDEBAR -->
+
         <aside class="sidebar">
 
             <div class="brand">
 
                 <img
                     src="assets/arbees-bakeshop-logo1.png"
-                    alt="Arbee's"
+                    alt="Arbee's Bakery"
+                    onerror="this.style.display='none'"
                 >
 
                 <h2>ARBEES</h2>
-                <span>BAKERY SHOP</span>
+
+                <span>
+                    BAKERY SHOP
+                </span>
 
             </div>
 
-            <nav>
+
+            <nav class="nav">
 
                 <button class="active">
                     Dashboard
@@ -239,6 +1058,7 @@
 
             </nav>
 
+
             <button
                 id="logoutBtn"
                 class="logout"
@@ -249,18 +1069,26 @@
         </aside>
 
 
+
         <!-- MAIN -->
+
         <main class="main">
 
-            <header>
+
+            <div class="topbar">
 
                 <div>
-                    <h1>Dashboard</h1>
+
+                    <h1>
+                        Dashboard
+                    </h1>
 
                     <p>
                         Welcome to Arbee's Bakery Shop
                     </p>
+
                 </div>
+
 
                 <div class="profile">
 
@@ -274,69 +1102,1325 @@
 
                 </div>
 
-            </header>
+            </div>
+
 
 
             <!-- STATISTICS -->
-            <section class="stats">
+
+            <div class="stats">
+
 
                 <div class="stat">
-                    <p>Total Products</p>
+
+                    <p>
+                        Total Products
+                    </p>
+
                     <h2 id="totalProducts">
                         0
                     </h2>
+
                 </div>
 
+
                 <div class="stat">
-                    <p>Total Stock</p>
+
+                    <p>
+                        Total Stock
+                    </p>
+
                     <h2 id="totalStock">
                         0
                     </h2>
+
                 </div>
 
+
                 <div class="stat">
-                    <p>Low Stock Items</p>
+
+                    <p>
+                        Low Stock Items
+                    </p>
+
                     <h2 id="lowStock">
                         0
                     </h2>
+
                 </div>
 
+
                 <div class="stat">
-                    <p>Estimated Value</p>
+
+                    <p>
+                        Estimated Value
+                    </p>
+
                     <h2 id="estimatedValue">
                         ₱0.00
                     </h2>
+
                 </div>
 
-            </section>
+            </div>
+
 
 
             <!-- LOW STOCK -->
-            <section class="panel">
+
+            <div class="panel">
 
                 <h2>
                     Low Stock Products
                 </h2>
 
                 <div id="lowStockList">
+
                     <p>
                         No low stock products.
                     </p>
+
                 </div>
 
-            </section>
+            </div>
+
 
         </main>
 
     </div>
 
-</div>
+</section>
 
 
-<script
-    type="module"
-    src="script.js"
-></script>
+
+<!-- =====================================================
+     FIREBASE + JAVASCRIPT
+====================================================== -->
+
+<script type="module">
+
+    import {
+        initializeApp
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+    import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        updateProfile
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    import {
+        getDatabase,
+        ref,
+        set,
+        get
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+
+    /* ==================================================
+       FIREBASE CONFIG
+
+       IMPORTANT:
+       Replace these with your REAL Firebase values.
+    ================================================== */
+
+    const firebaseConfig = {
+
+        apiKey:
+            "YOUR_API_KEY",
+
+        authDomain:
+            "crudfirebase-b2a1f-default-rtdb.firebaseapp.com",
+
+        databaseURL:
+            "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/",
+
+        projectId:
+            "YOUR_PROJECT_ID",
+
+        storageBucket:
+            "YOUR_STORAGE_BUCKET",
+
+        messagingSenderId:
+            "YOUR_MESSAGING_SENDER_ID",
+
+        appId:
+            "YOUR_APP_ID"
+    };
+
+
+
+    /* ==================================================
+       GOOGLE APPS SCRIPT URL
+
+       Paste your deployed /exec URL here.
+    ================================================== */
+
+    const OTP_API_URL =
+        "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+
+
+
+    /* ==================================================
+       FIREBASE INITIALIZATION
+    ================================================== */
+
+    const app =
+        initializeApp(firebaseConfig);
+
+
+    const auth =
+        getAuth(app);
+
+
+    const db =
+        getDatabase(app);
+
+
+
+    /* ==================================================
+       PAGE ELEMENTS
+    ================================================== */
+
+    const loginPage =
+        document.getElementById(
+            "loginPage"
+        );
+
+
+    const registerPage =
+        document.getElementById(
+            "registerPage"
+        );
+
+
+    const otpPage =
+        document.getElementById(
+            "otpPage"
+        );
+
+
+    const dashboardPage =
+        document.getElementById(
+            "dashboardPage"
+        );
+
+
+
+    let currentUser = null;
+
+    let otpExpiresAt = 0;
+
+
+
+    /* ==================================================
+       SHOW PAGE
+    ================================================== */
+
+    function showPage(page) {
+
+        loginPage.classList.add(
+            "hidden"
+        );
+
+        registerPage.classList.add(
+            "hidden"
+        );
+
+        otpPage.classList.add(
+            "hidden"
+        );
+
+        dashboardPage.classList.add(
+            "hidden"
+        );
+
+
+        page.classList.remove(
+            "hidden"
+        );
+    }
+
+
+
+    /* ==================================================
+       REGISTER PAGE
+    ================================================== */
+
+    document
+        .getElementById("showRegister")
+        .onclick = () => {
+
+            document
+                .getElementById(
+                    "registerError"
+                )
+                .textContent = "";
+
+            showPage(
+                registerPage
+            );
+        };
+
+
+
+    /* ==================================================
+       LOGIN PAGE
+    ================================================== */
+
+    document
+        .getElementById("showLogin")
+        .onclick = () => {
+
+            document
+                .getElementById(
+                    "loginError"
+                )
+                .textContent = "";
+
+            showPage(
+                loginPage
+            );
+        };
+
+
+
+    /* ==================================================
+       REGISTER
+    ================================================== */
+
+    document
+        .getElementById("registerForm")
+        .addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const error =
+                    document.getElementById(
+                        "registerError"
+                    );
+
+
+                error.textContent = "";
+
+
+                const name =
+                    document.getElementById(
+                        "registerName"
+                    ).value.trim();
+
+
+                const email =
+                    document.getElementById(
+                        "registerEmail"
+                    ).value.trim();
+
+
+                const password =
+                    document.getElementById(
+                        "registerPassword"
+                    ).value;
+
+
+                const confirmPassword =
+                    document.getElementById(
+                        "confirmPassword"
+                    ).value;
+
+
+
+                if (
+                    password.length < 6
+                ) {
+
+                    error.textContent =
+                        "Password must be at least 6 characters.";
+
+                    return;
+                }
+
+
+
+                if (
+                    password !==
+                    confirmPassword
+                ) {
+
+                    error.textContent =
+                        "Passwords do not match.";
+
+                    return;
+                }
+
+
+
+                try {
+
+                    const result =
+                        await createUserWithEmailAndPassword(
+                            auth,
+                            email,
+                            password
+                        );
+
+
+                    const user =
+                        result.user;
+
+
+
+                    await updateProfile(
+                        user,
+                        {
+                            displayName:
+                                name
+                        }
+                    );
+
+
+
+                    await set(
+                        ref(
+                            db,
+                            "users/" +
+                            user.uid
+                        ),
+                        {
+                            uid:
+                                user.uid,
+
+                            name:
+                                name,
+
+                            email:
+                                email,
+
+                            role:
+                                "staff",
+
+                            createdAt:
+                                new Date()
+                                    .toISOString()
+                        }
+                    );
+
+
+
+                    await signOut(
+                        auth
+                    );
+
+
+
+                    document
+                        .getElementById(
+                            "registerForm"
+                        )
+                        .reset();
+
+
+
+                    alert(
+                        "Registration successful! You can now login."
+                    );
+
+
+                    showPage(
+                        loginPage
+                    );
+
+
+                }
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    document
+                        .getElementById(
+                            "registerError"
+                        )
+                        .textContent =
+                        firebaseError(
+                            error.code
+                        );
+                }
+
+            }
+        );
+
+
+
+    /* ==================================================
+       LOGIN
+    ================================================== */
+
+    document
+        .getElementById("loginForm")
+        .addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const error =
+                    document.getElementById(
+                        "loginError"
+                    );
+
+
+                const button =
+                    document.getElementById(
+                        "loginBtn"
+                    );
+
+
+                error.textContent = "";
+
+
+                const email =
+                    document.getElementById(
+                        "loginEmail"
+                    ).value.trim();
+
+
+                const password =
+                    document.getElementById(
+                        "loginPassword"
+                    ).value;
+
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Checking...";
+
+
+
+                try {
+
+                    const result =
+                        await signInWithEmailAndPassword(
+                            auth,
+                            email,
+                            password
+                        );
+
+
+                    currentUser =
+                        result.user;
+
+
+
+                    document
+                        .getElementById(
+                            "otpEmail"
+                        )
+                        .textContent =
+                        currentUser.email;
+
+
+
+                    showPage(
+                        otpPage
+                    );
+
+
+
+                    await sendOTP(
+                        currentUser.email
+                    );
+
+
+                }
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    error.message =
+                        error.message;
+
+
+                    document
+                        .getElementById(
+                            "loginError"
+                        )
+                        .textContent =
+                        firebaseError(
+                            error.code
+                        );
+
+                }
+                finally {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "Login";
+                }
+
+            }
+        );
+
+
+
+    /* ==================================================
+       SEND OTP
+    ================================================== */
+
+    async function sendOTP(email) {
+
+        const error =
+            document.getElementById(
+                "otpError"
+            );
+
+
+        const message =
+            document.getElementById(
+                "otpMessage"
+            );
+
+
+        error.textContent = "";
+
+        message.textContent =
+            "Sending OTP to your Gmail...";
+
+
+
+        if (
+            OTP_API_URL ===
+            "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"
+        ) {
+
+            message.textContent = "";
+
+
+            error.textContent =
+                "OTP service is not configured. Add your Apps Script /exec URL.";
+
+            return;
+        }
+
+
+
+        try {
+
+            const response =
+                await fetch(
+                    OTP_API_URL,
+                    {
+                        method:
+                            "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                action:
+                                    "sendOTP",
+
+                                email:
+                                    email
+                            })
+                    }
+                );
+
+
+
+            const result =
+                await response.json();
+
+
+
+            if (
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "OTP failed."
+                );
+            }
+
+
+
+            otpExpiresAt =
+                Date.now() +
+                5 * 60 * 1000;
+
+
+
+            message.textContent =
+                "OTP sent! Check your Gmail Inbox or Spam.";
+
+        }
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            message.textContent = "";
+
+
+            document
+                .getElementById(
+                    "otpError"
+                )
+                .textContent =
+                "Unable to send OTP. Check your Apps Script URL.";
+        }
+    }
+
+
+
+    /* ==================================================
+       VERIFY OTP
+    ================================================== */
+
+    document
+        .getElementById("otpForm")
+        .addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const code =
+                    document
+                        .getElementById(
+                            "otpInput"
+                        )
+                        .value
+                        .trim();
+
+
+                const error =
+                    document.getElementById(
+                        "otpError"
+                    );
+
+
+                const message =
+                    document.getElementById(
+                        "otpMessage"
+                    );
+
+
+                const button =
+                    document.getElementById(
+                        "verifyOtpBtn"
+                    );
+
+
+                error.textContent = "";
+
+                message.textContent = "";
+
+
+
+                if (
+                    !/^\d{6}$/.test(
+                        code
+                    )
+                ) {
+
+                    error.textContent =
+                        "Enter exactly 6 numbers.";
+
+                    return;
+                }
+
+
+
+                if (
+                    Date.now() >
+                    otpExpiresAt
+                ) {
+
+                    error.textContent =
+                        "OTP expired. Click Resend OTP.";
+
+                    return;
+                }
+
+
+
+                if (
+                    !currentUser
+                ) {
+
+                    error.textContent =
+                        "Login session expired. Login again.";
+
+                    return;
+                }
+
+
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "Verifying...";
+
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            OTP_API_URL,
+                            {
+                                method:
+                                    "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "text/plain;charset=utf-8"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        action:
+                                            "verifyOTP",
+
+                                        email:
+                                            currentUser.email,
+
+                                        code:
+                                            code
+                                    })
+                            }
+                        );
+
+
+
+                    const result =
+                        await response.json();
+
+
+
+                    if (
+                        !result.success
+                    ) {
+
+                        throw new Error(
+                            result.message ||
+                            "Invalid OTP."
+                        );
+                    }
+
+
+
+                    message.textContent =
+                        "OTP verified successfully!";
+
+
+                    await loadDashboard();
+
+
+
+                    setTimeout(
+                        () => {
+
+                            showPage(
+                                dashboardPage
+                            );
+
+                        },
+                        600
+                    );
+
+
+                }
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    error.textContent =
+                        error.message ||
+                        "Invalid OTP.";
+                }
+                finally {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "Verify OTP";
+                }
+
+            }
+        );
+
+
+
+    /* ==================================================
+       RESEND OTP
+    ================================================== */
+
+    document
+        .getElementById("resendOtp")
+        .onclick = async () => {
+
+            if (
+                currentUser
+            ) {
+
+                await sendOTP(
+                    currentUser.email
+                );
+
+            }
+
+        };
+
+
+
+    /* ==================================================
+       BACK TO LOGIN
+    ================================================== */
+
+    document
+        .getElementById("backLogin")
+        .onclick = async () => {
+
+            currentUser = null;
+
+
+            await signOut(
+                auth
+            );
+
+
+            showPage(
+                loginPage
+            );
+        };
+
+
+
+    /* ==================================================
+       LOAD DASHBOARD
+    ================================================== */
+
+    async function loadDashboard() {
+
+        if (
+            !currentUser
+        ) return;
+
+
+
+        document
+            .getElementById(
+                "userName"
+            )
+            .textContent =
+            currentUser.displayName ||
+            "Staff";
+
+
+        document
+            .getElementById(
+                "userEmail"
+            )
+            .textContent =
+            currentUser.email;
+
+
+
+        try {
+
+            const snapshot =
+                await get(
+                    ref(
+                        db,
+                        "bakeryProducts"
+                    )
+                );
+
+
+
+            if (
+                !snapshot.exists()
+            ) {
+
+                setDashboard(
+                    0,
+                    0,
+                    0,
+                    0
+                );
+
+                return;
+            }
+
+
+
+            const products =
+                snapshot.val();
+
+
+
+            let productCount = 0;
+
+            let stockCount = 0;
+
+            let lowCount = 0;
+
+            let totalValue = 0;
+
+            let lowProducts = [];
+
+
+
+            Object.values(
+                products
+            ).forEach(
+                product => {
+
+                    productCount++;
+
+
+                    const quantity =
+                        Number(
+                            product.quantity
+                        ) || 0;
+
+
+                    const price =
+                        Number(
+                            product.price
+                        ) || 0;
+
+
+                    const threshold =
+                        Number(
+                            product.threshold
+                        ) || 5;
+
+
+
+                    stockCount +=
+                        quantity;
+
+
+                    totalValue +=
+                        quantity *
+                        price;
+
+
+
+                    if (
+                        quantity <=
+                        threshold
+                    ) {
+
+                        lowCount++;
+
+
+                        lowProducts.push(
+                            product
+                        );
+                    }
+
+                }
+            );
+
+
+
+            setDashboard(
+                productCount,
+                stockCount,
+                lowCount,
+                totalValue
+            );
+
+
+            displayLowStock(
+                lowProducts
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Dashboard error:",
+                error
+            );
+        }
+    }
+
+
+
+    /* ==================================================
+       SET DASHBOARD
+    ================================================== */
+
+    function setDashboard(
+        products,
+        stock,
+        low,
+        value
+    ) {
+
+        document
+            .getElementById(
+                "totalProducts"
+            )
+            .textContent =
+            products;
+
+
+        document
+            .getElementById(
+                "totalStock"
+            )
+            .textContent =
+            stock;
+
+
+        document
+            .getElementById(
+                "lowStock"
+            )
+            .textContent =
+            low;
+
+
+        document
+            .getElementById(
+                "estimatedValue"
+            )
+            .textContent =
+            "₱" +
+            Number(value)
+                .toLocaleString(
+                    "en-PH",
+                    {
+                        minimumFractionDigits:
+                            2
+                    }
+                );
+    }
+
+
+
+    /* ==================================================
+       LOW STOCK
+    ================================================== */
+
+    function displayLowStock(
+        products
+    ) {
+
+        const box =
+            document.getElementById(
+                "lowStockList"
+            );
+
+
+
+        if (
+            products.length === 0
+        ) {
+
+            box.innerHTML =
+                "<p>No low stock products.</p>";
+
+            return;
+        }
+
+
+
+        box.innerHTML =
+            products
+                .map(
+                    product => {
+
+                        return `
+
+                            <div class="low-item">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        product.name ||
+                                        "Product"
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    Stock:
+                                    ${
+                                        Number(
+                                            product.quantity
+                                        ) || 0
+                                    }
+                                </small>
+
+                            </div>
+
+                        `;
+                    }
+                )
+                .join("");
+    }
+
+
+
+    /* ==================================================
+       LOGOUT
+    ================================================== */
+
+    document
+        .getElementById("logoutBtn")
+        .onclick = async () => {
+
+            await signOut(
+                auth
+            );
+
+
+            currentUser = null;
+
+
+            document
+                .getElementById(
+                    "loginForm"
+                )
+                .reset();
+
+
+            showPage(
+                loginPage
+            );
+        };
+
+
+
+    /* ==================================================
+       FIREBASE ERROR
+    ================================================== */
+
+    function firebaseError(
+        code
+    ) {
+
+        switch (code) {
+
+            case "auth/invalid-credential":
+                return "Invalid email or password.";
+
+            case "auth/user-not-found":
+                return "Account not found.";
+
+            case "auth/wrong-password":
+                return "Incorrect password.";
+
+            case "auth/invalid-email":
+                return "Invalid email address.";
+
+            case "auth/email-already-in-use":
+                return "Email is already registered.";
+
+            case "auth/weak-password":
+                return "Password must be at least 6 characters.";
+
+            case "auth/too-many-requests":
+                return "Too many attempts. Try again later.";
+
+            default:
+                return "Authentication failed. Please try again.";
+        }
+    }
+
+
+
+    /* ==================================================
+       HTML ESCAPE
+    ================================================== */
+
+    function escapeHTML(
+        value
+    ) {
+
+        return String(value)
+
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
+    }
+
+
+
+    /* ==================================================
+       START ON LOGIN
+    ================================================== */
+
+    showPage(
+        loginPage
+    );
+
+</script>
 
 </body>
 </html>
