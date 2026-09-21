@@ -4,70 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Arbees Bakery Shop</title>
+    <title>Arbee's Bakery Shop</title>
 
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Firebase -->
-    <script type="module" src="./script.js"></script>
+    <link rel="icon" href="./arbees-bakeshop-logo1.png">
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- ================= LOGIN PAGE ================= -->
 <section id="loginPage" class="auth-page">
 
     <div class="auth-card">
 
-        <img src="arbees-bakeshop-logo1.png"
-             class="auth-logo"
-             alt="Arbees Bakery Shop">
+        <img
+            src="./arbees-bakeshop-logo1.png"
+            class="auth-logo"
+            alt="Arbee's Bakery Shop"
+        >
 
         <h1>ARBEES BAKERY SHOP</h1>
-        <p class="auth-subtitle">Inventory Management System</p>
 
-        <form id="loginForm">
+        <p class="auth-subtitle">
+            Bakery Inventory Management System
+        </p>
 
-            <div class="form-group">
-                <label>Email</label>
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Enter your email"
-                    required>
+        <div class="google-login-box">
+
+            <div class="google-icon">
+                G
             </div>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    required>
-            </div>
+            <h2>Login with Google</h2>
 
-            <button type="submit" class="main-btn">
-                Login
+            <p>
+                Use your Google account to continue.
+            </p>
+
+            <button id="googleLoginBtn" class="google-btn">
+                <span class="google-letter">G</span>
+                Continue with Google
             </button>
 
             <p id="loginError" class="error-message"></p>
 
-        </form>
-
-        <div class="divider">
-            <span>OR</span>
         </div>
 
-        <button id="googleLoginBtn" class="google-btn">
-            <span class="google-icon">G</span>
-            Continue with Google
-        </button>
-
-        <p class="switch-text">
-            Don't have an account?
-            <button type="button" id="showRegisterBtn">
-                Register
-            </button>
+        <p class="security-note">
+            🔒 Secure authentication powered by Firebase
         </p>
 
     </div>
@@ -75,114 +60,93 @@
 </section>
 
 
-<!-- ================= REGISTER ================= -->
-<section id="registerPage" class="auth-page hidden">
-
-    <div class="auth-card">
-
-        <img src="arbees-bakeshop-logo1.png"
-             class="auth-logo"
-             alt="Arbees Bakery Shop">
-
-        <h1>Create Account</h1>
-        <p class="auth-subtitle">
-            Register using Google for secure verification
-        </p>
-
-        <button id="googleRegisterBtn" class="google-btn">
-            <span class="google-icon">G</span>
-            Register with Google
-        </button>
-
-        <p id="registerError" class="error-message"></p>
-
-        <p class="switch-text">
-            Already have an account?
-            <button type="button" id="showLoginBtn">
-                Login
-            </button>
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- ================= OTP VERIFICATION ================= -->
+<!-- ================= OTP PAGE ================= -->
 <section id="otpPage" class="auth-page hidden">
 
     <div class="auth-card otp-card">
 
-        <div class="verification-icon">
-            ✓
+        <div class="security-icon">
+            📱
         </div>
 
-        <h1>OTP Verification</h1>
+        <h1>Phone Verification</h1>
 
         <p class="auth-subtitle">
-            We need to verify your phone number before entering the system.
+            Verify your phone number to continue
         </p>
 
-        <div id="googleUserInfo" class="google-user-info"></div>
+        <div id="googleUserInfo" class="google-user-info">
 
-        <form id="phoneForm">
+            <img id="googleUserPhoto" src="./MY PICTURE.jpg" alt="User">
 
-            <div class="form-group">
-                <label>Phone Number</label>
+            <div>
+                <strong id="googleUserName">
+                    Google User
+                </strong>
 
-                <input
-                    type="tel"
-                    id="phoneNumber"
-                    placeholder="+639XXXXXXXXX"
-                    required>
-
-                <small>
-                    Example: +639171234567
+                <small id="googleUserEmail">
+                    user@gmail.com
                 </small>
             </div>
 
+        </div>
+
+
+        <!-- PHONE NUMBER -->
+        <form id="phoneForm">
+
+            <label for="phoneNumber">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="phoneNumber"
+                placeholder="+639XXXXXXXXX"
+                required
+            >
+
+            <small class="input-help">
+                Example: +639123456789
+            </small>
+
             <div id="recaptcha-container"></div>
 
-            <button type="submit" class="main-btn">
+            <button type="submit" class="primary-btn">
                 Send OTP
             </button>
 
         </form>
 
+
+        <!-- OTP -->
         <form id="otpForm" class="hidden">
 
-            <div class="form-group">
-                <label>Enter OTP</label>
+            <label for="otpCode">
+                Enter 6-digit OTP
+            </label>
 
-                <input
-                    type="text"
-                    id="otpCode"
-                    maxlength="6"
-                    inputmode="numeric"
-                    placeholder="6-digit OTP"
-                    required>
-            </div>
+            <input
+                type="text"
+                id="otpCode"
+                maxlength="6"
+                inputmode="numeric"
+                placeholder="123456"
+                required
+            >
 
-            <button type="submit" class="main-btn">
+            <p id="otpMessage" class="success-message"></p>
+
+            <button type="submit" class="primary-btn">
                 Verify OTP
-            </button>
-
-            <button
-                type="button"
-                id="resendOtpBtn"
-                class="secondary-btn">
-                Resend OTP
             </button>
 
         </form>
 
-        <p id="otpMessage" class="success-message"></p>
+
         <p id="otpError" class="error-message"></p>
 
-        <button
-            type="button"
-            id="otpBackBtn"
-            class="back-btn">
+        <button id="otpBackBtn" class="back-btn">
             Back to Login
         </button>
 
@@ -191,7 +155,7 @@
 </section>
 
 
-<!-- ================= SYSTEM ================= -->
+<!-- ================= MAIN SYSTEM ================= -->
 <section id="systemPage" class="system-page hidden">
 
     <!-- SIDEBAR -->
@@ -200,73 +164,66 @@
         <div class="sidebar-logo">
 
             <img
-                src="arbees-bakeshop-logo1.png"
-                alt="Arbees Bakery Shop">
+                src="./arbees-bakeshop-logo1.png"
+                alt="Arbee's Bakery Shop"
+            >
 
             <h2>ARBEES</h2>
             <span>BAKERY SHOP</span>
 
         </div>
 
-        <nav>
 
-            <button
-                class="nav-btn active"
-                data-page="dashboard">
-                Dashboard
+        <nav class="sidebar-nav">
+
+            <button class="nav-btn active" data-page="dashboard">
+                🏠 Dashboard
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="inventory">
-                Inventory
+            <button class="nav-btn" data-page="inventory">
+                📦 Inventory
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="addProduct">
-                Add Product
+            <button class="nav-btn" data-page="addProduct">
+                ➕ Add Product
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="activity">
-                Activity Logs
+            <button class="nav-btn" data-page="activity">
+                📋 Activity Logs
             </button>
 
-            <button
-                class="nav-btn"
-                data-page="users">
-                Account
+            <button class="nav-btn" data-page="users">
+                👤 Account
             </button>
 
         </nav>
 
+
         <button id="logoutBtn" class="logout-btn">
-            Logout
+            🚪 Logout
         </button>
 
     </aside>
 
 
-    <!-- MAIN -->
-    <main class="main-area">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
-        <!-- TOPBAR -->
-        <header class="topbar">
+        <!-- HEADER -->
+        <header class="top-header">
 
             <div>
-                <h2 id="pageTitle">
-                    Dashboard
-                </h2>
+                <h2>Arbee's Bakery Shop</h2>
+                <p>Inventory Management System</p>
             </div>
 
-            <div class="top-profile">
+            <div class="header-user">
 
                 <img
-                    id="profileHeaderImage"
-                    src="MY PICTURE.jpg"
-                    alt="Profile">
+                    id="headerUserPhoto"
+                    src="./MY PICTURE.jpg"
+                    alt="User"
+                >
 
                 <div>
                     <strong id="headerUserName">
@@ -274,7 +231,7 @@
                     </strong>
 
                     <small id="headerUserEmail">
-                        user@email.com
+                        user@gmail.com
                     </small>
                 </div>
 
@@ -284,52 +241,49 @@
 
 
         <!-- ================= DASHBOARD ================= -->
-        <section
-            id="dashboardPage"
-            class="page">
+        <section id="dashboardPage" class="content-page">
 
-            <div class="welcome-box">
-
-                <h1>
-                    Welcome,
-                    <span id="currentUserName">
-                        User
-                    </span>
-                </h1>
-
-                <p>
-                    Manage your bakery products and inventory.
-                </p>
-
-                <span id="userRole" class="role-badge">
-                    Staff
-                </span>
-
+            <div class="page-title">
+                <h1>Dashboard</h1>
+                <p>Overview of your bakery inventory</p>
             </div>
 
 
             <div class="stats-grid">
 
                 <div class="stat-card">
-                    <span>Total Products</span>
-                    <strong id="totalProducts">0</strong>
+                    <span>📦</span>
+                    <div>
+                        <p>Total Products</p>
+                        <h2 id="totalProducts">0</h2>
+                    </div>
                 </div>
 
-                <div class="stat-card">
-                    <span>Total Stock</span>
-                    <strong id="totalStock">0</strong>
-                </div>
 
                 <div class="stat-card">
-                    <span>Low Stock Items</span>
-                    <strong id="lowStock">0</strong>
+                    <span>🍞</span>
+                    <div>
+                        <p>Total Stock</p>
+                        <h2 id="totalStock">0</h2>
+                    </div>
                 </div>
 
+
                 <div class="stat-card">
-                    <span>Estimated Value</span>
-                    <strong id="estimatedValue">
-                        ₱0.00
-                    </strong>
+                    <span>⚠️</span>
+                    <div>
+                        <p>Low Stock Items</p>
+                        <h2 id="lowStock">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <span>₱</span>
+                    <div>
+                        <p>Estimated Value</p>
+                        <h2 id="estimatedValue">₱0.00</h2>
+                    </div>
                 </div>
 
             </div>
@@ -337,14 +291,14 @@
 
             <div class="dashboard-grid">
 
-                <div class="content-card">
+                <div class="panel">
 
-                    <div class="card-header">
-                        <h3>Low Stock Products</h3>
+                    <div class="panel-header">
+                        <h2>Low Stock Products</h2>
                     </div>
 
-                    <div id="lowStockList">
-                        <p class="empty-text">
+                    <div id="lowStockList" class="low-stock-list">
+                        <p class="empty-message">
                             No low stock products.
                         </p>
                     </div>
@@ -352,14 +306,14 @@
                 </div>
 
 
-                <div class="content-card">
+                <div class="panel">
 
-                    <div class="card-header">
-                        <h3>Recent Activity</h3>
+                    <div class="panel-header">
+                        <h2>Recent Activity</h2>
                     </div>
 
                     <div id="recentActivity">
-                        <p class="empty-text">
+                        <p class="empty-message">
                             No recent activity.
                         </p>
                     </div>
@@ -372,20 +326,19 @@
 
 
         <!-- ================= INVENTORY ================= -->
-        <section
-            id="inventoryPage"
-            class="page hidden">
+        <section id="inventoryPage" class="content-page hidden">
 
-            <div class="page-header">
+            <div class="page-title-row">
 
                 <div>
                     <h1>Inventory</h1>
-                    <p>Manage bakery products.</p>
+                    <p>Manage bakery products</p>
                 </div>
 
                 <button
                     id="inventoryAddBtn"
-                    class="main-btn small-btn">
+                    class="primary-btn"
+                >
                     + Add Product
                 </button>
 
@@ -397,7 +350,8 @@
                 <input
                     type="text"
                     id="searchProduct"
-                    placeholder="Search product...">
+                    placeholder="Search product..."
+                >
 
                 <select id="categoryFilter">
 
@@ -421,8 +375,8 @@
                         Cookies
                     </option>
 
-                    <option value="Others">
-                        Others
+                    <option value="Other">
+                        Other
                     </option>
 
                 </select>
@@ -430,7 +384,7 @@
             </div>
 
 
-            <div class="table-card">
+            <div class="table-container">
 
                 <table>
 
@@ -442,13 +396,14 @@
                             <th>Category</th>
                             <th>Quantity</th>
                             <th>Price</th>
-                            <th>Stock Status</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
 
                     </thead>
 
                     <tbody id="inventoryTableBody">
+
                     </tbody>
 
                 </table>
@@ -459,16 +414,17 @@
 
 
         <!-- ================= ADD PRODUCT ================= -->
-        <section
-            id="addProductPage"
-            class="page hidden">
+        <section id="addProductPage" class="content-page hidden">
 
-            <div class="page-header">
+            <div class="page-title">
 
-                <div>
-                    <h1>Add Product</h1>
-                    <p>Add a new bakery product.</p>
-                </div>
+                <h1 id="productFormTitle">
+                    Add Product
+                </h1>
+
+                <p>
+                    Add a new bakery product
+                </p>
 
             </div>
 
@@ -488,7 +444,8 @@
                             <input
                                 type="text"
                                 id="productName"
-                                required>
+                                required
+                            >
 
                         </div>
 
@@ -502,7 +459,8 @@
                             <input
                                 type="text"
                                 id="productSKU"
-                                required>
+                                required
+                            >
 
                         </div>
 
@@ -515,7 +473,8 @@
 
                             <select
                                 id="productCategory"
-                                required>
+                                required
+                            >
 
                                 <option value="">
                                     Select Category
@@ -537,8 +496,8 @@
                                     Cookies
                                 </option>
 
-                                <option value="Others">
-                                    Others
+                                <option value="Other">
+                                    Other
                                 </option>
 
                             </select>
@@ -556,7 +515,8 @@
                                 type="number"
                                 id="productQuantity"
                                 min="0"
-                                required>
+                                required
+                            >
 
                         </div>
 
@@ -572,7 +532,8 @@
                                 id="productPrice"
                                 min="0"
                                 step="0.01"
-                                required>
+                                required
+                            >
 
                         </div>
 
@@ -588,18 +549,33 @@
                                 id="lowStockThreshold"
                                 min="0"
                                 value="5"
-                                required>
+                                required
+                            >
 
                         </div>
 
                     </div>
 
 
-                    <button
-                        type="submit"
-                        class="main-btn">
-                        Save Product
-                    </button>
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            Save Product
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelProductBtn"
+                            class="secondary-btn"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
 
                     <p id="productMessage"></p>
 
@@ -611,21 +587,20 @@
 
 
         <!-- ================= ACTIVITY ================= -->
-        <section
-            id="activityPage"
-            class="page hidden">
+        <section id="activityPage" class="content-page hidden">
 
-            <div class="page-header">
+            <div class="page-title">
 
-                <div>
-                    <h1>Activity Logs</h1>
-                    <p>System activity history.</p>
-                </div>
+                <h1>Activity Logs</h1>
+
+                <p>
+                    Record of system activities
+                </p>
 
             </div>
 
 
-            <div class="table-card">
+            <div class="table-container">
 
                 <table>
 
@@ -641,6 +616,7 @@
                     </thead>
 
                     <tbody id="activityTableBody">
+
                     </tbody>
 
                 </table>
@@ -651,16 +627,15 @@
 
 
         <!-- ================= ACCOUNT ================= -->
-        <section
-            id="usersPage"
-            class="page hidden">
+        <section id="usersPage" class="content-page hidden">
 
-            <div class="page-header">
+            <div class="page-title">
 
-                <div>
-                    <h1>My Account</h1>
-                    <p>Your verified account information.</p>
-                </div>
+                <h1>My Account</h1>
+
+                <p>
+                    Google authenticated account
+                </p>
 
             </div>
 
@@ -668,35 +643,22 @@
             <div class="profile-card">
 
                 <img
-                    src="MY PICTURE.jpg"
-                    id="profileImage"
-                    alt="Profile">
+                    id="profilePhoto"
+                    src="./MY PICTURE.jpg"
+                    alt="Profile"
+                >
 
-                <div class="profile-info">
+                <h2 id="profileName">
+                    User
+                </h2>
 
-                    <h2 id="profileName">
-                        User
-                    </h2>
+                <p id="profileEmail">
+                    user@gmail.com
+                </p>
 
-                    <p id="profileEmail">
-                        user@email.com
-                    </p>
-
-                    <span
-                        id="profileRole"
-                        class="role-badge">
-                        Staff
-                    </span>
-
-                    <p class="verified-label">
-                        ✓ Google verified
-                    </p>
-
-                        <p class="verified-label">
-                        ✓ OTP verified
-                    </p>
-
-                </div>
+                <span id="profileRole" class="role-badge">
+                    Staff
+                </span>
 
             </div>
 
@@ -705,6 +667,9 @@
     </main>
 
 </section>
+
+
+<script type="module" src="./script.js"></script>
 
 </body>
 </html>
