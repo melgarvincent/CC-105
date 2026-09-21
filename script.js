@@ -1,8 +1,3 @@
-/* =========================================================
-   ARBEES BAKERY SHOP
-   Firebase Google Authentication + Phone OTP
-   ========================================================= */
-
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
@@ -21,44 +16,44 @@ import {
     getDatabase,
     ref,
     set,
-    push,
     get,
+    push,
     update,
     remove
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-/* =========================================================
+/* =====================================================
    FIREBASE CONFIG
-   ========================================================= */
+===================================================== */
 
 const firebaseConfig = {
 
     apiKey: "PASTE_YOUR_API_KEY_HERE",
 
     authDomain:
-        "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+        "crudfirebase-b2a1f-default.firebaseapp.com",
 
     databaseURL:
         "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com/",
 
     projectId:
-        "PASTE_YOUR_PROJECT_ID",
+        "PASTE_YOUR_PROJECT_ID_HERE",
 
     storageBucket:
-        "PASTE_YOUR_STORAGE_BUCKET",
+        "PASTE_YOUR_STORAGE_BUCKET_HERE",
 
     messagingSenderId:
-        "PASTE_YOUR_MESSAGING_SENDER_ID",
+        "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
 
     appId:
-        "PASTE_YOUR_APP_ID"
+        "PASTE_YOUR_APP_ID_HERE"
 };
 
 
-/* =========================================================
+/* =====================================================
    INITIALIZE FIREBASE
-   ========================================================= */
+===================================================== */
 
 const app = initializeApp(firebaseConfig);
 
@@ -68,40 +63,10 @@ const db = getDatabase(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-googleProvider.setCustomParameters({
-    prompt: "select_account"
-});
 
-
-/* =========================================================
-   DATABASE REFERENCES
-   ========================================================= */
-
-const productsRef = ref(db, "bakeryProducts");
-
-const activityRef = ref(db, "activityLogs");
-
-const usersRef = ref(db, "users");
-
-
-/* =========================================================
-   GLOBAL VARIABLES
-   ========================================================= */
-
-let currentUser = null;
-
-let confirmationResult = null;
-
-let recaptchaVerifier = null;
-
-let editingProductId = null;
-
-let allProducts = {};
-
-
-/* =========================================================
-   PAGE ELEMENTS
-   ========================================================= */
+/* =====================================================
+   DOM
+===================================================== */
 
 const loginPage =
     document.getElementById("loginPage");
@@ -112,25 +77,62 @@ const otpPage =
 const systemPage =
     document.getElementById("systemPage");
 
-const dashboardPage =
-    document.getElementById("dashboardPage");
+const googleLoginBtn =
+    document.getElementById("googleLoginBtn");
 
-const inventoryPage =
-    document.getElementById("inventoryPage");
+const loginError =
+    document.getElementById("loginError");
 
-const addProductPage =
-    document.getElementById("addProductPage");
+const otpError =
+    document.getElementById("otpError");
 
-const activityPage =
-    document.getElementById("activityPage");
+const otpMessage =
+    document.getElementById("otpMessage");
 
-const usersPage =
-    document.getElementById("usersPage");
+const phoneStep =
+    document.getElementById("phoneStep");
+
+const otpStep =
+    document.getElementById("otpStep");
+
+const phoneNumber =
+    document.getElementById("phoneNumber");
+
+const otpCode =
+    document.getElementById("otpCode");
+
+const sendOtpBtn =
+    document.getElementById("sendOtpBtn");
+
+const verifyOtpBtn =
+    document.getElementById("verifyOtpBtn");
+
+const resendOtpBtn =
+    document.getElementById("resendOtpBtn");
+
+const otpBackBtn =
+    document.getElementById("otpBackBtn");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 
-/* =========================================================
-   SHOW / HIDE PAGES
-   ========================================================= */
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+let confirmationResult = null;
+
+let recaptchaVerifier = null;
+
+let editingProductId = null;
+
+
+/* =====================================================
+   PAGE FUNCTIONS
+===================================================== */
 
 function showLogin() {
 
@@ -139,6 +141,7 @@ function showLogin() {
     otpPage.classList.add("hidden");
 
     systemPage.classList.add("hidden");
+
 }
 
 
@@ -161,30 +164,25 @@ function showSystem() {
 
     systemPage.classList.remove("hidden");
 
-    showSystemPage("dashboard");
-
     loadDashboard();
 
-    loadInventory();
-
-    loadActivity();
-
-    loadUserProfile();
 }
 
 
-/* =========================================================
+/* =====================================================
    GOOGLE LOGIN
-   ========================================================= */
+===================================================== */
 
-document
-    .getElementById("googleLoginBtn")
-    .addEventListener("click", async () => {
+googleLoginBtn.addEventListener(
+    "click",
+    async () => {
 
-        const errorBox =
-            document.getElementById("loginError");
+        loginError.textContent = "";
 
-        errorBox.textContent = "";
+        googleLoginBtn.disabled = true;
+
+        googleLoginBtn.textContent =
+            "Connecting to Google...";
 
         try {
 
@@ -196,86 +194,54 @@ document
 
             currentUser = result.user;
 
-            displayGoogleUser();
+            /*
+             * Google authentication completed.
+             * The user still needs phone OTP.
+             */
+
+            sessionStorage.setItem(
+                "googleVerified",
+                "true"
+            );
 
             showOTP();
 
-            setupRecaptcha();
+            prepareRecaptcha();
 
         } catch (error) {
 
             console.error(error);
 
-            errorBox.textContent =
+            loginError.textContent =
                 getAuthError(error);
+
+        } finally {
+
+            googleLoginBtn.disabled = false;
+
+            googleLoginBtn.innerHTML =
+                '<span class="google-icon">G</span> Continue with Google';
 
         }
 
-    });
+    }
+);
 
 
-/* =========================================================
-   DISPLAY GOOGLE USER
-   ========================================================= */
+/* =====================================================
+   RECAPTCHA
+===================================================== */
 
-function displayGoogleUser() {
-
-    if (!currentUser) return;
-
-    const name =
-        currentUser.displayName ||
-        "Google User";
-
-    const email =
-        currentUser.email ||
-        "";
-
-    const photo =
-        currentUser.photoURL ||
-        "./MY PICTURE.jpg";
-
-
-    document.getElementById(
-        "googleUserName"
-    ).textContent = name;
-
-
-    document.getElementById(
-        "googleUserEmail"
-    ).textContent = email;
-
-
-    document.getElementById(
-        "googleUserPhoto"
-    ).src = photo;
-
-}
-
-
-/* =========================================================
-   SETUP RECAPTCHA
-   ========================================================= */
-
-function setupRecaptcha() {
-
-    const container =
-        document.getElementById(
-            "recaptcha-container"
-        );
-
-    container.innerHTML = "";
+function prepareRecaptcha() {
 
     if (recaptchaVerifier) {
 
         try {
             recaptchaVerifier.clear();
-        } catch (error) {
-            console.log(error);
-        }
+        } catch (e) {}
 
         recaptchaVerifier = null;
     }
-
 
     recaptchaVerifier =
         new RecaptchaVerifier(
@@ -285,89 +251,114 @@ function setupRecaptcha() {
 
                 size: "normal",
 
-                callback: function () {
+                callback: () => {
 
-                    console.log(
-                        "reCAPTCHA completed."
-                    );
+                    otpMessage.textContent =
+                        "Verification completed. You can send the OTP.";
 
                 },
 
-                "expired-callback":
-                    function () {
+                "expired-callback": () => {
 
-                        document.getElementById(
-                            "otpError"
-                        ).textContent =
-                            "reCAPTCHA expired. Please try again.";
+                    otpMessage.textContent =
+                        "reCAPTCHA expired. Please verify again.";
 
-                    }
+                }
 
             }
         );
 
+    recaptchaVerifier.render();
 }
 
 
-/* =========================================================
+/* =====================================================
+   PHONE NUMBER FORMAT
+===================================================== */
+
+function formatPhilippineNumber(value) {
+
+    let phone = value.trim();
+
+    /*
+     * 09171234567
+     * becomes
+     * +639171234567
+     */
+
+    if (phone.startsWith("09")) {
+
+        phone =
+            "+63" +
+            phone.substring(1);
+
+    }
+
+    /*
+     * 639171234567
+     * becomes
+     * +639171234567
+     */
+
+    if (phone.startsWith("639")) {
+
+        phone =
+            "+" +
+            phone;
+
+    }
+
+    return phone;
+}
+
+
+/* =====================================================
    SEND OTP
-   ========================================================= */
+===================================================== */
 
-document
-    .getElementById("phoneForm")
-    .addEventListener("submit", async (event) => {
+sendOtpBtn.addEventListener(
+    "click",
+    async () => {
 
-        event.preventDefault();
+        otpError.textContent = "";
 
-
-        const phoneNumber =
-            document
-                .getElementById("phoneNumber")
-                .value
-                .trim();
-
-
-        const errorBox =
-            document.getElementById(
-                "otpError"
-            );
-
-        const messageBox =
-            document.getElementById(
-                "otpMessage"
-            );
-
-
-        errorBox.textContent = "";
-
-        messageBox.textContent = "";
-
-
-        /* Philippine number validation */
-
-        if (!/^\+639\d{9}$/.test(phoneNumber)) {
-
-            errorBox.textContent =
-                "Use Philippine format: +639XXXXXXXXX";
-
-            return;
-        }
-
+        otpMessage.textContent = "";
 
         if (!currentUser) {
 
-            errorBox.textContent =
+            otpError.textContent =
                 "Please login with Google first.";
 
             return;
         }
 
+        let phone =
+            formatPhilippineNumber(
+                phoneNumber.value
+            );
+
+        if (
+            !phone.startsWith("+63") ||
+            phone.length < 13
+        ) {
+
+            otpError.textContent =
+                "Enter a valid Philippine number, example: +639171234567";
+
+            return;
+        }
 
         try {
 
+            sendOtpBtn.disabled = true;
+
+            sendOtpBtn.textContent =
+                "Sending OTP...";
+
+
             if (!recaptchaVerifier) {
 
-                setupRecaptcha();
+                prepareRecaptcha();
 
             }
 
@@ -380,114 +371,107 @@ document
             confirmationResult =
                 await linkWithPhoneNumber(
                     currentUser,
-                    phoneNumber,
+                    phone,
                     recaptchaVerifier
                 );
 
 
-            document
-                .getElementById("phoneForm")
-                .classList.add("hidden");
+            phoneStep.classList.add("hidden");
 
+            otpStep.classList.remove("hidden");
 
-            document
-                .getElementById("otpForm")
-                .classList.remove("hidden");
+            otpMessage.textContent =
+                "OTP sent to " + phone;
 
-
-            messageBox.textContent =
-                "OTP sent to your phone.";
 
         } catch (error) {
 
             console.error(error);
 
-            errorBox.textContent =
+            otpError.textContent =
                 getAuthError(error);
-
 
             resetRecaptcha();
 
+        } finally {
+
+            sendOtpBtn.disabled = false;
+
+            sendOtpBtn.textContent =
+                "Send OTP";
+
         }
 
-    });
+    }
+);
 
 
-/* =========================================================
+/* =====================================================
    VERIFY OTP
-   ========================================================= */
+===================================================== */
 
-document
-    .getElementById("otpForm")
-    .addEventListener("submit", async (event) => {
+verifyOtpBtn.addEventListener(
+    "click",
+    async () => {
 
-        event.preventDefault();
+        otpError.textContent = "";
 
+        otpMessage.textContent = "";
 
-        const otp =
-            document
-                .getElementById("otpCode")
-                .value
-                .trim();
-
-
-        const errorBox =
-            document.getElementById(
-                "otpError"
-            );
-
-
-        errorBox.textContent = "";
-
-
-        if (!/^\d{6}$/.test(otp)) {
-
-            errorBox.textContent =
-                "Enter the 6-digit OTP.";
-
-            return;
-        }
-
+        const code =
+            otpCode.value.trim();
 
         if (!confirmationResult) {
 
-            errorBox.textContent =
+            otpError.textContent =
                 "Please request an OTP first.";
 
             return;
         }
 
+        if (!/^\d{6}$/.test(code)) {
+
+            otpError.textContent =
+                "Enter the 6-digit OTP.";
+
+            return;
+        }
 
         try {
 
-            /*
-             * Confirm SMS code.
-             */
+            verifyOtpBtn.disabled = true;
 
-            const userCredential =
-                await confirmationResult.confirm(
-                    otp
-                );
-
-
-            currentUser =
-                userCredential.user;
+            verifyOtpBtn.textContent =
+                "Verifying...";
 
 
             /*
-             * Save verified user in RTDB.
+             * Confirm the SMS code.
              */
 
-            await saveVerifiedUser();
+            const result =
+                await confirmationResult.confirm(code);
+
+            currentUser = result.user;
+
+            sessionStorage.setItem(
+                "otpVerified",
+                "true"
+            );
 
 
             /*
-             * Activity log.
+             * Save user information to RTDB.
              */
 
-            await logActivity(
-                "Authentication",
-                "Google authentication and phone OTP verification completed."
+            await saveUserToDatabase(
+                currentUser
+            );
+
+
+            await addActivity(
+                "Login",
+                "Google authentication and OTP verification successful."
             );
 
 
@@ -497,163 +481,15 @@ document
 
             console.error(error);
 
-            errorBox.textContent =
+            otpError.textContent =
                 getAuthError(error);
 
-        }
+        } finally {
 
-    });
+            verifyOtpBtn.disabled = false;
 
-
-/* =========================================================
-   SAVE USER TO DATABASE
-   ========================================================= */
-
-async function saveVerifiedUser() {
-
-    if (!currentUser) return;
-
-
-    const userRef =
-        ref(
-            db,
-            "users/" + currentUser.uid
-        );
-
-
-    await set(userRef, {
-
-        uid:
-            currentUser.uid,
-
-        name:
-            currentUser.displayName ||
-            "User",
-
-        email:
-            currentUser.email ||
-            "",
-
-        photoURL:
-            currentUser.photoURL ||
-            "",
-
-        phoneNumber:
-            currentUser.phoneNumber ||
-            "",
-
-        role:
-            "staff",
-
-        googleVerified:
-            true,
-
-        otpVerified:
-            true,
-
-        verifiedAt:
-            new Date().toISOString()
-
-    });
-
-}
-
-
-/* =========================================================
-   BACK TO LOGIN
-   ========================================================= */
-
-document
-    .getElementById("otpBackBtn")
-    .addEventListener("click", async () => {
-
-        try {
-
-            await signOut(auth);
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-
-
-        currentUser = null;
-
-        confirmationResult = null;
-
-        document
-            .getElementById("phoneForm")
-            .classList.remove("hidden");
-
-
-        document
-            .getElementById("otpForm")
-            .classList.add("hidden");
-
-
-        document
-            .getElementById("phoneNumber")
-            .value = "";
-
-
-        document
-            .getElementById("otpCode")
-            .value = "";
-
-
-        showLogin();
-
-    });
-
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-document
-    .getElementById("logoutBtn")
-    .addEventListener("click", async () => {
-
-        try {
-
-            if (currentUser) {
-
-                await logActivity(
-                    "Logout",
-                    "User logged out of the system."
-                );
-
-            }
-
-            await signOut(auth);
-
-            currentUser = null;
-
-            confirmationResult = null;
-
-            showLogin();
-
-        } catch (error) {
-
-            console.error(error);
-
-        }
-
-    });
-
-
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
-
-onAuthStateChanged(
-    auth,
-    (user) => {
-
-        if (user) {
-
-            currentUser = user;
+            verifyOtpBtn.textContent =
+                "Verify OTP";
 
         }
 
@@ -661,13 +497,279 @@ onAuthStateChanged(
 );
 
 
-/* =========================================================
+/* =====================================================
+   RESEND OTP
+===================================================== */
+
+resendOtpBtn.addEventListener(
+    "click",
+    async () => {
+
+        otpStep.classList.add("hidden");
+
+        phoneStep.classList.remove("hidden");
+
+        otpCode.value = "";
+
+        otpError.textContent = "";
+
+        otpMessage.textContent =
+            "Enter your phone number again.";
+
+        resetRecaptcha();
+
+        setTimeout(() => {
+
+            prepareRecaptcha();
+
+        }, 300);
+
+    }
+);
+
+
+/* =====================================================
+   BACK TO LOGIN
+===================================================== */
+
+otpBackBtn.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            await signOut(auth);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+        sessionStorage.clear();
+
+        currentUser = null;
+
+        resetOTPPage();
+
+        showLogin();
+
+    }
+);
+
+
+/* =====================================================
+   RESET RECAPTCHA
+===================================================== */
+
+function resetRecaptcha() {
+
+    if (recaptchaVerifier) {
+
+        try {
+
+            recaptchaVerifier.clear();
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+        recaptchaVerifier = null;
+
+    }
+
+    const container =
+        document.getElementById(
+            "recaptcha-container"
+        );
+
+    if (container) {
+
+        container.innerHTML = "";
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET OTP PAGE
+===================================================== */
+
+function resetOTPPage() {
+
+    phoneStep.classList.remove("hidden");
+
+    otpStep.classList.add("hidden");
+
+    phoneNumber.value = "";
+
+    otpCode.value = "";
+
+    otpError.textContent = "";
+
+    otpMessage.textContent = "";
+
+    confirmationResult = null;
+
+    resetRecaptcha();
+
+}
+
+
+/* =====================================================
+   SAVE USER TO RTDB
+===================================================== */
+
+async function saveUserToDatabase(user) {
+
+    const userRef =
+        ref(db, "users/" + user.uid);
+
+    const snapshot =
+        await get(userRef);
+
+    const oldData =
+        snapshot.exists()
+            ? snapshot.val()
+            : {};
+
+    await set(
+        userRef,
+        {
+
+            uid: user.uid,
+
+            name:
+                user.displayName ||
+                oldData.name ||
+                "User",
+
+            email:
+                user.email ||
+                oldData.email ||
+                "",
+
+            photoURL:
+                user.photoURL ||
+                oldData.photoURL ||
+                "MY PICTURE.jpg",
+
+            phoneNumber:
+                user.phoneNumber ||
+                oldData.phoneNumber ||
+                "",
+
+            role:
+                oldData.role ||
+                "staff",
+
+            googleVerified: true,
+
+            otpVerified: true,
+
+            lastLogin:
+                new Date().toISOString(),
+
+            createdAt:
+                oldData.createdAt ||
+                new Date().toISOString()
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+logoutBtn.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            await addActivity(
+                "Logout",
+                "User logged out of the system."
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+        await signOut(auth);
+
+        sessionStorage.clear();
+
+        currentUser = null;
+
+        resetOTPPage();
+
+        showLogin();
+
+    }
+);
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        currentUser = user;
+
+        if (!user) {
+
+            showLogin();
+
+            return;
+
+        }
+
+
+        /*
+         * If Google login happened but OTP
+         * has not been completed, stay on OTP.
+         */
+
+        const otpVerified =
+            sessionStorage.getItem(
+                "otpVerified"
+            );
+
+        if (otpVerified === "true") {
+
+            showSystem();
+
+        } else {
+
+            showOTP();
+
+            prepareRecaptcha();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    NAVIGATION
-   ========================================================= */
+===================================================== */
 
 document
     .querySelectorAll(".nav-btn")
-    .forEach((button) => {
+    .forEach(button => {
 
         button.addEventListener(
             "click",
@@ -676,7 +778,7 @@ document
                 const page =
                     button.dataset.page;
 
-                showSystemPage(page);
+                showPage(page);
 
             }
         );
@@ -684,40 +786,27 @@ document
     });
 
 
-function showSystemPage(pageName) {
+function showPage(page) {
 
-    const pages = {
+    document
+        .querySelectorAll(".page")
+        .forEach(section => {
 
-        dashboard:
-            dashboardPage,
-
-        inventory:
-            inventoryPage,
-
-        addProduct:
-            addProductPage,
-
-        activity:
-            activityPage,
-
-        users:
-            usersPage
-
-    };
-
-
-    Object.values(pages)
-        .forEach(page => {
-
-            page.classList.add("hidden");
+            section.classList.add("hidden");
 
         });
 
 
-    if (pages[pageName]) {
+    const selected =
+        document.getElementById(
+            page + "Page"
+        );
 
-        pages[pageName]
-            .classList.remove("hidden");
+    if (selected) {
+
+        selected.classList.remove(
+            "hidden"
+        );
 
     }
 
@@ -726,257 +815,333 @@ function showSystemPage(pageName) {
         .querySelectorAll(".nav-btn")
         .forEach(button => {
 
-            button.classList.remove("active");
+            button.classList.remove(
+                "active"
+            );
 
         });
 
 
     const activeButton =
         document.querySelector(
-            `.nav-btn[data-page="${pageName}"]`
+            `[data-page="${page}"]`
         );
-
 
     if (activeButton) {
 
-        activeButton.classList.add("active");
+        activeButton.classList.add(
+            "active"
+        );
+
+    }
+
+
+    const titles = {
+
+        dashboard: "Dashboard",
+
+        inventory: "Inventory",
+
+        addProduct: "Add Product",
+
+        activity: "Activity Logs",
+
+        users: "My Account"
+
+    };
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        titles[page] || "Dashboard";
+
+
+    if (page === "dashboard") {
+
+        loadDashboard();
+
+    }
+
+    if (page === "inventory") {
+
+        loadInventory();
+
+    }
+
+    if (page === "activity") {
+
+        loadActivities();
+
+    }
+
+    if (page === "users") {
+
+        loadProfile();
 
     }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ADD PRODUCT BUTTON
-   ========================================================= */
+===================================================== */
 
 document
     .getElementById("inventoryAddBtn")
-    .addEventListener("click", () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        resetProductForm();
+            startAddProduct();
 
-        showSystemPage("addProduct");
-
-    });
+        }
+    );
 
 
 document
     .getElementById("cancelProductBtn")
-    .addEventListener("click", () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        resetProductForm();
+            startAddProduct();
 
-        showSystemPage("inventory");
+            showPage("inventory");
 
-    });
+        }
+    );
 
 
-/* =========================================================
+/* =====================================================
    PRODUCT FORM
-   ========================================================= */
+===================================================== */
 
 document
     .getElementById("productForm")
-    .addEventListener("submit", async (event) => {
+    .addEventListener(
+        "submit",
+        async event => {
 
-        event.preventDefault();
+            event.preventDefault();
 
-
-        const name =
-            document.getElementById(
-                "productName"
-            ).value.trim();
-
-
-        const sku =
-            document.getElementById(
-                "productSKU"
-            ).value.trim();
-
-
-        const category =
-            document.getElementById(
-                "productCategory"
-            ).value;
-
-
-        const quantity =
-            Number(
+            const name =
                 document.getElementById(
-                    "productQuantity"
-                ).value
-            );
+                    "productName"
+                ).value.trim();
 
-
-        const price =
-            Number(
+            const sku =
                 document.getElementById(
-                    "productPrice"
-                ).value
-            );
+                    "productSKU"
+                ).value.trim();
 
-
-        const threshold =
-            Number(
+            const category =
                 document.getElementById(
-                    "lowStockThreshold"
-                ).value
-            );
+                    "productCategory"
+                ).value;
 
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "productQuantity"
+                    ).value
+                );
 
-        const message =
-            document.getElementById(
-                "productMessage"
-            );
+            const price =
+                Number(
+                    document.getElementById(
+                        "productPrice"
+                    ).value
+                );
 
-
-        if (!name ||
-            !sku ||
-            !category) {
-
-            message.textContent =
-                "Please complete all required fields.";
-
-            message.style.color =
-                "#dc3545";
-
-            return;
-        }
-
-
-        if (quantity < 0 ||
-            price < 0 ||
-            threshold < 0) {
-
-            message.textContent =
-                "Values cannot be negative.";
-
-            message.style.color =
-                "#dc3545";
-
-            return;
-        }
-
-
-        try {
-
-            if (editingProductId) {
-
-                const productRef =
-                    ref(
-                        db,
-                        "bakeryProducts/" +
-                        editingProductId
-                    );
-
-
-                await update(
-                    productRef,
-                    {
-
-                        name,
-                        sku,
-                        category,
-                        quantity,
-                        price,
-                        threshold,
-                        updatedAt:
-                            new Date().toISOString(),
-
-                        updatedBy:
-                            currentUser?.email || ""
-
-                    }
+            const threshold =
+                Number(
+                    document.getElementById(
+                        "lowStockThreshold"
+                    ).value
                 );
 
 
-                await logActivity(
-                    "Update Product",
-                    `Updated product: ${name}`
+            if (
+                !name ||
+                !sku ||
+                !category ||
+                quantity < 0 ||
+                price < 0 ||
+                threshold < 0
+            ) {
+
+                showProductMessage(
+                    "Please complete all fields.",
+                    true
                 );
 
-
-                message.textContent =
-                    "Product updated successfully.";
-
-            } else {
-
-                const newProductRef =
-                    push(productsRef);
-
-
-                await set(
-                    newProductRef,
-                    {
-
-                        name,
-                        sku,
-                        category,
-                        quantity,
-                        price,
-                        threshold,
-
-                        createdAt:
-                            new Date().toISOString(),
-
-                        createdBy:
-                            currentUser?.email || ""
-
-                    }
-                );
-
-
-                await logActivity(
-                    "Add Product",
-                    `Added product: ${name}`
-                );
-
-
-                message.textContent =
-                    "Product added successfully.";
-
+                return;
             }
 
 
-            message.style.color =
-                "#198754";
+            try {
+
+                let productId =
+                    editingProductId;
 
 
-            resetProductForm();
+                if (productId) {
 
-            await loadInventory();
+                    const productRef =
+                        ref(
+                            db,
+                            "bakeryProducts/" +
+                            productId
+                        );
 
-            await loadDashboard();
+                    await update(
+                        productRef,
+                        {
+
+                            name,
+
+                            sku,
+
+                            category,
+
+                            quantity,
+
+                            price,
+
+                            threshold,
+
+                            updatedAt:
+                                new Date()
+                                    .toISOString()
+
+                        }
+                    );
 
 
-            setTimeout(() => {
+                    await addActivity(
+                        "Update Product",
+                        `${name} (${sku}) was updated.`
+                    );
 
-                showSystemPage("inventory");
 
-            }, 800);
+                    showProductMessage(
+                        "Product updated successfully."
+                    );
 
 
-        } catch (error) {
+                } else {
 
-            console.error(error);
+                    const newProductRef =
+                        push(
+                            ref(
+                                db,
+                                "bakeryProducts"
+                            )
+                        );
 
-            message.textContent =
-                "Failed to save product.";
 
-            message.style.color =
-                "#dc3545";
+                    await set(
+                        newProductRef,
+                        {
+
+                            name,
+
+                            sku,
+
+                            category,
+
+                            quantity,
+
+                            price,
+
+                            threshold,
+
+                            createdAt:
+                                new Date()
+                                    .toISOString(),
+
+                            createdBy:
+                                currentUser
+                                    ? currentUser.uid
+                                    : ""
+
+                        }
+                    );
+
+
+                    await addActivity(
+                        "Add Product",
+                        `${name} (${sku}) was added.`
+                    );
+
+
+                    showProductMessage(
+                        "Product added successfully."
+                    );
+
+                }
+
+
+                document
+                    .getElementById(
+                        "productForm"
+                    )
+                    .reset();
+
+                editingProductId = null;
+
+                document.getElementById(
+                    "productFormTitle"
+                ).textContent =
+                    "Add Product";
+
+
+                await loadInventory();
+
+                await loadDashboard();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showProductMessage(
+                    error.message,
+                    true
+                );
+
+            }
 
         }
+    );
 
-    });
+
+function showProductMessage(
+    message,
+    isError = false
+) {
+
+    const element =
+        document.getElementById(
+            "productMessage"
+        );
+
+    element.textContent = message;
+
+    element.style.color =
+        isError
+            ? "#d9534f"
+            : "#2e8b57";
+
+}
 
 
-/* =========================================================
-   RESET PRODUCT FORM
-   ========================================================= */
+/* =====================================================
+   START ADD PRODUCT
+===================================================== */
 
-function resetProductForm() {
+function startAddProduct() {
 
     editingProductId = null;
 
@@ -984,221 +1149,84 @@ function resetProductForm() {
         .getElementById("productForm")
         .reset();
 
+    document.getElementById(
+        "productFormTitle"
+    ).textContent =
+        "Add Product";
 
-    document
-        .getElementById("lowStockThreshold")
-        .value = 5;
-
-
-    document
-        .getElementById("productFormTitle")
-        .textContent = "Add Product";
-
-
-    document
-        .getElementById("productMessage")
-        .textContent = "";
+    showPage("addProduct");
 
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD INVENTORY
-   ========================================================= */
+===================================================== */
 
 async function loadInventory() {
-
-    try {
-
-        const snapshot =
-            await get(productsRef);
-
-
-        allProducts =
-            snapshot.exists()
-                ? snapshot.val()
-                : {};
-
-
-        renderInventory();
-
-    } catch (error) {
-
-        console.error(
-            "Inventory error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RENDER INVENTORY
-   ========================================================= */
-
-function renderInventory() {
 
     const tbody =
         document.getElementById(
             "inventoryTableBody"
         );
 
-
     tbody.innerHTML = "";
 
+    try {
 
-    const search =
-        document
-            .getElementById(
-                "searchProduct"
-            )
-            .value
-            .toLowerCase()
-            .trim();
-
-
-    const category =
-        document.getElementById(
-            "categoryFilter"
-        ).value;
+        const snapshot =
+            await get(
+                ref(
+                    db,
+                    "bakeryProducts"
+                )
+            );
 
 
-    Object.entries(allProducts)
-        .forEach(([id, product]) => {
+        if (!snapshot.exists()) {
 
-            const productName =
-                String(
-                    product.name || ""
-                ).toLowerCase();
-
-
-            const productCategory =
-                product.category || "";
-
-
-            if (
-                search &&
-                !productName.includes(search)
-            ) {
-                return;
-            }
-
-
-            if (
-                category !== "all" &&
-                productCategory !== category
-            ) {
-                return;
-            }
-
-
-            const quantity =
-                Number(product.quantity || 0);
-
-
-            const threshold =
-                Number(product.threshold || 0);
-
-
-            const price =
-                Number(product.price || 0);
-
-
-            const lowStock =
-                quantity <= threshold;
-
-
-            const row =
-                document.createElement("tr");
-
-
-            row.innerHTML = `
-
-                <td>
-                    <strong>
-                        ${escapeHTML(product.name || "")}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(product.sku || "")}
-                </td>
-
-                <td>
-                    ${escapeHTML(product.category || "")}
-                </td>
-
-                <td>
-                    ${quantity}
-                </td>
-
-                <td>
-                    ₱${price.toFixed(2)}
-                </td>
-
-                <td>
-
-                    <span class="status ${
-                        lowStock
-                            ? "low-stock"
-                            : "in-stock"
-                    }">
-
-                        ${
-                            lowStock
-                                ? "LOW STOCK"
-                                : "IN STOCK"
-                        }
-
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn edit-btn"
-                        onclick="editProduct('${id}')"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        class="action-btn delete-btn"
-                        onclick="deleteProduct('${id}')"
-                    >
-                        Delete
-                    </button>
-
-                </td>
-
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        No products found.
+                    </td>
+                </tr>
             `;
 
-
-            tbody.appendChild(row);
-
-        });
+            return;
+        }
 
 
-    if (!tbody.children.length) {
+        const products =
+            snapshot.val();
+
+
+        Object.entries(products)
+            .forEach(
+                ([id, product]) => {
+
+                    addProductRow(
+                        tbody,
+                        id,
+                        product
+                    );
+
+                }
+            );
+
+
+        applyFilters();
+
+    } catch (error) {
+
+        console.error(error);
 
         tbody.innerHTML = `
-
             <tr>
-
-                <td
-                    colspan="7"
-                    style="text-align:center;padding:30px;"
-                >
-
-                    No products found.
-
+                <td colspan="7">
+                    Error loading inventory.
                 </td>
-
             </tr>
-
         `;
 
     }
@@ -1206,15 +1234,259 @@ function renderInventory() {
 }
 
 
-/* =========================================================
-   SEARCH / FILTER
-   ========================================================= */
+/* =====================================================
+   PRODUCT ROW
+===================================================== */
+
+function addProductRow(
+    tbody,
+    id,
+    product
+) {
+
+    const quantity =
+        Number(product.quantity || 0);
+
+    const threshold =
+        Number(product.threshold || 0);
+
+
+    let statusText =
+        "IN STOCK";
+
+    let statusClass =
+        "in-stock";
+
+
+    if (quantity === 0) {
+
+        statusText =
+            "OUT OF STOCK";
+
+        statusClass =
+            "out-stock";
+
+    } else if (
+        quantity <= threshold
+    ) {
+
+        statusText =
+            "LOW STOCK";
+
+        statusClass =
+            "low-stock";
+
+    }
+
+
+    const row =
+        document.createElement("tr");
+
+
+    row.dataset.name =
+        (product.name || "")
+            .toLowerCase();
+
+    row.dataset.category =
+        product.category || "";
+
+
+    row.innerHTML = `
+
+        <td>${escapeHTML(product.name || "")}</td>
+
+        <td>${escapeHTML(product.sku || "")}</td>
+
+        <td>${escapeHTML(product.category || "")}</td>
+
+        <td>${quantity}</td>
+
+        <td>
+            ₱${Number(product.price || 0)
+                .toFixed(2)}
+        </td>
+
+        <td>
+            <span class="status ${statusClass}">
+                ${statusText}
+            </span>
+        </td>
+
+        <td>
+
+            <button
+                class="action-btn edit-btn"
+                data-edit="${id}"
+            >
+                Edit
+            </button>
+
+            <button
+                class="action-btn delete-btn"
+                data-delete="${id}"
+            >
+                Delete
+            </button>
+
+        </td>
+    `;
+
+
+    tbody.appendChild(row);
+
+
+    row
+        .querySelector(
+            `[data-edit="${id}"]`
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                editProduct(
+                    id,
+                    product
+                );
+
+            }
+        );
+
+
+    row
+        .querySelector(
+            `[data-delete="${id}"]`
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                deleteProduct(
+                    id,
+                    product
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   EDIT PRODUCT
+===================================================== */
+
+function editProduct(
+    id,
+    product
+) {
+
+    editingProductId = id;
+
+    document.getElementById(
+        "productName"
+    ).value =
+        product.name || "";
+
+    document.getElementById(
+        "productSKU"
+    ).value =
+        product.sku || "";
+
+    document.getElementById(
+        "productCategory"
+    ).value =
+        product.category || "";
+
+    document.getElementById(
+        "productQuantity"
+    ).value =
+        product.quantity || 0;
+
+    document.getElementById(
+        "productPrice"
+    ).value =
+        product.price || 0;
+
+    document.getElementById(
+        "lowStockThreshold"
+    ).value =
+        product.threshold ?? 5;
+
+    document.getElementById(
+        "productFormTitle"
+    ).textContent =
+        "Edit Product";
+
+
+    showPage("addProduct");
+
+}
+
+
+/* =====================================================
+   DELETE PRODUCT
+===================================================== */
+
+async function deleteProduct(
+    id,
+    product
+) {
+
+    const confirmDelete =
+        confirm(
+            `Delete ${product.name}?`
+        );
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await remove(
+            ref(
+                db,
+                "bakeryProducts/" +
+                id
+            )
+        );
+
+
+        await addActivity(
+            "Delete Product",
+            `${product.name} (${product.sku}) was deleted.`
+        );
+
+
+        await loadInventory();
+
+        await loadDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to delete product."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SEARCH + CATEGORY
+===================================================== */
 
 document
     .getElementById("searchProduct")
     .addEventListener(
         "input",
-        renderInventory
+        applyFilters
     );
 
 
@@ -1222,167 +1494,115 @@ document
     .getElementById("categoryFilter")
     .addEventListener(
         "change",
-        renderInventory
+        applyFilters
     );
 
 
-/* =========================================================
-   EDIT PRODUCT
-   ========================================================= */
+function applyFilters() {
 
-window.editProduct =
-    function(id) {
+    const search =
+        document.getElementById(
+            "searchProduct"
+        ).value
+            .toLowerCase()
+            .trim();
 
-        const product =
-            allProducts[id];
-
-
-        if (!product) return;
-
-
-        editingProductId = id;
+    const category =
+        document.getElementById(
+            "categoryFilter"
+        ).value;
 
 
-        document
-            .getElementById(
-                "productName"
-            )
-            .value =
-            product.name || "";
+    document
+        .querySelectorAll(
+            "#inventoryTableBody tr"
+        )
+        .forEach(row => {
+
+            const name =
+                row.dataset.name || "";
+
+            const rowCategory =
+                row.dataset.category || "";
 
 
-        document
-            .getElementById(
-                "productSKU"
-            )
-            .value =
-            product.sku || "";
+            const matchesSearch =
+                name.includes(search);
+
+            const matchesCategory =
+                category === "all" ||
+                rowCategory === category;
 
 
-        document
-            .getElementById(
-                "productCategory"
-            )
-            .value =
-            product.category || "";
+            row.style.display =
+                matchesSearch &&
+                matchesCategory
+                    ? ""
+                    : "none";
+
+        });
+
+}
 
 
-        document
-            .getElementById(
-                "productQuantity"
-            )
-            .value =
-            product.quantity || 0;
-
-
-        document
-            .getElementById(
-                "productPrice"
-            )
-            .value =
-            product.price || 0;
-
-
-        document
-            .getElementById(
-                "lowStockThreshold"
-            )
-            .value =
-            product.threshold || 5;
-
-
-        document
-            .getElementById(
-                "productFormTitle"
-            )
-            .textContent =
-            "Update Product";
-
-
-        document
-            .getElementById(
-                "productMessage"
-            )
-            .textContent = "";
-
-
-        showSystemPage("addProduct");
-
-    };
-
-
-/* =========================================================
-   DELETE PRODUCT
-   ========================================================= */
-
-window.deleteProduct =
-    async function(id) {
-
-        const product =
-            allProducts[id];
-
-
-        if (!product) return;
-
-
-        const confirmed =
-            confirm(
-                `Delete "${product.name}"?`
-            );
-
-
-        if (!confirmed) return;
-
-
-        try {
-
-            await remove(
-                ref(
-                    db,
-                    "bakeryProducts/" + id
-                )
-            );
-
-
-            await logActivity(
-                "Delete Product",
-                `Deleted product: ${product.name}`
-            );
-
-
-            await loadInventory();
-
-            await loadDashboard();
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Failed to delete product."
-            );
-
-        }
-
-    };
-
-
-/* =========================================================
+/* =====================================================
    DASHBOARD
-   ========================================================= */
+===================================================== */
 
 async function loadDashboard() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "currentUserName"
+    ).textContent =
+        currentUser.displayName ||
+        "User";
+
+
+    document.getElementById(
+        "headerUserName"
+    ).textContent =
+        currentUser.displayName ||
+        "User";
+
+
+    document.getElementById(
+        "headerUserEmail"
+    ).textContent =
+        currentUser.email ||
+        "";
+
+
+    const photo =
+        currentUser.photoURL ||
+        "MY PICTURE.jpg";
+
+
+    document.getElementById(
+        "headerUserPhoto"
+    ).src = photo;
+
+
+    document.getElementById(
+        "profilePhoto"
+    ).src = photo;
+
 
     try {
 
         const snapshot =
-            await get(productsRef);
-
-
-        const products =
-            snapshot.exists()
-                ? snapshot.val()
-                : {};
+            await get(
+                ref(
+                    db,
+                    "bakeryProducts"
+                )
+            );
 
 
         let totalProducts = 0;
@@ -1397,430 +1617,86 @@ async function loadDashboard() {
         const lowStockProducts = [];
 
 
-        Object.values(products)
-            .forEach(product => {
+        if (snapshot.exists()) {
 
-                totalProducts++;
-
-
-                const quantity =
-                    Number(
-                        product.quantity || 0
-                    );
+            const products =
+                snapshot.val();
 
 
-                const price =
-                    Number(
-                        product.price || 0
-                    );
+            Object.values(products)
+                .forEach(product => {
+
+                    const quantity =
+                        Number(
+                            product.quantity || 0
+                        );
+
+                    const price =
+                        Number(
+                            product.price || 0
+                        );
+
+                    const threshold =
+                        Number(
+                            product.threshold || 0
+                        );
 
 
-                const threshold =
-                    Number(
-                        product.threshold || 0
-                    );
+                    totalProducts++;
+
+                    totalStock += quantity;
+
+                    estimatedValue +=
+                        quantity * price;
 
 
-                totalStock += quantity;
+                    if (
+                        quantity <= threshold
+                    ) {
+
+                        lowStock++;
+
+                        lowStockProducts
+                            .push(product);
+
+                    }
+
+                });
+
+        }
 
 
-                estimatedValue +=
-                    quantity * price;
-
-
-                if (
-                    quantity <= threshold
-                ) {
-
-                    lowStock++;
-
-                    lowStockProducts
-                        .push(product);
-
-                }
-
-            });
-
-
-        document
-            .getElementById(
-                "totalProducts"
-            )
-            .textContent =
+        document.getElementById(
+            "totalProducts"
+        ).textContent =
             totalProducts;
 
 
-        document
-            .getElementById(
-                "totalStock"
-            )
-            .textContent =
+        document.getElementById(
+            "totalStock"
+        ).textContent =
             totalStock;
 
 
-        document
-            .getElementById(
-                "lowStock"
-            )
-            .textContent =
+        document.getElementById(
+            "lowStock"
+        ).textContent =
             lowStock;
 
 
-        document
-            .getElementById(
-                "estimatedValue"
-            )
-            .textContent =
+        document.getElementById(
+            "estimatedValue"
+        ).textContent =
             "₱" +
             estimatedValue.toFixed(2);
 
 
-        renderLowStock(
+        displayLowStock(
             lowStockProducts
         );
 
 
         await loadRecentActivity();
-
-    } catch (error) {
-
-        console.error(
-            "Dashboard error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOW STOCK
-   ========================================================= */
-
-function renderLowStock(products) {
-
-    const container =
-        document.getElementById(
-            "lowStockList"
-        );
-
-
-    container.innerHTML = "";
-
-
-    if (!products.length) {
-
-        container.innerHTML = `
-
-            <p class="empty-message">
-                No low stock products.
-            </p>
-
-        `;
-
-        return;
-    }
-
-
-    products
-        .slice(0, 10)
-        .forEach(product => {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "low-stock-item";
-
-
-            item.innerHTML = `
-
-                <strong>
-                    ${escapeHTML(product.name || "")}
-                </strong>
-
-                <div>
-                    Stock:
-                    ${Number(product.quantity || 0)}
-                </div>
-
-            `;
-
-
-            container.appendChild(item);
-
-        });
-
-}
-
-
-/* =========================================================
-   ACTIVITY LOG
-   ========================================================= */
-
-async function logActivity(
-    action,
-    details
-) {
-
-    if (!currentUser) return;
-
-
-    try {
-
-        const newLog =
-            push(activityRef);
-
-
-        await set(
-            newLog,
-            {
-
-                user:
-                    currentUser.displayName ||
-                    currentUser.email ||
-                    "User",
-
-                email:
-                    currentUser.email ||
-                    "",
-
-                action,
-
-                details,
-
-                timestamp:
-                    new Date().toISOString()
-
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Activity log error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD ACTIVITY
-   ========================================================= */
-
-async function loadActivity() {
-
-    try {
-
-        const snapshot =
-            await get(activityRef);
-
-
-        const logs =
-            snapshot.exists()
-                ? snapshot.val()
-                : {};
-
-
-        const tbody =
-            document.getElementById(
-                "activityTableBody"
-            );
-
-
-        tbody.innerHTML = "";
-
-
-        const entries =
-            Object.entries(logs)
-                .sort(
-                    (a, b) =>
-                        new Date(
-                            b[1].timestamp || 0
-                        ) -
-                        new Date(
-                            a[1].timestamp || 0
-                        )
-                );
-
-
-        entries.forEach(
-            ([id, log]) => {
-
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                row.innerHTML = `
-
-                    <td>
-                        ${
-                            formatDate(
-                                log.timestamp
-                            )
-                        }
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            log.user || ""
-                        )}
-                    </td>
-
-                    <td>
-                        <strong>
-                            ${escapeHTML(
-                                log.action || ""
-                            )}
-                        </strong>
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            log.details || ""
-                        )}
-                    </td>
-
-                `;
-
-
-                tbody.appendChild(row);
-
-            }
-        );
-
-
-        if (!entries.length) {
-
-            tbody.innerHTML = `
-
-                <tr>
-
-                    <td
-                        colspan="4"
-                        style="text-align:center;padding:30px;"
-                    >
-
-                        No activity logs yet.
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Activity error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RECENT ACTIVITY
-   ========================================================= */
-
-async function loadRecentActivity() {
-
-    try {
-
-        const snapshot =
-            await get(activityRef);
-
-
-        const logs =
-            snapshot.exists()
-                ? snapshot.val()
-                : {};
-
-
-        const container =
-            document.getElementById(
-                "recentActivity"
-            );
-
-
-        container.innerHTML = "";
-
-
-        const entries =
-            Object.values(logs)
-                .sort(
-                    (a, b) =>
-                        new Date(
-                            b.timestamp || 0
-                        ) -
-                        new Date(
-                            a.timestamp || 0
-                        )
-                )
-                .slice(0, 5);
-
-
-        if (!entries.length) {
-
-            container.innerHTML = `
-
-                <p class="empty-message">
-                    No recent activity.
-                </p>
-
-            `;
-
-            return;
-        }
-
-
-        entries.forEach(log => {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "activity-item";
-
-
-            item.innerHTML = `
-
-                <strong>
-                    ${escapeHTML(
-                        log.action || ""
-                    )}
-                </strong>
-
-                <div>
-                    ${escapeHTML(
-                        log.details || ""
-                    )}
-                </div>
-
-                <small>
-                    ${formatDate(
-                        log.timestamp
-                    )}
-                </small>
-
-            `;
-
-
-            container.appendChild(item);
-
-        });
 
     } catch (error) {
 
@@ -1831,16 +1707,320 @@ async function loadRecentActivity() {
 }
 
 
-/* =========================================================
-   ACCOUNT PROFILE
-   ========================================================= */
+/* =====================================================
+   LOW STOCK
+===================================================== */
 
-async function loadUserProfile() {
+function displayLowStock(products) {
 
-    if (!currentUser) return;
+    const container =
+        document.getElementById(
+            "lowStockList"
+        );
 
 
-    let userData = null;
+    if (!products.length) {
+
+        container.innerHTML = `
+            <p class="empty">
+                No low-stock products.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        products
+            .slice(0, 5)
+            .map(product => `
+
+                <div style="
+                    padding:10px 0;
+                    border-bottom:1px solid #eee;
+                ">
+
+                    <strong>
+                        ${escapeHTML(product.name || "")}
+                    </strong>
+
+                    <span style="
+                        float:right;
+                        color:#a75b00;
+                    ">
+                        ${product.quantity}
+                    </span>
+
+                </div>
+
+            `)
+            .join("");
+
+}
+
+
+/* =====================================================
+   ACTIVITY LOG
+===================================================== */
+
+async function addActivity(
+    action,
+    details
+) {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    const activityRef =
+        push(
+            ref(
+                db,
+                "activityLogs"
+            )
+        );
+
+
+    await set(
+        activityRef,
+        {
+
+            userId:
+                currentUser.uid,
+
+            user:
+                currentUser.displayName ||
+                currentUser.email ||
+                "User",
+
+            action,
+
+            details,
+
+            timestamp:
+                new Date()
+                    .toISOString()
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD ACTIVITY
+===================================================== */
+
+async function loadActivities() {
+
+    const tbody =
+        document.getElementById(
+            "activityTableBody"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    try {
+
+        const snapshot =
+            await get(
+                ref(
+                    db,
+                    "activityLogs"
+                )
+            );
+
+
+        if (!snapshot.exists()) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        No activity found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        const logs =
+            Object.values(
+                snapshot.val()
+            )
+            .sort(
+                (a, b) =>
+                    new Date(b.timestamp) -
+                    new Date(a.timestamp)
+            );
+
+
+        logs.forEach(log => {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${formatDate(log.timestamp)}
+                </td>
+
+                <td>
+                    ${escapeHTML(log.user || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(log.action || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(log.details || "")}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   RECENT ACTIVITY
+===================================================== */
+
+async function loadRecentActivity() {
+
+    const container =
+        document.getElementById(
+            "recentActivity"
+        );
+
+
+    try {
+
+        const snapshot =
+            await get(
+                ref(
+                    db,
+                    "activityLogs"
+                )
+            );
+
+
+        if (!snapshot.exists()) {
+
+            container.innerHTML = `
+                <p class="empty">
+                    No recent activity.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        const logs =
+            Object.values(
+                snapshot.val()
+            )
+            .sort(
+                (a, b) =>
+                    new Date(b.timestamp) -
+                    new Date(a.timestamp)
+            )
+            .slice(0, 5);
+
+
+        container.innerHTML =
+            logs.map(log => `
+
+                <div style="
+                    padding:10px 0;
+                    border-bottom:1px solid #eee;
+                ">
+
+                    <strong>
+                        ${escapeHTML(log.action || "")}
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        ${escapeHTML(log.details || "")}
+                    </small>
+
+                    <br>
+
+                    <small style="color:#888">
+                        ${formatDate(log.timestamp)}
+                    </small>
+
+                </div>
+
+            `).join("");
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+async function loadProfile() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        currentUser.displayName ||
+        "User";
+
+
+    document.getElementById(
+        "profileEmail"
+    ).textContent =
+        currentUser.email ||
+        "";
+
+
+    document.getElementById(
+        "profilePhoto"
+    ).src =
+        currentUser.photoURL ||
+        "MY PICTURE.jpg";
 
 
     try {
@@ -1857,8 +2037,14 @@ async function loadUserProfile() {
 
         if (snapshot.exists()) {
 
-            userData =
+            const data =
                 snapshot.val();
+
+
+            document.getElementById(
+                "profileRole"
+            ).textContent =
+                data.role || "Staff";
 
         }
 
@@ -1868,224 +2054,26 @@ async function loadUserProfile() {
 
     }
 
-
-    const name =
-        userData?.name ||
-        currentUser.displayName ||
-        "User";
-
-
-    const email =
-        userData?.email ||
-        currentUser.email ||
-        "";
-
-
-    const photo =
-        userData?.photoURL ||
-        currentUser.photoURL ||
-        "./MY PICTURE.jpg";
-
-
-    document
-        .getElementById(
-            "headerUserName"
-        )
-        .textContent =
-        name;
-
-
-    document
-        .getElementById(
-            "headerUserEmail"
-        )
-        .textContent =
-        email;
-
-
-    document
-        .getElementById(
-            "headerUserPhoto"
-        )
-        .src =
-        photo;
-
-
-    document
-        .getElementById(
-            "profileName"
-        )
-        .textContent =
-        name;
-
-
-    document
-        .getElementById(
-            "profileEmail"
-        )
-        .textContent =
-        email;
-
-
-    document
-        .getElementById(
-            "profilePhoto"
-        )
-        .src =
-        photo;
-
-
-    document
-        .getElementById(
-            "profileRole"
-        )
-        .textContent =
-        userData?.role ||
-        "Staff";
-
 }
 
 
-/* =========================================================
-   ERROR HANDLER
-   ========================================================= */
+/* =====================================================
+   HELPER
+===================================================== */
 
-function getAuthError(error) {
+function formatDate(timestamp) {
 
-    const code =
-        error?.code || "";
+    if (!timestamp) {
 
-
-    switch (code) {
-
-        case "auth/popup-closed-by-user":
-
-            return "Google login was cancelled.";
-
-
-        case "auth/popup-blocked":
-
-            return "Google popup was blocked by your browser.";
-
-
-        case "auth/unauthorized-domain":
-
-            return "This website is not authorized in Firebase Authentication.";
-
-
-        case "auth/operation-not-allowed":
-
-            return "This authentication provider is not enabled in Firebase.";
-
-
-        case "auth/invalid-phone-number":
-
-            return "Invalid phone number.";
-
-
-        case "auth/invalid-verification-code":
-
-            return "Incorrect OTP code.";
-
-
-        case "auth/code-expired":
-
-            return "OTP expired. Please request a new OTP.";
-
-
-        case "auth/too-many-requests":
-
-            return "Too many attempts. Please try again later.";
-
-
-        case "auth/provider-already-linked":
-
-            return "This phone number is already linked to this Google account.";
-
-
-        case "auth/credential-already-in-use":
-
-            return "This phone number is already connected to another account.";
-
-
-        case "auth/captcha-check-failed":
-
-            return "reCAPTCHA verification failed. Please try again.";
-
-
-        default:
-
-            return (
-                error?.message ||
-                "Authentication failed."
-            );
+        return "-";
 
     }
 
-}
-
-
-/* =========================================================
-   RESET RECAPTCHA
-   ========================================================= */
-
-function resetRecaptcha() {
-
-    if (recaptchaVerifier) {
-
-        try {
-
-            recaptchaVerifier.clear();
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-
-        recaptchaVerifier = null;
-
-    }
-
-
-    setTimeout(() => {
-
-        setupRecaptcha();
-
-    }, 500);
+    return new Date(timestamp)
+        .toLocaleString();
 
 }
 
-
-/* =========================================================
-   FORMAT DATE
-   ========================================================= */
-
-function formatDate(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const date =
-        new Date(dateString);
-
-
-    return date.toLocaleString(
-        "en-PH",
-        {
-            dateStyle: "medium",
-            timeStyle: "short"
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
 
 function escapeHTML(value) {
 
@@ -2099,8 +2087,51 @@ function escapeHTML(value) {
 }
 
 
-/* =========================================================
-   INITIAL PAGE
-   ========================================================= */
+function getAuthError(error) {
 
-showLogin();
+    const code =
+        error?.code || "";
+
+
+    const errors = {
+
+        "auth/popup-closed-by-user":
+            "Google login was cancelled.",
+
+        "auth/popup-blocked":
+            "Your browser blocked the Google login popup.",
+
+        "auth/network-request-failed":
+            "Network error. Check your internet connection.",
+
+        "auth/invalid-phone-number":
+            "Invalid phone number.",
+
+        "auth/too-many-requests":
+            "Too many attempts. Please try again later.",
+
+        "auth/code-expired":
+            "The OTP has expired. Request a new OTP.",
+
+        "auth/invalid-verification-code":
+            "Incorrect OTP code.",
+
+        "auth/provider-already-linked":
+            "This phone number is already linked to this account.",
+
+        "auth/credential-already-in-use":
+            "This phone number is already connected to another account.",
+
+        "auth/operation-not-allowed":
+            "This authentication provider is not enabled in Firebase."
+
+    };
+
+
+    return (
+        errors[code] ||
+        error?.message ||
+        "Authentication failed."
+    );
+
+}
