@@ -40,8 +40,8 @@ body {
 
     background:
         linear-gradient(
-            rgba(255,247,240,.75),
-            rgba(255,247,240,.75)
+            rgba(255, 247, 240, .78),
+            rgba(255, 247, 240, .78)
         ),
         #e8c8a9;
 }
@@ -58,32 +58,47 @@ body {
     border-radius: 20px;
 
     box-shadow:
-        0 15px 45px rgba(70,40,20,.18);
+        0 15px 45px rgba(70, 40, 20, .18);
 
     text-align: center;
 }
 
 
-.logo-circle {
-    width: 85px;
-    height: 85px;
+/* =====================================================
+   AUTH LOGO
+===================================================== */
+
+.auth-logo {
+    width: 210px;
+    height: 90px;
 
     margin: 0 auto 18px;
-
-    border-radius: 50%;
-
-    background: #f3dfcd;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #111;
 }
 
 
-.bread-icon {
-    font-size: 42px;
+.auth-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
 }
 
+
+/* =====================================================
+   AUTH TEXT
+===================================================== */
 
 .auth-card h1 {
     color: #8b4513;
@@ -158,7 +173,7 @@ body {
     border-color: #8b4513;
 
     box-shadow:
-        0 0 0 3px rgba(139,69,19,.10);
+        0 0 0 3px rgba(139, 69, 19, .10);
 }
 
 
@@ -285,6 +300,7 @@ body {
 ===================================================== */
 
 .system-page {
+
     min-height: 100vh;
 
     display: flex;
@@ -299,7 +315,7 @@ body {
 
 .sidebar {
 
-    width: 245px;
+    width: 260px;
 
     min-height: 100vh;
 
@@ -307,66 +323,58 @@ body {
 
     color: white;
 
-    padding: 25px 15px;
+    padding: 18px 15px;
 
     display: flex;
 
     flex-direction: column;
+
+    flex-shrink: 0;
 }
 
+
+/* =====================================================
+   ARBEES LOGO
+===================================================== */
 
 .brand {
 
+    width: 100%;
+
+    padding: 4px 5px 22px;
+
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
-
-    padding: 5px 10px 30px;
-
-    border-bottom: 1px solid rgba(255,255,255,.12);
-}
-
-
-.brand-icon {
-
-    width: 45px;
-    height: 45px;
-
-    background: #e8c8a9;
-
-    color: #3d281c;
-
-    border-radius: 12px;
-
-    display: flex;
-    align-items: center;
     justify-content: center;
 
-    font-size: 25px;
+    border-bottom:
+        1px solid rgba(255, 255, 255, .12);
 }
 
 
-.brand strong {
+.brand-logo {
+
+    width: 220px;
+
+    height: 82px;
+
+    object-fit: contain;
+
+    object-position: center;
 
     display: block;
 
-    font-size: 16px;
+    border-radius: 8px;
+
+    background: #111;
 }
 
 
-.brand small {
-
-    display: block;
-
-    color: #d5bba6;
-
-    font-size: 10px;
-
-    margin-top: 3px;
-}
-
+/* =====================================================
+   SIDEBAR NAV
+===================================================== */
 
 .sidebar nav {
 
@@ -397,6 +405,8 @@ body {
     cursor: pointer;
 
     font-size: 14px;
+
+    transition: .2s;
 }
 
 
@@ -409,11 +419,15 @@ body {
 }
 
 
+/* =====================================================
+   LOGOUT
+===================================================== */
+
 .logout-btn {
 
     margin-top: auto;
 
-    border: 1px solid rgba(255,255,255,.15);
+    border: 1px solid rgba(255, 255, 255, .15);
 
     background: transparent;
 
@@ -424,6 +438,8 @@ body {
     border-radius: 9px;
 
     cursor: pointer;
+
+    transition: .2s;
 }
 
 
@@ -485,7 +501,7 @@ body {
     border-radius: 10px;
 
     box-shadow:
-        0 3px 15px rgba(50,30,15,.07);
+        0 3px 15px rgba(50, 30, 15, .07);
 
     text-align: right;
 }
@@ -541,7 +557,7 @@ body {
     gap: 15px;
 
     box-shadow:
-        0 5px 20px rgba(60,35,20,.07);
+        0 5px 20px rgba(60, 35, 20, .07);
 }
 
 
@@ -597,7 +613,7 @@ body {
     padding: 30px;
 
     box-shadow:
-        0 5px 20px rgba(60,35,20,.07);
+        0 5px 20px rgba(60, 35, 20, .07);
 }
 
 
@@ -632,7 +648,7 @@ body {
     padding: 20px;
 
     box-shadow:
-        0 5px 20px rgba(60,35,20,.07);
+        0 5px 20px rgba(60, 35, 20, .07);
 }
 
 
@@ -647,13 +663,11 @@ body {
 
 
 .table-tools input {
-
     max-width: 300px;
 }
 
 
 .table-tools select {
-
     max-width: 180px;
 }
 
@@ -694,7 +708,8 @@ td {
 
     padding: 13px;
 
-    border-bottom: 1px solid #eee5df;
+    border-bottom:
+        1px solid #eee5df;
 
     font-size: 13px;
 }
@@ -777,7 +792,7 @@ td {
     border-radius: 15px;
 
     box-shadow:
-        0 5px 20px rgba(60,35,20,.07);
+        0 5px 20px rgba(60, 35, 20, .07);
 }
 
 
@@ -824,18 +839,32 @@ td {
 
 
 /* =====================================================
-   MOBILE
+   MOBILE / TABLET
 ===================================================== */
 
-@media (max-width: 900px) {
-
-    .sidebar {
-        width: 190px;
-    }
+@media (max-width: 1100px) {
 
     .stats-grid {
         grid-template-columns:
             repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .brand-logo {
+        width: 180px;
+        height: 75px;
+    }
+
+    .main-content {
+        padding: 22px;
     }
 
 }
@@ -860,7 +889,21 @@ td {
 
 
     .brand {
-        padding-bottom: 12px;
+
+        padding:
+            3px
+            5px
+            12px;
+
+    }
+
+
+    .brand-logo {
+
+        width: 185px;
+
+        height: 68px;
+
     }
 
 
@@ -871,11 +914,14 @@ td {
         overflow-x: auto;
 
         margin-top: 12px;
+
     }
 
 
     .nav-btn {
+
         white-space: nowrap;
+
     }
 
 
@@ -884,41 +930,54 @@ td {
         margin-top: 10px;
 
         width: 100%;
+
     }
 
 
     .main-content {
+
         padding: 18px;
+
     }
 
 
     .top-header {
+
         align-items: flex-start;
 
         flex-direction: column;
 
         gap: 12px;
+
     }
 
 
     .stats-grid {
+
         grid-template-columns: 1fr;
+
     }
 
 
     .form-grid {
+
         grid-template-columns: 1fr;
+
     }
 
 
     .table-tools {
+
         flex-direction: column;
+
     }
 
 
     .table-tools input,
     .table-tools select {
+
         max-width: none;
+
     }
 
 }
@@ -927,17 +986,34 @@ td {
 @media (max-width: 480px) {
 
     .auth-card {
-        padding: 25px 20px;
+
+        padding:
+            25px
+            20px;
+
+    }
+
+
+    .auth-logo {
+
+        width: 180px;
+
+        height: 78px;
+
     }
 
 
     .auth-card h1 {
+
         font-size: 21px;
+
     }
 
 
     .main-content {
+
         padding: 13px;
+
     }
 
 }
