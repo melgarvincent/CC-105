@@ -22,8 +22,11 @@
 
         <div class="auth-card">
 
-            <div class="logo-circle">
-                <div class="bread-icon">🥖</div>
+            <div class="auth-logo">
+                <img
+                    src="arbees-bakeshop-logo1.png"
+                    alt="Arbee's Bakeshop Logo"
+                >
             </div>
 
             <h1>ARBEES BAKERY SHOP</h1>
@@ -31,7 +34,6 @@
             <p class="subtitle">
                 Inventory Management System
             </p>
-
 
             <form id="loginForm">
 
@@ -51,7 +53,6 @@
 
                 </div>
 
-
                 <div class="input-group">
 
                     <label for="loginPassword">
@@ -68,7 +69,6 @@
 
                 </div>
 
-
                 <button
                     type="submit"
                     class="main-btn"
@@ -79,9 +79,6 @@
 
             </form>
 
-
-            <!-- FORGOT PASSWORD -->
-
             <button
                 type="button"
                 class="forgot-btn"
@@ -90,12 +87,10 @@
                 Forgot Password?
             </button>
 
-
             <p
                 id="loginMessage"
                 class="message"
             ></p>
-
 
             <div class="switch-account">
 
@@ -115,7 +110,6 @@
     </section>
 
 
-
     <!-- =====================================================
          REGISTER PAGE
     ====================================================== -->
@@ -127,8 +121,11 @@
 
         <div class="auth-card">
 
-            <div class="logo-circle">
-                <div class="bread-icon">🥐</div>
+            <div class="auth-logo">
+                <img
+                    src="arbees-bakeshop-logo1.png"
+                    alt="Arbee's Bakeshop Logo"
+                >
             </div>
 
             <h1>CREATE ACCOUNT</h1>
@@ -136,7 +133,6 @@
             <p class="subtitle">
                 Arbee's Bakery Shop
             </p>
-
 
             <form id="registerForm">
 
@@ -156,7 +152,6 @@
 
                 </div>
 
-
                 <div class="input-group">
 
                     <label for="registerEmail">
@@ -172,7 +167,6 @@
                     >
 
                 </div>
-
 
                 <div class="input-group">
 
@@ -191,7 +185,6 @@
 
                 </div>
 
-
                 <div class="input-group">
 
                     <label for="confirmPassword">
@@ -209,7 +202,6 @@
 
                 </div>
 
-
                 <button
                     type="submit"
                     class="main-btn"
@@ -220,12 +212,10 @@
 
             </form>
 
-
             <p
                 id="registerMessage"
                 class="message"
             ></p>
-
 
             <div class="switch-account">
 
@@ -245,7 +235,6 @@
     </section>
 
 
-
     <!-- =====================================================
          MAIN SYSTEM
     ====================================================== -->
@@ -261,14 +250,11 @@
 
             <div class="brand">
 
-                <div class="brand-icon">
-                    🥖
-                </div>
-
-                <div>
-                    <strong>ARBEES</strong>
-                    <small>BAKERY SHOP</small>
-                </div>
+                <img
+                    src="arbees-bakeshop-logo1.png"
+                    alt="Arbee's Bakeshop Logo"
+                    class="brand-logo"
+                >
 
             </div>
 
@@ -282,7 +268,6 @@
                     🏠 Dashboard
                 </button>
 
-
                 <button
                     class="nav-btn"
                     data-page="inventory"
@@ -290,14 +275,12 @@
                     📦 Inventory
                 </button>
 
-
                 <button
                     class="nav-btn"
                     data-page="addProduct"
                 >
                     ➕ Add Product
                 </button>
-
 
                 <button
                     class="nav-btn"
@@ -319,7 +302,6 @@
         </aside>
 
 
-
         <!-- MAIN CONTENT -->
 
         <main class="main-content">
@@ -335,8 +317,13 @@
                 <div class="top-header">
 
                     <div>
+
                         <h2>Dashboard</h2>
-                        <p>Welcome to Arbee's Bakery Shop</p>
+
+                        <p>
+                            Welcome to Arbee's Bakery Shop
+                        </p>
+
                     </div>
 
                     <div class="user-box">
@@ -363,10 +350,15 @@
                         </div>
 
                         <div>
-                            <span>Total Products</span>
+
+                            <span>
+                                Total Products
+                            </span>
+
                             <strong id="totalProducts">
                                 0
                             </strong>
+
                         </div>
 
                     </div>
@@ -379,10 +371,15 @@
                         </div>
 
                         <div>
-                            <span>Total Stock</span>
+
+                            <span>
+                                Total Stock
+                            </span>
+
                             <strong id="totalStock">
                                 0
                             </strong>
+
                         </div>
 
                     </div>
@@ -395,10 +392,15 @@
                         </div>
 
                         <div>
-                            <span>Low Stock</span>
+
+                            <span>
+                                Low Stock
+                            </span>
+
                             <strong id="lowStock">
                                 0
                             </strong>
+
                         </div>
 
                     </div>
@@ -411,10 +413,15 @@
                         </div>
 
                         <div>
-                            <span>Estimated Value</span>
+
+                            <span>
+                                Estimated Value
+                            </span>
+
                             <strong id="totalValue">
                                 ₱0.00
                             </strong>
+
                         </div>
 
                     </div>
@@ -446,7 +453,6 @@
             </div>
 
 
-
             <!-- ================= INVENTORY ================= -->
 
             <div
@@ -457,11 +463,13 @@
                 <div class="top-header">
 
                     <div>
+
                         <h2>Inventory</h2>
 
                         <p>
                             Manage bakery products
                         </p>
+
                     </div>
 
                     <button
@@ -535,9 +543,7 @@
 
                             </thead>
 
-                            <tbody id="inventoryTable">
-
-                            </tbody>
+                            <tbody id="inventoryTable"></tbody>
 
                         </table>
 
@@ -546,7 +552,6 @@
                 </div>
 
             </div>
-
 
 
             <!-- ================= ADD PRODUCT ================= -->
@@ -738,7 +743,6 @@
             </div>
 
 
-
             <!-- ================= ACTIVITY ================= -->
 
             <div
@@ -779,9 +783,7 @@
 
                             </thead>
 
-                            <tbody id="activityTable">
-
-                            </tbody>
+                            <tbody id="activityTable"></tbody>
 
                         </table>
 
@@ -791,13 +793,12 @@
 
             </div>
 
-
         </main>
 
     </section>
 
 
-    <!-- FIREBASE SCRIPT -->
+    <!-- FIREBASE / JAVASCRIPT -->
 
     <script
         type="module"
