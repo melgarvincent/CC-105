@@ -1,6 +1,6 @@
-/* =====================================================
+/* =========================================================
    FIREBASE IMPORTS
-===================================================== */
+========================================================= */
 
 import {
     initializeApp
@@ -26,13 +26,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
 
-/* =====================================================
+/* =========================================================
    FIREBASE CONFIG
-===================================================== */
+========================================================= */
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
+    apiKey:
+        "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
 
     authDomain:
         "crudfirebase-b2a1f.firebaseapp.com",
@@ -57,9 +58,9 @@ const firebaseConfig = {
 };
 
 
-/* =====================================================
+/* =========================================================
    INITIALIZE FIREBASE
-===================================================== */
+========================================================= */
 
 const app = initializeApp(firebaseConfig);
 
@@ -68,9 +69,9 @@ const auth = getAuth(app);
 const db = getDatabase(app);
 
 
-/* =====================================================
+/* =========================================================
    DATABASE REFERENCES
-===================================================== */
+========================================================= */
 
 const productsRef = ref(db, "bakeryProducts");
 
@@ -79,18 +80,18 @@ const activityRef = ref(db, "activityLogs");
 const usersRef = ref(db, "users");
 
 
-/* =====================================================
-   VARIABLES
-===================================================== */
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
 let products = {};
 
 let currentUser = null;
 
 
-/* =====================================================
-   PAGE ELEMENTS
-===================================================== */
+/* =========================================================
+   DOM ELEMENTS
+========================================================= */
 
 const loginPage =
     document.getElementById("loginPage");
@@ -98,269 +99,343 @@ const loginPage =
 const registerPage =
     document.getElementById("registerPage");
 
-const dashboardPage =
-    document.getElementById("dashboardPage");
+const appPage =
+    document.getElementById("app");
 
 
-/* =====================================================
-   HELPER
-===================================================== */
+const loginForm =
+    document.getElementById("loginForm");
 
-function showElement(element) {
+const registerForm =
+    document.getElementById("registerForm");
 
-    if (element) {
-        element.classList.remove("hidden");
-    }
+const productForm =
+    document.getElementById("productForm");
+
+
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
+function showLogin() {
+
+    loginPage.classList.remove("hidden");
+
+    registerPage.classList.add("hidden");
+
+    appPage.classList.add("hidden");
+
+    clearMessages();
 }
 
 
-function hideElement(element) {
+/* =========================================================
+   SHOW REGISTER
+========================================================= */
 
-    if (element) {
-        element.classList.add("hidden");
-    }
+function showRegister() {
+
+    loginPage.classList.add("hidden");
+
+    registerPage.classList.remove("hidden");
+
+    appPage.classList.add("hidden");
+
+    clearMessages();
 }
 
 
-/* =====================================================
-   LOGIN / REGISTER PAGE SWITCH
-===================================================== */
+/* =========================================================
+   CLEAR AUTH MESSAGES
+========================================================= */
 
-document
-    .getElementById("showRegisterBtn")
-    .addEventListener("click", () => {
+function clearMessages() {
 
-        hideElement(loginPage);
+    const loginMessage =
+        document.getElementById("loginMessage");
 
-        showElement(registerPage);
+    const registerMessage =
+        document.getElementById("registerMessage");
 
-        document
-            .getElementById("loginMessage")
-            .textContent = "";
+    loginMessage.textContent = "";
 
-    });
+    registerMessage.textContent = "";
 
+    loginMessage.className = "auth-message";
 
-document
-    .getElementById("showLoginBtn")
-    .addEventListener("click", () => {
-
-        hideElement(registerPage);
-
-        showElement(loginPage);
-
-        document
-            .getElementById("registerMessage")
-            .textContent = "";
-
-    });
+    registerMessage.className = "auth-message";
+}
 
 
-/* =====================================================
+/* =========================================================
+   SHOW MESSAGE
+========================================================= */
+
+function showMessage(element, message, type) {
+
+    element.textContent = message;
+
+    element.className =
+        "auth-message " + type;
+}
+
+
+/* =========================================================
    LOGIN
-===================================================== */
+========================================================= */
 
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", async (event) => {
+loginForm.addEventListener("submit", async (event) => {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
+    const email =
+        document.getElementById("loginEmail")
+            .value
+            .trim();
 
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
+    const password =
+        document.getElementById("loginPassword")
+            .value;
 
-        const message =
-            document
-                .getElementById("loginMessage");
+    const loginBtn =
+        document.getElementById("loginBtn");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
 
 
-        message.textContent = "Logging in...";
+    if (!email || !password) {
+
+        showMessage(
+            loginMessage,
+            "Please enter your email and password.",
+            "error-message"
+        );
+
+        return;
+    }
 
 
-        try {
+    loginBtn.disabled = true;
 
-            await signInWithEmailAndPassword(
+    loginBtn.textContent = "LOGGING IN...";
+
+
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        showMessage(
+            loginMessage,
+            "Login successful!",
+            "success-message"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            loginMessage,
+            getAuthErrorMessage(error),
+            "error-message"
+        );
+
+    }
+
+    finally {
+
+        loginBtn.disabled = false;
+
+        loginBtn.textContent = "LOGIN";
+    }
+
+});
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+registerForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+
+    const name =
+        document.getElementById("registerName")
+            .value
+            .trim();
+
+    const email =
+        document.getElementById("registerEmail")
+            .value
+            .trim();
+
+    const password =
+        document.getElementById("registerPassword")
+            .value;
+
+    const confirmPassword =
+        document.getElementById("registerConfirmPassword")
+            .value;
+
+
+    const registerBtn =
+        document.getElementById("registerBtn");
+
+    const registerMessage =
+        document.getElementById("registerMessage");
+
+
+    if (!name || !email || !password || !confirmPassword) {
+
+        showMessage(
+            registerMessage,
+            "Please complete all fields.",
+            "error-message"
+        );
+
+        return;
+    }
+
+
+    if (password.length < 6) {
+
+        showMessage(
+            registerMessage,
+            "Password must be at least 6 characters.",
+            "error-message"
+        );
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        showMessage(
+            registerMessage,
+            "Passwords do not match.",
+            "error-message"
+        );
+
+        return;
+    }
+
+
+    registerBtn.disabled = true;
+
+    registerBtn.textContent = "CREATING...";
+
+
+    try {
+
+        const credential =
+            await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
 
-            message.textContent = "";
 
-        } catch (error) {
-
-            console.error(error);
-
-            message.textContent =
-                getFirebaseError(error);
-
-        }
-
-    });
+        const user =
+            credential.user;
 
 
-/* =====================================================
-   REGISTER
-===================================================== */
+        /* SAVE USER PROFILE TO REALTIME DATABASE */
 
-document
-    .getElementById("registerForm")
-    .addEventListener("submit", async (event) => {
-
-        event.preventDefault();
-
-
-        const name =
-            document
-                .getElementById("registerName")
-                .value
-                .trim();
+        await set(
+            ref(db, "users/" + user.uid),
+            {
+                uid: user.uid,
+                name: name,
+                email: email,
+                role: "staff",
+                createdAt: new Date().toISOString()
+            }
+        );
 
 
-        const email =
-            document
-                .getElementById("registerEmail")
-                .value
-                .trim();
+        /* SAVE ACTIVITY */
+
+        await addActivity(
+            "New User Registered",
+            `${name} created a staff account.`
+        );
 
 
-        const password =
-            document
-                .getElementById("registerPassword")
-                .value;
+        showMessage(
+            registerMessage,
+            "Account created successfully!",
+            "success-message"
+        );
 
 
-        const confirm =
-            document
-                .getElementById("registerConfirm")
-                .value;
+        registerForm.reset();
 
 
-        const message =
-            document
-                .getElementById("registerMessage");
+        /*
+           Firebase automatically signs in
+           the newly registered user.
+           onAuthStateChanged() will open dashboard.
+        */
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            registerMessage,
+            getAuthErrorMessage(error),
+            "error-message"
+        );
+
+    }
+
+    finally {
+
+        registerBtn.disabled = false;
+
+        registerBtn.textContent =
+            "CREATE ACCOUNT";
+    }
+
+});
 
 
-        if (password !== confirm) {
-
-            message.textContent =
-                "Passwords do not match.";
-
-            return;
-        }
-
-
-        if (password.length < 6) {
-
-            message.textContent =
-                "Password must be at least 6 characters.";
-
-            return;
-        }
-
-
-        message.textContent =
-            "Creating account...";
-
-
-        try {
-
-            const userCredential =
-                await createUserWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            const user =
-                userCredential.user;
-
-
-            /*
-               Store profile information in RTDB.
-               Password is NOT stored here.
-            */
-
-            await set(
-                ref(db, `users/${user.uid}`),
-                {
-
-                    name: name,
-
-                    email: email,
-
-                    role: "staff",
-
-                    createdAt:
-                        new Date().toISOString()
-
-                }
-            );
-
-
-            message.textContent =
-                "Account created successfully!";
-
-
-            document
-                .getElementById("registerForm")
-                .reset();
-
-
-            setTimeout(() => {
-
-                hideElement(registerPage);
-
-                showElement(dashboardPage);
-
-            }, 800);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            message.textContent =
-                getFirebaseError(error);
-
-        }
-
-    });
-
-
-/* =====================================================
+/* =========================================================
    FORGOT PASSWORD
-===================================================== */
+========================================================= */
 
 document
-    .getElementById("forgotBtn")
+    .getElementById("forgotPasswordBtn")
     .addEventListener("click", async () => {
 
         const email =
-            document
-                .getElementById("loginEmail")
+            document.getElementById("loginEmail")
                 .value
                 .trim();
 
-
-        const message =
-            document
-                .getElementById("loginMessage");
+        const loginMessage =
+            document.getElementById("loginMessage");
 
 
         if (!email) {
 
-            message.textContent =
-                "Enter your email first.";
+            showMessage(
+                loginMessage,
+                "Enter your email first.",
+                "error-message"
+            );
 
             return;
         }
@@ -374,68 +449,91 @@ document
             );
 
 
-            message.textContent =
-                "Password reset email sent.";
+            showMessage(
+                loginMessage,
+                "Password reset email sent. Check your inbox.",
+                "success-message"
+            );
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
 
-            message.textContent =
-                getFirebaseError(error);
-
+            showMessage(
+                loginMessage,
+                getAuthErrorMessage(error),
+                "error-message"
+            );
         }
 
     });
 
 
-/* =====================================================
+/* =========================================================
+   SWITCH LOGIN / REGISTER
+========================================================= */
+
+document
+    .getElementById("showRegisterBtn")
+    .addEventListener("click", showRegister);
+
+
+document
+    .getElementById("showLoginBtn")
+    .addEventListener("click", showLogin);
+
+
+/* =========================================================
    AUTH STATE
-===================================================== */
+========================================================= */
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
+onAuthStateChanged(auth, async (user) => {
 
-        currentUser = user;
+    currentUser = user;
 
 
-        if (user) {
+    if (user) {
 
-            hideElement(loginPage);
+        loginPage.classList.add("hidden");
 
-            hideElement(registerPage);
+        registerPage.classList.add("hidden");
 
-            showElement(dashboardPage);
-
-
-            document
-                .getElementById("userEmail")
-                .textContent =
-                user.email || "User";
+        appPage.classList.remove("hidden");
 
 
-            loadProducts();
+        document
+            .getElementById("currentUserDisplay")
+            .textContent =
+                user.email || "Staff";
 
-            loadActivityLogs();
 
-        } else {
+        await loadProducts();
 
-            showElement(loginPage);
+        loadActivityLogs();
 
-            hideElement(registerPage);
-
-            hideElement(dashboardPage);
-
-        }
+        updateDashboard();
 
     }
-);
+
+    else {
+
+        appPage.classList.add("hidden");
+
+        loginPage.classList.remove("hidden");
+
+        registerPage.classList.add("hidden");
+
+        products = {};
+    }
+
+});
 
 
-/* =====================================================
+/* =========================================================
    LOGOUT
-===================================================== */
+========================================================= */
 
 document
     .getElementById("logoutBtn")
@@ -445,242 +543,396 @@ document
 
             await signOut(auth);
 
-        } catch (error) {
+            showToast(
+                "Logged out successfully.",
+                "success"
+            );
+
+        }
+
+        catch (error) {
 
             console.error(error);
 
+            showToast(
+                "Logout failed.",
+                "error"
+            );
         }
 
     });
 
 
-/* =====================================================
+/* =========================================================
    NAVIGATION
-===================================================== */
+========================================================= */
 
 document
-    .querySelectorAll(".nav-btn")
+    .querySelectorAll(".nav-btn[data-page]")
     .forEach(button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.addEventListener("click", () => {
 
-                const page =
-                    button.dataset.page;
+            const page =
+                button.dataset.page;
 
-                showContent(page);
+            showPage(page);
+
+        });
+
+    });
 
 
-                document
-                    .querySelectorAll(".nav-btn")
-                    .forEach(btn => {
+function showPage(pageId) {
 
-                        btn.classList.remove("active");
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
 
-                    });
+            page.classList.remove("active");
 
+        });
+
+
+    const selectedPage =
+        document.getElementById(pageId);
+
+
+    if (selectedPage) {
+
+        selectedPage.classList.add("active");
+
+    }
+
+
+    document
+        .querySelectorAll(".nav-btn[data-page]")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+            if (button.dataset.page === pageId) {
 
                 button.classList.add("active");
 
+            }
+
+        });
+
+
+    if (pageId === "dashboard") {
+
+        updateDashboard();
+
+    }
+
+
+    if (pageId === "inventory") {
+
+        displayInventory();
+
+    }
+
+
+    if (pageId === "activity") {
+
+        loadActivityLogs();
+
+    }
+
+}
+
+
+/* =========================================================
+   INVENTORY ADD BUTTON
+========================================================= */
+
+document
+    .getElementById("inventoryAddBtn")
+    .addEventListener("click", () => {
+
+        resetProductForm();
+
+        showPage("addProduct");
+
+    });
+
+
+/* =========================================================
+   CANCEL PRODUCT
+========================================================= */
+
+document
+    .getElementById("cancelProductBtn")
+    .addEventListener("click", () => {
+
+        resetProductForm();
+
+        showPage("inventory");
+
+    });
+
+
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+
+    return new Promise((resolve) => {
+
+        onValue(
+            productsRef,
+            (snapshot) => {
+
+                products =
+                    snapshot.val() || {};
+
+
+                displayInventory();
+
+                updateDashboard();
+
+                resolve();
+
+            },
+            (error) => {
+
+                console.error(
+                    "Products error:",
+                    error
+                );
+
+                showToast(
+                    "Unable to load inventory.",
+                    "error"
+                );
+
+                resolve();
             }
         );
 
     });
 
-
-/* =====================================================
-   SHOW CONTENT
-===================================================== */
-
-window.showContent = function(pageId) {
-
-    document
-        .querySelectorAll(".content-section")
-        .forEach(section => {
-
-            section.classList.add("hidden");
-
-        });
-
-
-    const page =
-        document.getElementById(pageId);
-
-
-    if (page) {
-        page.classList.remove("hidden");
-    }
-
-
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(btn => {
-
-            btn.classList.remove("active");
-
-            if (
-                btn.dataset.page === pageId
-            ) {
-
-                btn.classList.add("active");
-
-            }
-
-        });
-
-};
-
-
-/* =====================================================
-   LOAD PRODUCTS
-===================================================== */
-
-function loadProducts() {
-
-    onValue(
-        productsRef,
-        snapshot => {
-
-            products =
-                snapshot.val() || {};
-
-            displayInventory();
-
-            updateDashboard();
-
-        }
-    );
-
 }
 
 
-/* =====================================================
+/* =========================================================
    DISPLAY INVENTORY
-===================================================== */
+========================================================= */
 
 function displayInventory() {
 
-    const table =
-        document.getElementById("inventoryTable");
-
-
-    table.innerHTML = "";
+    const tbody =
+        document.getElementById(
+            "inventoryTableBody"
+        );
 
 
     const search =
-        (
-            document
-                .getElementById("searchProduct")
-                ?.value || ""
+        document.getElementById(
+            "searchInput"
         )
-        .toLowerCase();
+        .value
+        .toLowerCase()
+        .trim();
 
 
     const category =
-        document
-            .getElementById("categoryFilter")
-            ?.value || "all";
+        document.getElementById(
+            "categoryFilter"
+        )
+        .value;
 
 
-    Object.entries(products)
-        .forEach(([id, product]) => {
-
-            const productName =
-                String(product.name || "")
-                    .toLowerCase();
+    tbody.innerHTML = "";
 
 
-            const productCategory =
-                product.category || "";
+    const productEntries =
+        Object.entries(products);
 
 
-            if (
-                search &&
-                !productName.includes(search)
-            ) {
-                return;
+    const filtered =
+        productEntries.filter(
+            ([id, product]) => {
+
+                const matchesSearch =
+
+                    String(product.sku || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    String(product.name || "")
+                        .toLowerCase()
+                        .includes(search);
+
+
+                const matchesCategory =
+
+                    category === "all"
+
+                    ||
+
+                    product.category === category;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory
+                );
+
             }
+        );
 
 
-            if (
-                category !== "all" &&
-                productCategory !== category
-            ) {
-                return;
-            }
+    if (filtered.length === 0) {
 
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    <div class="empty-state">
+                        No products found.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    filtered.forEach(
+        ([id, product]) => {
 
             const quantity =
                 Number(product.quantity || 0);
-
 
             const threshold =
                 Number(product.threshold || 0);
 
 
-            const isLow =
-                quantity <= threshold;
+            const status =
+                getProductStatus(
+                    quantity,
+                    threshold
+                );
 
 
-            const row =
+            const tr =
                 document.createElement("tr");
 
 
-            row.innerHTML = `
-
-                <td>${escapeHTML(product.sku)}</td>
-
-                <td>${escapeHTML(product.name)}</td>
-
-                <td>${escapeHTML(product.category)}</td>
-
-                <td>${quantity}</td>
-
-                <td>₱${Number(product.price || 0).toFixed(2)}</td>
-
-                <td>${threshold}</td>
+            tr.innerHTML = `
 
                 <td>
-                    <span class="status ${isLow ? "low" : "ok"}">
-                        ${isLow ? "LOW STOCK" : "IN STOCK"}
-                    </span>
+                    ${escapeHTML(product.sku || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(product.name || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(product.category || "-")}
+                </td>
+
+                <td>
+                    ${quantity}
+                </td>
+
+                <td>
+                    ₱${Number(product.price || 0).toFixed(2)}
+                </td>
+
+                <td>
+                    ${getStatusHTML(status)}
                 </td>
 
                 <td>
 
                     <button
-                        class="edit-btn"
-                        onclick="editProduct('${id}')"
+                        class="action-btn edit-btn"
+                        data-edit="${id}"
                     >
                         Edit
                     </button>
 
                     <button
-                        class="delete-btn"
-                        onclick="deleteProduct('${id}')"
+                        class="action-btn delete-btn"
+                        data-delete="${id}"
                     >
                         Delete
                     </button>
 
                 </td>
-
             `;
 
 
-            table.appendChild(row);
+            tbody.appendChild(tr);
+
+        }
+    );
+
+
+    attachTableActions();
+
+    updateCategoryFilter();
+
+}
+
+
+/* =========================================================
+   TABLE ACTIONS
+========================================================= */
+
+function attachTableActions() {
+
+    document
+        .querySelectorAll("[data-edit]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    editProduct(
+                        button.dataset.edit
+                    );
+
+                }
+            );
+
+        });
+
+
+    document
+        .querySelectorAll("[data-delete]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    deleteProduct(
+                        button.dataset.delete
+                    );
+
+                }
+            );
 
         });
 
 }
 
 
-/* =====================================================
+/* =========================================================
    SEARCH
-===================================================== */
+========================================================= */
 
 document
-    .getElementById("searchProduct")
+    .getElementById("searchInput")
     .addEventListener(
         "input",
         displayInventory
@@ -695,159 +947,301 @@ document
     );
 
 
-/* =====================================================
-   ADD / UPDATE PRODUCT
-===================================================== */
+/* =========================================================
+   UPDATE CATEGORY FILTER
+========================================================= */
 
-document
-    .getElementById("productForm")
-    .addEventListener("submit", async (event) => {
+function updateCategoryFilter() {
+
+    const select =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+
+    const current =
+        select.value;
+
+
+    const categories =
+        new Set();
+
+
+    Object.values(products)
+        .forEach(product => {
+
+            if (product.category) {
+
+                categories.add(
+                    product.category
+                );
+
+            }
+
+        });
+
+
+    select.innerHTML = `
+        <option value="all">
+            All Categories
+        </option>
+    `;
+
+
+    [...categories]
+        .sort()
+        .forEach(category => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = category;
+
+            option.textContent = category;
+
+            select.appendChild(option);
+
+        });
+
+
+    if (
+        [...categories].includes(current)
+    ) {
+
+        select.value = current;
+
+    }
+
+}
+
+
+/* =========================================================
+   ADD / UPDATE PRODUCT
+========================================================= */
+
+productForm.addEventListener(
+    "submit",
+    async (event) => {
 
         event.preventDefault();
 
 
-        const id =
+        const editId =
             document
                 .getElementById("editProductId")
                 .value;
 
 
+        const sku =
+            document
+                .getElementById("sku")
+                .value
+                .trim();
+
+
+        const name =
+            document
+                .getElementById("productName")
+                .value
+                .trim();
+
+
+        const category =
+            document
+                .getElementById("category")
+                .value;
+
+
+        const quantity =
+            Number(
+                document
+                    .getElementById("quantity")
+                    .value
+            );
+
+
+        const price =
+            Number(
+                document
+                    .getElementById("price")
+                    .value
+            );
+
+
+        const threshold =
+            Number(
+                document
+                    .getElementById("threshold")
+                    .value
+            );
+
+
+        if (!sku || !name || !category) {
+
+            showToast(
+                "Please complete all product fields.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(quantity) ||
+            quantity < 0
+        ) {
+
+            showToast(
+                "Quantity must be 0 or greater.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(price) ||
+            price < 0
+        ) {
+
+            showToast(
+                "Price must be 0 or greater.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(threshold) ||
+            threshold < 0
+        ) {
+
+            showToast(
+                "Threshold must be 0 or greater.",
+                "error"
+            );
+
+            return;
+        }
+
+
         const product = {
 
-            sku:
-                document
-                    .getElementById("productSKU")
-                    .value
-                    .trim(),
+            sku: sku,
 
-            name:
-                document
-                    .getElementById("productName")
-                    .value
-                    .trim(),
+            name: name,
 
-            category:
-                document
-                    .getElementById("productCategory")
-                    .value,
+            category: category,
 
-            quantity:
-                Number(
-                    document
-                        .getElementById("productQuantity")
-                        .value
-                ),
+            quantity: quantity,
 
-            price:
-                Number(
-                    document
-                        .getElementById("productPrice")
-                        .value
-                ),
+            price: price,
 
-            threshold:
-                Number(
-                    document
-                        .getElementById("productThreshold")
-                        .value
-                ),
+            threshold: threshold,
 
             updatedAt:
                 new Date().toISOString()
-
         };
-
-
-        const message =
-            document
-                .getElementById("productMessage");
 
 
         try {
 
-            if (id) {
+            if (editId) {
 
                 await update(
-                    ref(db, `bakeryProducts/${id}`),
+                    ref(
+                        db,
+                        "bakeryProducts/" + editId
+                    ),
                     product
                 );
 
 
                 await addActivity(
-                    "Updated",
-                    product.name
+                    "Product Updated",
+                    `${name} was updated.`
                 );
 
 
-                message.textContent =
-                    "Product updated successfully.";
+                showToast(
+                    "Product updated successfully.",
+                    "success"
+                );
 
-            } else {
+            }
+
+            else {
 
                 const newProductRef =
                     push(productsRef);
 
 
+                product.createdAt =
+                    new Date().toISOString();
+
+
                 await set(
                     newProductRef,
-                    {
-
-                        ...product,
-
-                        createdAt:
-                            new Date().toISOString()
-
-                    }
+                    product
                 );
 
 
                 await addActivity(
-                    "Added",
-                    product.name
+                    "Product Added",
+                    `${name} was added to inventory.`
                 );
 
 
-                message.textContent =
-                    "Product added successfully.";
+                showToast(
+                    "Product added successfully.",
+                    "success"
+                );
 
             }
 
 
             resetProductForm();
 
-
-            setTimeout(() => {
-
-                showContent(
-                    "inventoryContent"
-                );
-
-            }, 700);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            message.textContent =
-                "Error saving product.";
+            showPage("inventory");
 
         }
 
-    });
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Unable to save product.",
+                "error"
+            );
+
+        }
+
+    }
+);
 
 
-/* =====================================================
+/* =========================================================
    EDIT PRODUCT
-===================================================== */
+========================================================= */
 
-window.editProduct = function(id) {
+function editProduct(id) {
 
     const product =
         products[id];
 
 
     if (!product) {
+
+        showToast(
+            "Product not found.",
+            "error"
+        );
+
         return;
     }
 
@@ -858,106 +1252,65 @@ window.editProduct = function(id) {
 
 
     document
-        .getElementById("productSKU")
-        .value = product.sku || "";
+        .getElementById("sku")
+        .value =
+            product.sku || "";
 
 
     document
         .getElementById("productName")
-        .value = product.name || "";
+        .value =
+            product.name || "";
 
 
     document
-        .getElementById("productCategory")
-        .value = product.category || "";
+        .getElementById("category")
+        .value =
+            product.category || "";
 
 
     document
-        .getElementById("productQuantity")
-        .value = product.quantity || 0;
+        .getElementById("quantity")
+        .value =
+            product.quantity ?? 0;
 
 
     document
-        .getElementById("productPrice")
-        .value = product.price || 0;
+        .getElementById("price")
+        .value =
+            product.price ?? 0;
 
 
     document
-        .getElementById("productThreshold")
-        .value = product.threshold || 0;
+        .getElementById("threshold")
+        .value =
+            product.threshold ?? 5;
 
 
     document
-        .getElementById("formTitle")
-        .textContent = "Edit Product";
+        .getElementById("productFormTitle")
+        .textContent =
+            "Edit Product";
 
 
-    showContent("addProductContent");
-
-};
-
-
-/* =====================================================
-   DELETE PRODUCT
-===================================================== */
-
-window.deleteProduct = async function(id) {
-
-    const product =
-        products[id];
+    document
+        .getElementById("saveProductBtn")
+        .textContent =
+            "Update Product";
 
 
-    if (!product) {
-        return;
-    }
+    showPage("addProduct");
+
+}
 
 
-    const confirmDelete =
-        confirm(
-            `Delete "${product.name}"?`
-        );
-
-
-    if (!confirmDelete) {
-        return;
-    }
-
-
-    try {
-
-        await remove(
-            ref(db, `bakeryProducts/${id}`)
-        );
-
-
-        await addActivity(
-            "Deleted",
-            product.name
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to delete product."
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   RESET PRODUCT FORM
-===================================================== */
+/* =========================================================
+   RESET FORM
+========================================================= */
 
 function resetProductForm() {
 
-    document
-        .getElementById("productForm")
-        .reset();
+    productForm.reset();
 
 
     document
@@ -966,67 +1319,113 @@ function resetProductForm() {
 
 
     document
-        .getElementById("formTitle")
-        .textContent = "Add Product";
+        .getElementById("threshold")
+        .value = 5;
 
 
     document
-        .getElementById("productMessage")
-        .textContent = "";
+        .getElementById("productFormTitle")
+        .textContent =
+            "Add Product";
+
+
+    document
+        .getElementById("saveProductBtn")
+        .textContent =
+            "Save Product";
 
 }
 
 
-/* =====================================================
-   CANCEL PRODUCT
-===================================================== */
+/* =========================================================
+   DELETE PRODUCT
+========================================================= */
 
-document
-    .getElementById("cancelProductBtn")
-    .addEventListener(
-        "click",
-        () => {
+async function deleteProduct(id) {
 
-            resetProductForm();
-
-            showContent(
-                "inventoryContent"
-            );
-
-        }
-    );
+    const product =
+        products[id];
 
 
-/* =====================================================
+    if (!product) {
+
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${product.name}" from inventory?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    try {
+
+        await remove(
+            ref(
+                db,
+                "bakeryProducts/" + id
+            )
+        );
+
+
+        await addActivity(
+            "Product Deleted",
+            `${product.name} was deleted from inventory.`
+        );
+
+
+        showToast(
+            "Product deleted successfully.",
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Unable to delete product.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    DASHBOARD
-===================================================== */
+========================================================= */
 
 function updateDashboard() {
 
-    const list =
+    const entries =
         Object.values(products);
-
-
-    let totalProducts =
-        list.length;
 
 
     let totalStock = 0;
 
     let lowStock = 0;
 
-    let totalValue = 0;
+    let estimatedValue = 0;
 
 
-    list.forEach(product => {
+    entries.forEach(product => {
 
         const quantity =
             Number(product.quantity || 0);
 
-
         const price =
             Number(product.price || 0);
-
 
         const threshold =
             Number(product.threshold || 0);
@@ -1034,11 +1433,14 @@ function updateDashboard() {
 
         totalStock += quantity;
 
-        totalValue +=
+        estimatedValue +=
             quantity * price;
 
 
-        if (quantity <= threshold) {
+        if (
+            quantity > 0 &&
+            quantity <= threshold
+        ) {
 
             lowStock++;
 
@@ -1050,25 +1452,32 @@ function updateDashboard() {
     document
         .getElementById("totalProducts")
         .textContent =
-        totalProducts;
+            entries.length;
 
 
     document
         .getElementById("totalStock")
         .textContent =
-        totalStock;
+            totalStock;
 
 
     document
-        .getElementById("lowStock")
+        .getElementById("lowStockItems")
         .textContent =
-        lowStock;
+            lowStock;
 
 
     document
-        .getElementById("totalValue")
+        .getElementById("estimatedValue")
         .textContent =
-        `₱${totalValue.toFixed(2)}`;
+            "₱" +
+            estimatedValue.toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
 
 
     displayDashboardTable();
@@ -1076,105 +1485,94 @@ function updateDashboard() {
 }
 
 
-/* =====================================================
+/* =========================================================
    DASHBOARD TABLE
-===================================================== */
+========================================================= */
 
 function displayDashboardTable() {
 
-    const table =
+    const tbody =
         document.getElementById(
-            "dashboardTable"
+            "dashboardTableBody"
         );
 
 
-    table.innerHTML = "";
+    tbody.innerHTML = "";
 
 
-    const list =
+    const entries =
         Object.entries(products)
             .slice(-8)
             .reverse();
 
 
-    list.forEach(([id, product]) => {
+    if (entries.length === 0) {
 
-        const quantity =
-            Number(product.quantity || 0);
-
-
-        const threshold =
-            Number(product.threshold || 0);
-
-
-        const low =
-            quantity <= threshold;
-
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>${escapeHTML(product.sku)}</td>
-
-            <td>${escapeHTML(product.name)}</td>
-
-            <td>${escapeHTML(product.category)}</td>
-
-            <td>${quantity}</td>
-
-            <td>₱${Number(product.price || 0).toFixed(2)}</td>
-
-            <td>
-                <span class="status ${low ? "low" : "ok"}">
-                    ${low ? "LOW STOCK" : "IN STOCK"}
-                </span>
-            </td>
-
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        No products available.
+                    </div>
+                </td>
+            </tr>
         `;
 
-
-        table.appendChild(row);
-
-    });
-
-}
-
-
-/* =====================================================
-   ACTIVITY LOG
-===================================================== */
-
-async function addActivity(
-    action,
-    productName
-) {
-
-    if (!currentUser) {
         return;
     }
 
 
-    const newLog =
-        push(activityRef);
+    entries.forEach(
+        ([id, product]) => {
+
+            const quantity =
+                Number(product.quantity || 0);
+
+            const threshold =
+                Number(product.threshold || 0);
 
 
-    await set(
-        newLog,
-        {
+            const status =
+                getProductStatus(
+                    quantity,
+                    threshold
+                );
 
-            action: action,
 
-            product:
-                productName,
+            const tr =
+                document.createElement("tr");
 
-            user:
-                currentUser.email,
 
-            date:
-                new Date().toISOString()
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeHTML(product.sku || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(product.name || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(product.category || "-")}
+                </td>
+
+                <td>
+                    ${quantity}
+                </td>
+
+                <td>
+                    ₱${Number(product.price || 0).toFixed(2)}
+                </td>
+
+                <td>
+                    ${getStatusHTML(status)}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
 
         }
     );
@@ -1182,9 +1580,122 @@ async function addActivity(
 }
 
 
-/* =====================================================
-   LOAD ACTIVITY
-===================================================== */
+/* =========================================================
+   PRODUCT STATUS
+========================================================= */
+
+function getProductStatus(
+    quantity,
+    threshold
+) {
+
+    if (quantity <= 0) {
+
+        return "out";
+
+    }
+
+
+    if (quantity <= threshold) {
+
+        return "low";
+
+    }
+
+
+    return "in";
+
+}
+
+
+/* =========================================================
+   STATUS HTML
+========================================================= */
+
+function getStatusHTML(status) {
+
+    if (status === "out") {
+
+        return `
+            <span class="status out-stock">
+                OUT OF STOCK
+            </span>
+        `;
+
+    }
+
+
+    if (status === "low") {
+
+        return `
+            <span class="status low-stock">
+                LOW STOCK
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="status in-stock">
+            IN STOCK
+        </span>
+    `;
+
+}
+
+
+/* =========================================================
+   ACTIVITY LOG
+========================================================= */
+
+async function addActivity(
+    action,
+    description
+) {
+
+    try {
+
+        const newActivity =
+            push(activityRef);
+
+
+        await set(
+            newActivity,
+            {
+
+                action: action,
+
+                description: description,
+
+                email:
+                    currentUser
+                        ? currentUser.email
+                        : "System",
+
+                createdAt:
+                    new Date().toISOString()
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Activity error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD ACTIVITY LOGS
+========================================================= */
 
 function loadActivityLogs() {
 
@@ -1196,46 +1707,90 @@ function loadActivityLogs() {
                 snapshot.val() || {};
 
 
-            const table =
+            const list =
                 document.getElementById(
-                    "activityTable"
+                    "activityList"
                 );
 
 
-            table.innerHTML = "";
+            list.innerHTML = "";
 
 
-            Object.values(data)
-                .reverse()
-                .forEach(log => {
-
-                    const row =
-                        document.createElement("tr");
-
-
-                    const date =
-                        log.date
-                            ? new Date(log.date)
-                                .toLocaleString()
-                            : "-";
+            const entries =
+                Object.values(data)
+                    .sort(
+                        (a, b) =>
+                            new Date(b.createdAt || 0)
+                            -
+                            new Date(a.createdAt || 0)
+                    );
 
 
-                    row.innerHTML = `
+            if (entries.length === 0) {
 
-                        <td>${escapeHTML(date)}</td>
+                list.innerHTML = `
+                    <div class="empty-state">
+                        No activity logs yet.
+                    </div>
+                `;
 
-                        <td>${escapeHTML(log.action || "")}</td>
+                return;
+            }
 
-                        <td>${escapeHTML(log.product || "")}</td>
 
-                        <td>${escapeHTML(log.user || "")}</td>
+            entries
+                .slice(0, 50)
+                .forEach(activity => {
+
+                    const item =
+                        document.createElement("div");
+
+
+                    item.className =
+                        "activity-item";
+
+
+                    item.innerHTML = `
+
+                        <strong>
+                            ${escapeHTML(
+                                activity.action || "Activity"
+                            )}
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(
+                                activity.description || ""
+                            )}
+                        </p>
+
+                        <p>
+                            By:
+                            ${escapeHTML(
+                                activity.email || "System"
+                            )}
+                        </p>
+
+                        <p class="activity-time">
+                            ${formatDate(
+                                activity.createdAt
+                            )}
+                        </p>
 
                     `;
 
 
-                    table.appendChild(row);
+                    list.appendChild(item);
 
                 });
+
+        },
+        error => {
+
+            console.error(
+                "Activity logs error:",
+                error
+            );
 
         }
     );
@@ -1243,51 +1798,150 @@ function loadActivityLogs() {
 }
 
 
-/* =====================================================
-   FIREBASE ERROR MESSAGE
-===================================================== */
+/* =========================================================
+   DATE FORMAT
+========================================================= */
 
-function getFirebaseError(error) {
+function formatDate(dateString) {
 
-    switch (error.code) {
+    if (!dateString) {
 
-        case "auth/invalid-credential":
-        case "auth/invalid-login-credentials":
-            return "Invalid email or password.";
+        return "Unknown date";
 
-        case "auth/user-not-found":
-            return "No account found with this email.";
+    }
 
-        case "auth/wrong-password":
-            return "Incorrect password.";
 
-        case "auth/email-already-in-use":
-            return "This email is already registered.";
+    const date =
+        new Date(dateString);
 
-        case "auth/weak-password":
-            return "Password is too weak.";
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "Unknown date";
+
+    }
+
+
+    return date.toLocaleString(
+        "en-PH",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent = message;
+
+    toast.className =
+        "show " + type;
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.className = "";
+
+        }, 3000);
+
+}
+
+
+/* =========================================================
+   AUTH ERROR MESSAGE
+========================================================= */
+
+function getAuthErrorMessage(error) {
+
+    const code =
+        error.code || "";
+
+
+    switch (code) {
 
         case "auth/invalid-email":
-            return "Please enter a valid email.";
+
+            return "Invalid email address.";
+
+
+        case "auth/user-not-found":
+
+            return "No account found with this email.";
+
+
+        case "auth/wrong-password":
+
+            return "Incorrect password.";
+
+
+        case "auth/invalid-credential":
+
+            return "Incorrect email or password.";
+
+
+        case "auth/email-already-in-use":
+
+            return "This email is already registered.";
+
+
+        case "auth/weak-password":
+
+            return "Password must be at least 6 characters.";
+
 
         case "auth/too-many-requests":
+
             return "Too many attempts. Please try again later.";
 
+
+        case "auth/network-request-failed":
+
+            return "Network error. Check your internet connection.";
+
+
+        case "auth/operation-not-allowed":
+
+            return "Email/password login is not enabled in Firebase.";
+
+
         default:
-            return error.message || "Something went wrong.";
+
+            return error.message ||
+                "Something went wrong.";
 
     }
 
 }
 
 
-/* =====================================================
+/* =========================================================
    ESCAPE HTML
-===================================================== */
+========================================================= */
 
 function escapeHTML(value) {
 
-    return String(value ?? "")
+    return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -1295,3 +1949,10 @@ function escapeHTML(value) {
         .replace(/'/g, "&#039;");
 
 }
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+showLogin();
