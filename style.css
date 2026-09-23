@@ -1,595 +1,375 @@
+/* =====================================
+   GENERAL
+===================================== */
+
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 
 body {
-    background: #fff8f0;
-    color: #4b2e20;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f7f1e8;
+    color: #3e2723;
+    line-height: 1.5;
 }
 
-
-/* =========================
-   LOGIN
-========================= */
-
-.login-body {
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b4513,
-            #d2691e
-        );
+button,
+input,
+select {
+    font-family: inherit;
 }
 
-.login-container {
+button {
+    cursor: pointer;
+}
+
+input,
+select {
+    padding: 11px;
     width: 100%;
-    max-width: 420px;
-    padding: 20px;
+    border: 1px solid #d7ccc8;
+    border-radius: 7px;
+    outline: none;
 }
 
-.login-card {
-    background: white;
+input:focus,
+select:focus {
+    border-color: #795548;
+}
 
-    padding: 35px;
+/* =====================================
+   HEADER
+===================================== */
 
-    border-radius: 18px;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.2);
-
+header {
+    background: #5d4037;
+    color: white;
+    padding: 20px;
     text-align: center;
 }
 
-.bakery-logo {
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-.login-card h1 {
-    color: #6f350f;
-}
-
-.login-subtitle {
-    color: #777;
-    margin: 8px 0 25px;
-}
-
-.login-card label {
-    display: block;
-    text-align: left;
-    margin-top: 12px;
-    font-weight: bold;
-}
-
-.login-card input {
-    width: 100%;
-
-    padding: 13px;
-
-    margin-top: 6px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-
-    outline: none;
-}
-
-.login-card input:focus {
-    border-color: #8b4513;
-}
-
-.main-button {
-    background: #8b4513;
-    color: white;
-
-    border: none;
-
-    padding: 12px 20px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: bold;
-}
-
-.main-button:hover {
-    background: #6f350f;
-}
-
-.login-card .main-button {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.secondary-button {
-    border: none;
-    background: transparent;
-    color: #8b4513;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.register-area {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.register-area p {
-    margin-bottom: 8px;
-}
-
-#loginMessage {
-    margin-top: 15px;
-    color: #b00000;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.top-header {
-    height: 70px;
-
-    background: #8b4513;
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 25px;
-}
-
-.top-header strong {
-    font-size: 20px;
-}
-
-.logout-button {
-    background: white;
-    color: #8b4513;
-
-    border: none;
-
-    padding: 9px 16px;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-}
-
-
-/* =========================
-   LAYOUT
-========================= */
-
-.layout {
-    display: flex;
-    min-height: calc(100vh - 70px);
-}
-
-
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar {
-    width: 230px;
-
-    background: #4b2e20;
-
-    color: white;
-
-    padding: 25px 15px;
-}
-
-.sidebar h2 {
-    margin-bottom: 20px;
-    padding-left: 10px;
-}
-
-.sidebar a {
-    display: block;
-
-    color: white;
-
-    text-decoration: none;
-
-    padding: 13px;
-
-    border-radius: 7px;
-
-    margin-bottom: 7px;
-}
-
-.sidebar a:hover,
-.sidebar a.active {
-    background: #8b4513;
-}
-
-
-/* =========================
-   MAIN
-========================= */
-
-.main-content {
-    flex: 1;
-
-    padding: 30px;
-
-    min-width: 0;
-}
-
-.main-content h1 {
+header h1 {
     margin-bottom: 5px;
 }
 
-.welcome {
-    color: #777;
-    margin-bottom: 25px;
+header p {
+    color: #efebe9;
 }
 
+/* =====================================
+   LOGIN
+===================================== */
 
-/* =========================
-   DASHBOARD
-========================= */
-
-.dashboard-cards {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 18px;
-
-    margin-bottom: 25px;
-}
-
-.dashboard-card {
+#login {
+    max-width: 420px;
+    margin: 50px auto;
     background: white;
-
-    padding: 22px;
-
-    border-radius: 12px;
-
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.08);
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
 }
 
-.card-icon {
-    font-size: 35px;
+#login h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #5d4037;
 }
 
-.dashboard-card p {
-    color: #777;
-
-    font-size: 14px;
+#login label {
+    font-weight: bold;
 }
 
-.dashboard-card h2 {
-    font-size: 30px;
-
+#login input {
     margin-top: 5px;
 }
 
-
-/* =========================
-   CONTENT CARD
-========================= */
-
-.content-card {
-    background: white;
-
-    padding: 25px;
-
-    border-radius: 12px;
-
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.08);
-
-    margin-bottom: 25px;
+#login button {
+    background: #6d4c41;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 7px;
 }
 
-.section-title {
+#login button:hover {
+    background: #4e342e;
+}
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+nav {
+    background: #3e2723;
+    padding: 12px;
     display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 15px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.section-title a {
-    color: #8b4513;
-    text-decoration: none;
-    font-weight: bold;
+nav button {
+    background: #6d4c41;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
 }
 
-
-/* =========================
-   TABLE
-========================= */
-
-.table-container {
-    width: 100%;
-
-    overflow-x: auto;
+nav button:hover {
+    background: #8d6e63;
 }
 
-table {
-    width: 100%;
+/* =====================================
+   SECTIONS
+===================================== */
 
-    border-collapse: collapse;
-
-    min-width: 650px;
+section {
+    margin: 20px;
 }
 
-th,
-td {
-    padding: 13px;
-
-    border-bottom: 1px solid #eee;
-
-    text-align: left;
+#dashboard,
+#products,
+#stock {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
 }
 
-th {
-    background: #f3e2d0;
-}
-
-.badge {
-    display: inline-block;
-
-    padding: 5px 10px;
-
-    border-radius: 20px;
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-.in-stock {
-    background: #d9f5dc;
-    color: #24752d;
-}
-
-.low-stock {
-    background: #fff0b8;
-    color: #886400;
-}
-
-.out-stock {
-    background: #ffd7d7;
-    color: #a00000;
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-area {
+#dashboard h2,
+#products h2,
+#stock h2 {
+    color: #5d4037;
     margin-bottom: 20px;
 }
 
-.search-area input {
-    width: 100%;
+/* =====================================
+   DASHBOARD CARDS
+===================================== */
 
-    max-width: 400px;
-
-    padding: 12px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
+#dashboard > div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
 }
 
+#dashboard article {
+    background: #f5eee7;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 5px solid #795548;
+}
 
-/* =========================
+#dashboard article h4 {
+    color: #795548;
+    margin-bottom: 10px;
+}
+
+#dashboard article p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* =====================================
    FORMS
-========================= */
+===================================== */
 
-.form-card {
-    margin-top: 20px;
+form {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.form-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 18px;
-
-    margin-top: 20px;
-}
-
-.form-grid label,
-.stock-layout label {
-    display: block;
-
-    margin-bottom: 7px;
-
+form label {
     font-weight: bold;
+    display: inline-block;
+    margin-bottom: 4px;
 }
 
-.form-grid input,
-.form-grid select,
-.stock-layout input,
-.stock-layout select {
-    width: 100%;
+form input,
+form select {
+    margin-bottom: 10px;
+}
 
-    padding: 11px;
-
-    border: 1px solid #ddd;
-
+form button {
+    padding: 11px 18px;
+    border: none;
     border-radius: 7px;
-
-    outline: none;
+    background: #6d4c41;
+    color: white;
+    margin-right: 5px;
 }
 
-.form-grid input:focus,
-.form-grid select:focus,
-.stock-layout input:focus,
-.stock-layout select:focus {
-    border-color: #8b4513;
+form button:hover {
+    background: #4e342e;
 }
 
-.form-buttons {
-    display: flex;
+/* =====================================
+   SEARCH
+===================================== */
 
-    gap: 10px;
-
-    margin-top: 20px;
+#search {
+    max-width: 400px;
+    margin-bottom: 20px;
 }
 
-.cancel-button {
-    border: none;
+/* =====================================
+   TABLE
+===================================== */
 
-    padding: 12px 20px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    background: #ddd;
-}
-
-.small-button {
-    width: auto;
-}
-
-.full-button {
+table {
     width: 100%;
-
-    margin-top: 20px;
-}
-
-
-/* =========================
-   STOCK
-========================= */
-
-.stock-layout {
-    display: grid;
-
-    grid-template-columns:
-        400px 1fr;
-
-    gap: 25px;
-}
-
-.stock-layout form {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-#stockMessage {
+    border-collapse: collapse;
     margin-top: 15px;
+    background: white;
+}
+
+th {
+    background: #5d4037;
+    color: white;
+    padding: 13px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+/* =====================================
+   TABLE BUTTONS
+===================================== */
+
+td button {
+    padding: 7px 11px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin: 2px;
+}
+
+td button:first-child {
+    background: #1976d2;
+}
+
+td button:first-child:hover {
+    background: #0d47a1;
+}
+
+td button:last-child {
+    background: #d32f2f;
+}
+
+td button:last-child:hover {
+    background: #b71c1c;
+}
+
+/* =====================================
+   STOCK STATUS
+===================================== */
+
+.status-available {
+    color: #2e7d32;
     font-weight: bold;
 }
 
-
-/* =========================
-   ACTION BUTTONS
-========================= */
-
-.action-button {
-    border: none;
-
-    padding: 6px 10px;
-
-    border-radius: 5px;
-
-    cursor: pointer;
-
-    margin-right: 4px;
+.status-low {
+    color: #ef6c00;
+    font-weight: bold;
 }
 
-.edit-button {
-    background: #e1efff;
-    color: #1763a5;
+.status-out {
+    color: #c62828;
+    font-weight: bold;
 }
 
-.delete-button {
-    background: #ffe0e0;
-    color: #a00000;
+/* =====================================
+   FOOTER
+===================================== */
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #795548;
 }
 
+/* =====================================
+   HIDDEN
+===================================== */
 
-/* =========================
+.hidden {
+    display: none !important;
+}
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.success {
+    background: #c8e6c9;
+    color: #256029;
+}
+
+.error {
+    background: #ffcdd2;
+    color: #b71c1c;
+}
+
+/* =====================================
    RESPONSIVE
-========================= */
+===================================== */
 
-@media(max-width: 1000px) {
+@media (max-width: 900px) {
 
-    .dashboard-cards {
-        grid-template-columns:
-            repeat(2, 1fr);
+    #dashboard > div {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .stock-layout {
+}
+
+@media (max-width: 600px) {
+
+    #login {
+        margin: 25px 15px;
+    }
+
+    section {
+        margin: 10px;
+    }
+
+    #dashboard,
+    #products,
+    #stock {
+        padding: 15px;
+    }
+
+    #dashboard > div {
         grid-template-columns: 1fr;
     }
 
-}
-
-
-@media(max-width: 700px) {
-
-    .layout {
+    nav {
         flex-direction: column;
     }
 
-    .sidebar {
+    nav button {
         width: 100%;
     }
 
-    .sidebar a {
-        display: inline-block;
-        margin-right: 5px;
+    table {
+        font-size: 13px;
     }
-
-    .main-content {
-        padding: 18px;
-    }
-
-    .dashboard-cards {
-        grid-template-columns: 1fr;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .top-header {
-        padding: 0 15px;
-    }
-
 }
