@@ -1,6 +1,8 @@
-/* =========================================================
-   FIREBASE IMPORTS
-========================================================= */
+// ============================================================
+// ARBEES BAKERY SHOP
+// Firebase Authentication + Realtime Database
+// OTP REMOVED - Login goes directly to Dashboard
+// ============================================================
 
 import {
     initializeApp
@@ -12,7 +14,8 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 import {
@@ -25,234 +28,193 @@ import {
     remove
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
-import {
-    getFunctions,
-    httpsCallable
-} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-functions.js";
 
-
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+// ============================================================
+// FIREBASE CONFIG
+// ============================================================
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
-
-    authDomain:
-        "crudfirebase-b2a1f.firebaseapp.com",
-
-    databaseURL:
-        "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
-
-    projectId:
-        "crudfirebase-b2a1f",
-
-    storageBucket:
-        "crudfirebase-b2a1f.firebasestorage.app",
-
-    messagingSenderId:
-        "383674756572",
-
-    appId:
-        "1:383674756572:web:0585f268fb2cc8f5a6b319",
-
-    measurementId:
-        "G-QJXMR8ZQH8"
+    apiKey: "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc4",
+    authDomain: "crudfirebase-b2a1f.firebaseapp.com",
+    databaseURL: "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
+    projectId: "crudfirebase-b2a1f",
+    storageBucket: "crudfirebase-b2a1f.firebasestorage.app",
+    messagingSenderId: "383674756572",
+    appId: "1:383674756572:web:0585f268fb2cc8f5a6b319",
+    measurementId: "G-QJXMR8ZQH8"
 };
 
 
-/* =========================================================
-   INITIALIZE FIREBASE
-========================================================= */
+// ============================================================
+// INITIALIZE FIREBASE
+// ============================================================
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getDatabase(app);
 
 
-/* =========================================================
-   FIREBASE CLOUD FUNCTIONS
-========================================================= */
+// ============================================================
+// GLOBAL VARIABLES
+// ============================================================
 
-const functions = getFunctions(
-    app,
-    "us-central1"
-);
-
-
-const sendOtpFunction =
-    httpsCallable(functions, "sendOtp");
+let currentUser = null;
+let editingProductId = null;
+let products = [];
 
 
-const verifyOtpFunction =
-    httpsCallable(functions, "verifyOtp");
+// ============================================================
+// HELPER
+// ============================================================
 
+function $(id) {
+    return document.getElementById(id);
+}
 
-const clearOtpFunction =
-    httpsCallable(functions, "clearOtpVerification");
+function show(id) {
+    const element = $(id);
+    if (element) {
+        element.style.display = "";
+    }
+}
 
+function hide(id) {
+    const element = $(id);
+    if (element) {
+        element.style.display = "none";
+    }
+}
 
-/* =========================================================
-   DOM
-========================================================= */
+function setText(id, text) {
+    const element = $(id);
+    if (element) {
+        element.textContent = text;
+    }
+}
 
-const loginPage =
-    document.getElementById("loginPage");
+function getValue(id) {
+    const element = $(id);
+    return element ? element.value.trim() : "";
+}
 
-const registerPage =
-    document.getElementById("registerPage");
-
-const otpPage =
-    document.getElementById("otpPage");
-
-const appPage =
-    document.getElementById("appPage");
-
-
-/* =========================================================
-   AUTH ELEMENTS
-========================================================= */
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const registerForm =
-    document.getElementById("registerForm");
-
-const otpForm =
-    document.getElementById("otpForm");
-
-const forgotPasswordBtn =
-    document.getElementById("forgotPasswordBtn");
-
-const showRegisterBtn =
-    document.getElementById("showRegisterBtn");
-
-const showLoginBtn =
-    document.getElementById("showLoginBtn");
-
-const cancelOtpBtn =
-    document.getElementById("cancelOtpBtn");
-
-const resendOtpBtn =
-    document.getElementById("resendOtpBtn");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
-
-
-/* =========================================================
-   MESSAGES
-========================================================= */
-
-const loginMessage =
-    document.getElementById("loginMessage");
-
-const registerMessage =
-    document.getElementById("registerMessage");
-
-const otpMessage =
-    document.getElementById("otpMessage");
-
-
-/* =========================================================
-   OTP VARIABLES
-========================================================= */
-
-let otpTimerInterval = null;
-
-let otpSecondsRemaining = 300;
-
-let resendSecondsRemaining = 60;
-
-let otpChallengeActive = false;
-
-
-/* =========================================================
-   PRODUCT DATA
-========================================================= */
-
-let products = {};
-
-
-/* =========================================================
-   HELPER
-========================================================= */
-
-function showOnly(page) {
-
-    loginPage.classList.add("hidden");
-
-    registerPage.classList.add("hidden");
-
-    otpPage.classList.add("hidden");
-
-    appPage.classList.add("hidden");
-
-    page.classList.remove("hidden");
+function setValue(id, value) {
+    const element = $(id);
+    if (element) {
+        element.value = value ?? "";
+    }
 }
 
 
-function setMessage(element, message, type = "info") {
+// ============================================================
+// PAGE NAVIGATION
+// ============================================================
 
-    element.textContent = message;
+function showPage(pageId) {
 
-    element.className =
-        `auth-message ${type}`;
+    const pages = [
+        "loginPage",
+        "registerPage",
+        "dashboardPage",
+        "inventoryPage",
+        "activityPage",
+        "appPage",
+        "mainApp"
+    ];
+
+    pages.forEach(id => {
+        const element = $(id);
+
+        if (element) {
+            element.style.display = "none";
+        }
+    });
+
+    const page = $(pageId);
+
+    if (page) {
+        page.style.display = "block";
+    }
+
+    // If main application wrapper exists
+    if (pageId === "dashboardPage" ||
+        pageId === "inventoryPage" ||
+        pageId === "activityPage") {
+
+        const appPage = $("appPage");
+
+        if (appPage) {
+            appPage.style.display = "block";
+        }
+
+        const mainApp = $("mainApp");
+
+        if (mainApp) {
+            mainApp.style.display = "block";
+        }
+    }
 }
+
+
+// ============================================================
+// LOGIN / REGISTER PAGE SWITCH
+// ============================================================
+
+window.showLogin = function () {
+
+    hide("registerPage");
+    hide("dashboardPage");
+    hide("inventoryPage");
+    hide("activityPage");
+    hide("appPage");
+    hide("mainApp");
+
+    show("loginPage");
+
+    clearMessages();
+};
+
+
+window.showRegister = function () {
+
+    hide("loginPage");
+
+    show("registerPage");
+
+    clearMessages();
+};
 
 
 function clearMessages() {
 
-    setMessage(loginMessage, "");
+    const ids = [
+        "loginError",
+        "registerError",
+        "loginMessage",
+        "registerMessage"
+    ];
 
-    setMessage(registerMessage, "");
+    ids.forEach(id => {
+        const element = $(id);
 
-    setMessage(otpMessage, "");
-}
-
-
-function formatPeso(value) {
-
-    return Number(value || 0).toLocaleString(
-        "en-PH",
-        {
-            style: "currency",
-            currency: "PHP"
+        if (element) {
+            element.textContent = "";
+            element.style.display = "";
         }
-    );
+    });
 }
 
 
-function formatDate(timestamp) {
-
-    if (!timestamp) {
-        return "Unknown date";
-    }
-
-    return new Date(timestamp).toLocaleString(
-        "en-PH",
-        {
-            dateStyle: "medium",
-            timeStyle: "short"
-        }
-    );
-}
-
-
-/* =========================================================
-   FIREBASE ERROR MESSAGE
-========================================================= */
+// ============================================================
+// FIREBASE ERROR MESSAGE
+// ============================================================
 
 function getFirebaseErrorMessage(error) {
 
-    const code = error?.code || "";
+    if (!error) {
+        return "Something went wrong.";
+    }
 
-    switch (code) {
+    switch (error.code) {
 
         case "auth/invalid-email":
             return "Invalid email address.";
@@ -264,715 +226,173 @@ function getFirebaseErrorMessage(error) {
             return "Incorrect password.";
 
         case "auth/invalid-credential":
-            return "Invalid email or password.";
+            return "Incorrect email or password.";
 
         case "auth/email-already-in-use":
-            return "This email is already registered.";
+            return "Email is already registered.";
 
         case "auth/weak-password":
-            return "Password must be at least 6 characters.";
+            return "Password should be at least 6 characters.";
 
         case "auth/network-request-failed":
             return "Network error. Check your internet connection.";
 
-        case "functions/unauthenticated":
-            return "Please login first.";
-
-        case "functions/resource-exhausted":
-            return "Please wait before requesting another OTP.";
-
-        case "functions/invalid-argument":
-            return error?.message ||
-                "Invalid OTP.";
+        case "auth/too-many-requests":
+            return "Too many attempts. Please try again later.";
 
         default:
-            return error?.message ||
-                "Something went wrong.";
+            return error.message || "Something went wrong.";
     }
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+// ============================================================
+// LOGIN
+// ============================================================
 
-loginForm.addEventListener(
-    "submit",
-    async function (event) {
+const loginForm = $("loginForm");
+
+if (loginForm) {
+
+    loginForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
 
-        clearMessages();
+        const email = getValue("loginEmail");
+        const password = getValue("loginPassword");
 
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
-
-        const loginBtn =
-            document.getElementById("loginBtn");
-
+        const errorElement =
+            $("loginError") ||
+            $("loginMessage");
 
         if (!email || !password) {
 
-            setMessage(
-                loginMessage,
-                "Please enter your email and password.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        try {
-
-            loginBtn.disabled = true;
-
-            loginBtn.textContent =
-                "LOGGING IN...";
-
-
-            /*
-             * FIRST SECURITY STEP:
-             * Email + Password
-             */
-
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
-
-            /*
-             * SECOND SECURITY STEP:
-             * Send OTP to Gmail
-             */
-
-            await sendOtp();
-
-
-            showOtpPage(email);
-
-
-            setMessage(
-                otpMessage,
-                "OTP sent to your email.",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Login / OTP Error:",
-                error
-            );
-
-
-            /*
-             * If OTP sending failed,
-             * logout the authenticated user.
-             */
-
-            try {
-                await signOut(auth);
-            } catch (logoutError) {
-                console.error(logoutError);
+            if (errorElement) {
+                errorElement.textContent =
+                    "Please enter your email and password.";
             }
 
-
-            showOnly(loginPage);
-
-
-            setMessage(
-                loginMessage,
-                getFirebaseErrorMessage(error),
-                "error"
-            );
-
-
-        } finally {
-
-            loginBtn.disabled = false;
-
-            loginBtn.textContent =
-                "LOGIN";
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SEND OTP
-========================================================= */
-
-async function sendOtp() {
-
-    const result =
-        await sendOtpFunction({});
-
-
-    const data =
-        result.data || {};
-
-
-    otpChallengeActive = true;
-
-
-    startOtpTimer(
-        Number(data.expiresInSeconds || 300)
-    );
-
-
-    startResendTimer(
-        Number(data.resendInSeconds || 60)
-    );
-
-
-    return data;
-}
-
-
-/* =========================================================
-   SHOW OTP PAGE
-========================================================= */
-
-function showOtpPage(email) {
-
-    showOnly(otpPage);
-
-
-    document
-        .getElementById("otpEmailDisplay")
-        .textContent = email;
-
-
-    document
-        .getElementById("otpInput")
-        .value = "";
-
-
-    setMessage(
-        otpMessage,
-        "",
-        "info"
-    );
-
-
-    setTimeout(() => {
-
-        document
-            .getElementById("otpInput")
-            .focus();
-
-    }, 200);
-
-}
-
-
-/* =========================================================
-   OTP TIMER
-========================================================= */
-
-function startOtpTimer(seconds) {
-
-    clearInterval(otpTimerInterval);
-
-
-    otpSecondsRemaining =
-        Number(seconds);
-
-
-    updateOtpTimer();
-
-
-    otpTimerInterval =
-        setInterval(
-            () => {
-
-                otpSecondsRemaining--;
-
-                updateOtpTimer();
-
-
-                if (
-                    otpSecondsRemaining <= 0
-                ) {
-
-                    clearInterval(
-                        otpTimerInterval
-                    );
-
-                    otpChallengeActive = false;
-
-                    setMessage(
-                        otpMessage,
-                        "OTP expired. Please request a new OTP.",
-                        "error"
-                    );
-
-                }
-
-            },
-            1000
-        );
-}
-
-
-function updateOtpTimer() {
-
-    const timer =
-        document.getElementById(
-            "otpTimer"
-        );
-
-
-    if (
-        otpSecondsRemaining <= 0
-    ) {
-
-        timer.textContent =
-            "OTP expired.";
-
-        return;
-    }
-
-
-    const minutes =
-        Math.floor(
-            otpSecondsRemaining / 60
-        );
-
-    const seconds =
-        otpSecondsRemaining % 60;
-
-
-    timer.textContent =
-        `OTP expires in ${
-            String(minutes).padStart(2, "0")
-        }:${
-            String(seconds).padStart(2, "0")
-        }`;
-}
-
-
-/* =========================================================
-   RESEND TIMER
-========================================================= */
-
-let resendTimerInterval = null;
-
-
-function startResendTimer(seconds) {
-
-    clearInterval(
-        resendTimerInterval
-    );
-
-
-    resendSecondsRemaining =
-        Number(seconds);
-
-
-    resendOtpBtn.disabled = true;
-
-    updateResendButton();
-
-
-    resendTimerInterval =
-        setInterval(
-            () => {
-
-                resendSecondsRemaining--;
-
-                updateResendButton();
-
-
-                if (
-                    resendSecondsRemaining <= 0
-                ) {
-
-                    clearInterval(
-                        resendTimerInterval
-                    );
-
-                    resendOtpBtn.disabled =
-                        false;
-
-                    resendOtpBtn.textContent =
-                        "Resend OTP";
-
-                }
-
-            },
-            1000
-        );
-}
-
-
-function updateResendButton() {
-
-    if (
-        resendSecondsRemaining > 0
-    ) {
-
-        resendOtpBtn.textContent =
-            `Resend OTP (${resendSecondsRemaining}s)`;
-
-    } else {
-
-        resendOtpBtn.textContent =
-            "Resend OTP";
-    }
-}
-
-
-/* =========================================================
-   VERIFY OTP
-========================================================= */
-
-otpForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const otp =
-            document
-                .getElementById("otpInput")
-                .value
-                .trim();
-
-
-        if (!/^\d{6}$/.test(otp)) {
-
-            setMessage(
-                otpMessage,
-                "Enter the 6-digit OTP.",
-                "error"
-            );
-
             return;
         }
 
+        const loginButton =
+            $("loginBtn") ||
+            $("loginButton");
 
-        const verifyBtn =
-            document.getElementById(
-                "verifyOtpBtn"
-            );
-
+        if (loginButton) {
+            loginButton.disabled = true;
+            loginButton.textContent = "LOGGING IN...";
+        }
 
         try {
 
-            verifyBtn.disabled = true;
-
-            verifyBtn.textContent =
-                "VERIFYING...";
-
-
-            const result =
-                await verifyOtpFunction({
-                    otp: otp
-                });
-
-
-            if (
-                !result.data ||
-                result.data.success !== true
-            ) {
-
-                throw new Error(
-                    "OTP verification failed."
+            // Firebase Email/Password Login
+            const credential =
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
                 );
 
-            }
+            currentUser = credential.user;
 
+            console.log("Login successful:", currentUser.email);
 
-            /*
-             * Refresh Firebase ID token
-             * so otpVerified custom claim
-             * becomes available.
-             */
-
-            if (auth.currentUser) {
-
-                await auth.currentUser
-                    .getIdToken(true);
-
-            }
-
-
-            otpChallengeActive = false;
-
-
-            clearInterval(
-                otpTimerInterval
-            );
-
-
-            clearInterval(
-                resendTimerInterval
-            );
-
-
-            setMessage(
-                otpMessage,
-                "Verification successful!",
-                "success"
-            );
-
-
-            /*
-             * NOW OPEN DASHBOARD
-             */
-
-            setTimeout(
-                async () => {
-
-                    showApp();
-
-                    await loadProducts();
-
-                    await loadActivityLogs();
-
-                    updateDashboard();
-
-                },
-                400
-            );
-
+            // DIRECTLY GO TO DASHBOARD
+            // NO OTP
+            await openDashboard();
 
         } catch (error) {
 
-            console.error(
-                "OTP verification error:",
-                error
-            );
+            console.error("Login error:", error);
 
-
-            setMessage(
-                otpMessage,
-                getFirebaseErrorMessage(error),
-                "error"
-            );
-
+            if (errorElement) {
+                errorElement.textContent =
+                    getFirebaseErrorMessage(error);
+            }
 
         } finally {
 
-            verifyBtn.disabled = false;
-
-            verifyBtn.textContent =
-                "VERIFY OTP";
-        }
-
-    }
-);
-
-
-/* =========================================================
-   RESEND OTP
-========================================================= */
-
-resendOtpBtn.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            resendSecondsRemaining > 0
-        ) {
-            return;
-        }
-
-
-        try {
-
-            resendOtpBtn.disabled = true;
-
-            resendOtpBtn.textContent =
-                "SENDING...";
-
-
-            await sendOtp();
-
-
-            setMessage(
-                otpMessage,
-                "A new OTP has been sent.",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            resendOtpBtn.disabled = false;
-
-
-            setMessage(
-                otpMessage,
-                getFirebaseErrorMessage(error),
-                "error"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   CANCEL OTP
-========================================================= */
-
-cancelOtpBtn.addEventListener(
-    "click",
-    async function () {
-
-        try {
-
-            if (auth.currentUser) {
-
-                await clearOtpFunction({});
-
+            if (loginButton) {
+                loginButton.disabled = false;
+                loginButton.textContent = "LOGIN";
             }
-
-        } catch (error) {
-
-            console.error(
-                "Clear OTP error:",
-                error
-            );
-
         }
+    });
+}
 
 
-        try {
+// ============================================================
+// REGISTER
+// ============================================================
 
-            await signOut(auth);
+const registerForm = $("registerForm");
 
-        } catch (error) {
+if (registerForm) {
 
-            console.error(
-                "Logout error:",
-                error
-            );
-
-        }
-
-
-        otpChallengeActive = false;
-
-
-        clearInterval(
-            otpTimerInterval
-        );
-
-
-        clearInterval(
-            resendTimerInterval
-        );
-
-
-        showOnly(loginPage);
-
-        clearMessages();
-
-    }
-);
-
-
-/* =========================================================
-   REGISTER
-========================================================= */
-
-registerForm.addEventListener(
-    "submit",
-    async function (event) {
+    registerForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
 
-        clearMessages();
-
-
         const name =
-            document
-                .getElementById("registerName")
-                .value
-                .trim();
-
+            getValue("registerName") ||
+            getValue("fullName") ||
+            getValue("name");
 
         const email =
-            document
-                .getElementById("registerEmail")
-                .value
-                .trim();
-
+            getValue("registerEmail");
 
         const password =
-            document
-                .getElementById("registerPassword")
-                .value;
-
+            getValue("registerPassword");
 
         const confirmPassword =
-            document
-                .getElementById(
-                    "registerConfirmPassword"
-                )
-                .value;
+            getValue("registerConfirmPassword") ||
+            getValue("confirmPassword");
 
+        const errorElement =
+            $("registerError") ||
+            $("registerMessage");
 
-        const registerBtn =
-            document.getElementById(
-                "registerBtn"
-            );
+        if (!name || !email || !password || !confirmPassword) {
 
-
-        if (
-            password !== confirmPassword
-        ) {
-
-            setMessage(
-                registerMessage,
-                "Passwords do not match.",
-                "error"
-            );
+            if (errorElement) {
+                errorElement.textContent =
+                    "Please complete all fields.";
+            }
 
             return;
         }
 
+        if (password !== confirmPassword) {
+
+            if (errorElement) {
+                errorElement.textContent =
+                    "Passwords do not match.";
+            }
+
+            return;
+        }
 
         if (password.length < 6) {
 
-            setMessage(
-                registerMessage,
-                "Password must be at least 6 characters.",
-                "error"
-            );
+            if (errorElement) {
+                errorElement.textContent =
+                    "Password must be at least 6 characters.";
+            }
 
             return;
         }
 
+        const registerButton =
+            $("registerBtn") ||
+            $("registerButton");
+
+        if (registerButton) {
+            registerButton.disabled = true;
+            registerButton.textContent = "CREATING...";
+        }
 
         try {
-
-            registerBtn.disabled = true;
-
-            registerBtn.textContent =
-                "CREATING ACCOUNT...";
-
 
             const credential =
                 await createUserWithEmailAndPassword(
@@ -981,76 +401,69 @@ registerForm.addEventListener(
                     password
                 );
 
+            const user = credential.user;
 
-            const user =
-                credential.user;
+            // Save display name in Firebase Authentication
+            try {
+
+                await updateProfile(user, {
+                    displayName: name
+                });
+
+            } catch (profileError) {
+
+                console.warn(
+                    "Could not update Firebase profile:",
+                    profileError
+                );
+            }
 
 
-            /*
-             * Save profile to RTDB
-             */
-
+            // Save user profile in Realtime Database
             await set(
-                ref(
-                    db,
-                    `users/${user.uid}`
-                ),
+                ref(db, `users/${user.uid}`),
                 {
+                    uid: user.uid,
                     name: name,
                     email: email,
                     role: "staff",
-                    createdAt: Date.now()
+                    createdAt: new Date().toISOString()
                 }
             );
 
 
-            /*
-             * Activity log is optional.
-             * If security rules block it before OTP,
-             * the account will still be created.
-             */
-
+            // Activity log
             try {
 
-                await addActivity(
-                    `New account registered: ${email}`
+                await push(
+                    ref(db, "activityLogs"),
+                    {
+                        action: "REGISTER",
+                        description:
+                            `${name} created an account`,
+                        userId: user.uid,
+                        userEmail: email,
+                        timestamp:
+                            new Date().toISOString()
+                    }
                 );
 
             } catch (activityError) {
 
                 console.warn(
-                    "Registration activity log skipped.",
+                    "Activity log could not be saved:",
                     activityError
                 );
-
             }
 
 
-            /*
-             * Logout after registration.
-             * User must login and complete OTP.
-             */
+            alert(
+                "Account created successfully! Please login."
+            );
 
             await signOut(auth);
 
-
-            registerForm.reset();
-
-
-            showOnly(loginPage);
-
-
-            document
-                .getElementById("loginEmail")
-                .value = email;
-
-
-            setMessage(
-                loginMessage,
-                "Account created successfully. Please login.",
-                "success"
-            );
-
+            showPage("loginPage");
 
         } catch (error) {
 
@@ -1059,441 +472,263 @@ registerForm.addEventListener(
                 error
             );
 
-
-            setMessage(
-                registerMessage,
-                getFirebaseErrorMessage(error),
-                "error"
-            );
-
-        } finally {
-
-            registerBtn.disabled = false;
-
-            registerBtn.textContent =
-                "SIGN UP";
-        }
-
-    }
-);
-
-
-/* =========================================================
-   FORGOT PASSWORD
-========================================================= */
-
-forgotPasswordBtn.addEventListener(
-    "click",
-    async function () {
-
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
-
-
-        if (!email) {
-
-            setMessage(
-                loginMessage,
-                "Enter your email first.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        try {
-
-            forgotPasswordBtn.disabled =
-                true;
-
-
-            await sendPasswordResetEmail(
-                auth,
-                email
-            );
-
-
-            setMessage(
-                loginMessage,
-                "Password reset email sent. Check your Gmail.",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            setMessage(
-                loginMessage,
-                getFirebaseErrorMessage(error),
-                "error"
-            );
-
-
-        } finally {
-
-            forgotPasswordBtn.disabled =
-                false;
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SHOW REGISTER
-========================================================= */
-
-showRegisterBtn.addEventListener(
-    "click",
-    function () {
-
-        clearMessages();
-
-        showOnly(registerPage);
-
-    }
-);
-
-
-/* =========================================================
-   SHOW LOGIN
-========================================================= */
-
-showLoginBtn.addEventListener(
-    "click",
-    function () {
-
-        clearMessages();
-
-        showOnly(loginPage);
-
-    }
-);
-
-
-/* =========================================================
-   SHOW APP
-========================================================= */
-
-function showApp() {
-
-    showOnly(appPage);
-
-
-    if (auth.currentUser) {
-
-        document
-            .getElementById(
-                "currentUserEmail"
-            )
-            .textContent =
-                auth.currentUser.email || "";
-
-    }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-document
-    .querySelectorAll(".nav-item[data-page]")
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const page =
-                        this.dataset.page;
-
-
-                    document
-                        .querySelectorAll(
-                            ".nav-item[data-page]"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    this.classList.add(
-                        "active"
-                    );
-
-
-                    showContentPage(page);
-
-                }
-            );
-
-        }
-    );
-
-
-function showContentPage(page) {
-
-    document
-        .querySelectorAll(".content-page")
-        .forEach(
-            section =>
-                section.classList.add(
-                    "hidden"
-                )
-        );
-
-
-    const selected =
-        document.getElementById(
-            `${page}Page`
-        );
-
-
-    if (selected) {
-
-        selected.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    const titles = {
-
-        dashboard:
-            "Dashboard",
-
-        inventory:
-            "Inventory",
-
-        activity:
-            "Activity Logs"
-
-    };
-
-
-    document
-        .getElementById("pageTitle")
-        .textContent =
-            titles[page] || "Dashboard";
-
-
-    if (page === "dashboard") {
-
-        updateDashboard();
-
-    }
-
-
-    if (page === "inventory") {
-
-        renderInventory();
-
-    }
-
-
-    if (page === "activity") {
-
-        loadActivityLogs();
-
-    }
-
-}
-
-
-/* =========================================================
-   DASHBOARD VIEW ALL
-========================================================= */
-
-document
-    .getElementById(
-        "dashboardInventoryBtn"
-    )
-    .addEventListener(
-        "click",
-        function () {
-
-            document
-                .querySelectorAll(
-                    ".nav-item[data-page]"
-                )
-                .forEach(
-                    item =>
-                        item.classList.remove(
-                            "active"
-                        )
-                );
-
-
-            const inventoryNav =
-                document.querySelector(
-                    '.nav-item[data-page="inventory"]'
-                );
-
-
-            if (inventoryNav) {
-
-                inventoryNav.classList.add(
-                    "active"
-                );
-
+            if (errorElement) {
+                errorElement.textContent =
+                    getFirebaseErrorMessage(error);
             }
 
+        } finally {
 
-            showContentPage(
-                "inventory"
-            );
+            if (registerButton) {
+                registerButton.disabled = false;
+                registerButton.textContent = "REGISTER";
+            }
+        }
+    });
+}
 
+
+// ============================================================
+// FORGOT PASSWORD
+// ============================================================
+
+const forgotPassword =
+    $("forgotPassword") ||
+    $("forgotPasswordLink");
+
+if (forgotPassword) {
+
+    forgotPassword.addEventListener(
+        "click",
+        async function (event) {
+
+            event.preventDefault();
+
+            const email =
+                getValue("loginEmail");
+
+            if (!email) {
+
+                alert(
+                    "Enter your email address first."
+                );
+
+                return;
+            }
+
+            try {
+
+                await sendPasswordResetEmail(
+                    auth,
+                    email
+                );
+
+                alert(
+                    "Password reset email sent. Check your inbox."
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Password reset error:",
+                    error
+                );
+
+                alert(
+                    getFirebaseErrorMessage(error)
+                );
+            }
         }
     );
+}
 
 
-/* =========================================================
-   INVENTORY DATA
-========================================================= */
+// ============================================================
+// DASHBOARD
+// ============================================================
+
+async function openDashboard() {
+
+    showPage("dashboardPage");
+
+    await loadProducts();
+    await loadActivityLogs();
+
+    updateDashboard();
+}
+
+
+// ============================================================
+// LOAD PRODUCTS
+// ============================================================
 
 async function loadProducts() {
 
-    return new Promise(
-        resolve => {
+    return new Promise(resolve => {
 
-            const productsRef =
-                ref(
-                    db,
-                    "bakeryProducts"
+        const productsRef =
+            ref(db, "bakeryProducts");
+
+        onValue(
+            productsRef,
+            snapshot => {
+
+                products = [];
+
+                if (snapshot.exists()) {
+
+                    const data =
+                        snapshot.val();
+
+                    Object.entries(data).forEach(
+                        ([id, product]) => {
+
+                            products.push({
+                                id,
+                                ...product
+                            });
+                        }
+                    );
+                }
+
+                renderInventory();
+                updateDashboard();
+
+                resolve();
+
+            },
+            error => {
+
+                console.error(
+                    "Products loading error:",
+                    error
                 );
 
+                products = [];
 
-            onValue(
-                productsRef,
-                snapshot => {
+                renderInventory();
+                updateDashboard();
 
-                    products =
-                        snapshot.val() || {};
-
-
-                    renderInventory();
-
-                    updateDashboard();
-
-                    resolve();
-
-                },
-                {
-                    onlyOnce: true
-                }
-            );
-
-        }
-    );
+                resolve();
+            },
+            {
+                onlyOnce: true
+            }
+        );
+    });
 }
 
 
-/* =========================================================
-   RENDER INVENTORY
-========================================================= */
+// ============================================================
+// DASHBOARD STATISTICS
+// ============================================================
+
+function updateDashboard() {
+
+    const totalProducts =
+        products.length;
+
+    const totalStock =
+        products.reduce(
+            (sum, product) =>
+                sum + Number(product.quantity || 0),
+            0
+        );
+
+    const lowStock =
+        products.filter(product => {
+
+            const quantity =
+                Number(product.quantity || 0);
+
+            const threshold =
+                Number(product.threshold || 5);
+
+            return quantity <= threshold;
+
+        }).length;
+
+    const estimatedValue =
+        products.reduce(
+            (sum, product) => {
+
+                const quantity =
+                    Number(product.quantity || 0);
+
+                const price =
+                    Number(product.price || 0);
+
+                return sum + (quantity * price);
+
+            },
+            0
+        );
+
+
+    setText(
+        "totalProducts",
+        totalProducts
+    );
+
+    setText(
+        "totalStock",
+        totalStock
+    );
+
+    setText(
+        "lowStockItems",
+        lowStock
+    );
+
+    setText(
+        "estimatedValue",
+        formatCurrency(estimatedValue)
+    );
+
+
+    renderRecentProducts();
+}
+
+
+// ============================================================
+// CURRENCY
+// ============================================================
+
+function formatCurrency(value) {
+
+    return "₱" +
+        Number(value || 0).toLocaleString(
+            "en-PH",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+}
+
+
+// ============================================================
+// RENDER INVENTORY
+// ============================================================
 
 function renderInventory() {
 
-    const tbody =
-        document.getElementById(
-            "inventoryTableBody"
-        );
+    const tableBody =
+        $("inventoryTableBody") ||
+        $("inventoryBody");
 
-
-    if (!tbody) {
+    if (!tableBody) {
         return;
     }
 
-
-    tbody.innerHTML = "";
-
-
-    const search =
-        (
-            document
-                .getElementById(
-                    "searchProduct"
-                )
-                ?.value || ""
-        )
-        .toLowerCase()
-        .trim();
+    tableBody.innerHTML = "";
 
 
-    const category =
-        document
-            .getElementById(
-                "categoryFilter"
-            )
-            ?.value || "all";
+    if (products.length === 0) {
 
-
-    const entries =
-        Object.entries(products);
-
-
-    const filtered =
-        entries.filter(
-            ([key, product]) => {
-
-                const name =
-                    String(
-                        product.name || ""
-                    ).toLowerCase();
-
-
-                const sku =
-                    String(
-                        product.sku || ""
-                    ).toLowerCase();
-
-
-                const productCategory =
-                    String(
-                        product.category || ""
-                    );
-
-
-                const matchesSearch =
-                    !search ||
-                    name.includes(search) ||
-                    sku.includes(search);
-
-
-                const matchesCategory =
-                    category === "all" ||
-                    productCategory === category;
-
-
-                return (
-                    matchesSearch &&
-                    matchesCategory
-                );
-
-            }
-        );
-
-
-    if (filtered.length === 0) {
-
-        tbody.innerHTML = `
+        tableBody.innerHTML = `
             <tr>
-                <td colspan="7"
-                    style="text-align:center;padding:30px;">
+                <td colspan="8" style="text-align:center;">
                     No products found.
                 </td>
             </tr>
@@ -1503,454 +738,333 @@ function renderInventory() {
     }
 
 
-    filtered.forEach(
-        ([key, product]) => {
+    products.forEach(product => {
 
-            const quantity =
-                Number(
-                    product.quantity || 0
-                );
+        const quantity =
+            Number(product.quantity || 0);
 
+        const threshold =
+            Number(product.threshold || 5);
 
-            const threshold =
-                Number(
-                    product.threshold || 0
-                );
+        const status =
+            quantity <= threshold
+                ? "LOW STOCK"
+                : "IN STOCK";
 
-
-            const isLow =
-                quantity <= threshold;
+        const row =
+            document.createElement("tr");
 
 
-            const tr =
-                document.createElement(
-                    "tr"
-                );
+        row.innerHTML = `
+            <td>${escapeHtml(product.sku || "")}</td>
 
+            <td>${escapeHtml(product.name || "")}</td>
 
-            tr.innerHTML = `
+            <td>${escapeHtml(product.category || "")}</td>
 
-                <td>
-                    ${escapeHtml(
-                        product.sku || "-"
-                    )}
-                </td>
+            <td>${quantity}</td>
 
-                <td>
-                    <strong>
-                        ${escapeHtml(
-                            product.name || "-"
-                        )}
-                    </strong>
-                </td>
+            <td>${formatCurrency(product.price)}</td>
 
-                <td>
-                    ${escapeHtml(
-                        product.category || "-"
-                    )}
-                </td>
+            <td>
+                <span class="status ${
+                    quantity <= threshold
+                        ? "low-stock"
+                        : "in-stock"
+                }">
+                    ${status}
+                </span>
+            </td>
 
-                <td>
-                    ${quantity}
-                </td>
+            <td>
+                <button
+                    class="edit-btn"
+                    onclick="editProduct('${product.id}')">
+                    Edit
+                </button>
 
-                <td>
-                    ${formatPeso(
-                        product.price
-                    )}
-                </td>
+                <button
+                    class="delete-btn"
+                    onclick="deleteProduct('${product.id}')">
+                    Delete
+                </button>
+            </td>
+        `;
 
-                <td>
-                    <span class="status ${
-                        isLow
-                            ? "low-stock"
-                            : "in-stock"
-                    }">
-                        ${
-                            isLow
-                                ? "LOW STOCK"
-                                : "IN STOCK"
-                        }
-                    </span>
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn edit-btn"
-                        data-edit="${key}"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        class="action-btn delete-btn"
-                        data-delete="${key}"
-                    >
-                        Delete
-                    </button>
-
-                </td>
-            `;
-
-
-            tbody.appendChild(tr);
-
-        }
-    );
-
-
-    /*
-     * EDIT BUTTON
-     */
-
-    tbody
-        .querySelectorAll(
-            "[data-edit]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openEditProduct(
-                            button.dataset.edit
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    /*
-     * DELETE BUTTON
-     */
-
-    tbody
-        .querySelectorAll(
-            "[data-delete]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteProduct(
-                            button.dataset.delete
-                        );
-
-                    }
-                );
-
-            }
-        );
-
+        tableBody.appendChild(row);
+    });
 }
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
+// ============================================================
+// RECENT PRODUCTS
+// ============================================================
 
-document
-    .getElementById(
-        "searchProduct"
-    )
-    .addEventListener(
-        "input",
-        renderInventory
-    );
+function renderRecentProducts() {
 
+    const tableBody =
+        $("recentInventoryBody") ||
+        $("recentProductsBody");
 
-document
-    .getElementById(
-        "categoryFilter"
-    )
-    .addEventListener(
-        "change",
-        renderInventory
-    );
+    if (!tableBody) {
+        return;
+    }
+
+    tableBody.innerHTML = "";
 
 
-/* =========================================================
-   PRODUCT MODAL
-========================================================= */
-
-const productModal =
-    document.getElementById(
-        "productModal"
-    );
+    const recent =
+        products.slice(-5).reverse();
 
 
-document
-    .getElementById(
-        "openAddProductBtn"
-    )
-    .addEventListener(
-        "click",
-        openAddProduct
-    );
+    if (recent.length === 0) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    No inventory records yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
 
 
-document
-    .getElementById(
-        "closeProductModal"
-    )
-    .addEventListener(
-        "click",
-        closeProductModal
-    );
+    recent.forEach(product => {
 
+        const row =
+            document.createElement("tr");
 
-document
-    .getElementById(
-        "cancelProductBtn"
-    )
-    .addEventListener(
-        "click",
-        closeProductModal
-    );
+        row.innerHTML = `
+            <td>${escapeHtml(product.sku || "")}</td>
+            <td>${escapeHtml(product.name || "")}</td>
+            <td>${escapeHtml(product.category || "")}</td>
+            <td>${Number(product.quantity || 0)}</td>
+            <td>${formatCurrency(product.price)}</td>
+        `;
 
-
-function openAddProduct() {
-
-    document
-        .getElementById(
-            "modalTitle"
-        )
-        .textContent =
-            "Add Product";
-
-
-    document
-        .getElementById(
-            "productForm"
-        )
-        .reset();
-
-
-    document
-        .getElementById(
-            "editProductKey"
-        )
-        .value = "";
-
-
-    document
-        .getElementById(
-            "productThreshold"
-        )
-        .value = 5;
-
-
-    productModal.classList.remove(
-        "hidden"
-    );
-
+        tableBody.appendChild(row);
+    });
 }
 
 
-function openEditProduct(key) {
+// ============================================================
+// ADD PRODUCT
+// ============================================================
+
+window.openAddProduct = function () {
+
+    editingProductId = null;
+
+    clearProductForm();
+
+    const modal =
+        $("productModal") ||
+        $("addProductModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+    setText(
+        "modalTitle",
+        "Add Product"
+    );
+};
+
+
+window.showAddProduct = window.openAddProduct;
+
+
+// ============================================================
+// CLOSE PRODUCT MODAL
+// ============================================================
+
+window.closeProductModal = function () {
+
+    const modal =
+        $("productModal") ||
+        $("addProductModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    editingProductId = null;
+
+    clearProductForm();
+};
+
+
+// ============================================================
+// CLEAR PRODUCT FORM
+// ============================================================
+
+function clearProductForm() {
+
+    setValue("productId", "");
+    setValue("productSku", "");
+    setValue("sku", "");
+
+    setValue("productName", "");
+    setValue("productCategory", "");
+    setValue("productQuantity", "");
+    setValue("productPrice", "");
+    setValue("productThreshold", "5");
+
+    setValue("skuInput", "");
+    setValue("nameInput", "");
+    setValue("categoryInput", "");
+    setValue("quantityInput", "");
+    setValue("priceInput", "");
+    setValue("thresholdInput", "5");
+}
+
+
+// ============================================================
+// EDIT PRODUCT
+// ============================================================
+
+window.editProduct = function (id) {
 
     const product =
-        products[key];
-
+        products.find(
+            item => item.id === id
+        );
 
     if (!product) {
         return;
     }
 
-
-    document
-        .getElementById(
-            "modalTitle"
-        )
-        .textContent =
-            "Edit Product";
+    editingProductId = id;
 
 
-    document
-        .getElementById(
-            "editProductKey"
-        )
-        .value = key;
-
-
-    document
-        .getElementById(
-            "productSku"
-        )
-        .value =
-            product.sku || "";
-
-
-    document
-        .getElementById(
-            "productName"
-        )
-        .value =
-            product.name || "";
-
-
-    document
-        .getElementById(
-            "productCategory"
-        )
-        .value =
-            product.category || "";
-
-
-    document
-        .getElementById(
-            "productQuantity"
-        )
-        .value =
-            product.quantity ?? 0;
-
-
-    document
-        .getElementById(
-            "productPrice"
-        )
-        .value =
-            product.price ?? 0;
-
-
-    document
-        .getElementById(
-            "productThreshold"
-        )
-        .value =
-            product.threshold ?? 5;
-
-
-    productModal.classList.remove(
-        "hidden"
+    setValue(
+        "productSku",
+        product.sku
     );
 
-}
-
-
-function closeProductModal() {
-
-    productModal.classList.add(
-        "hidden"
+    setValue(
+        "sku",
+        product.sku
     );
 
-}
+    setValue(
+        "productName",
+        product.name
+    );
+
+    setValue(
+        "productCategory",
+        product.category
+    );
+
+    setValue(
+        "productQuantity",
+        product.quantity
+    );
+
+    setValue(
+        "productPrice",
+        product.price
+    );
+
+    setValue(
+        "productThreshold",
+        product.threshold || 5
+    );
 
 
-/* =========================================================
-   SAVE PRODUCT
-========================================================= */
+    const modal =
+        $("productModal") ||
+        $("addProductModal");
 
-document
-    .getElementById(
-        "productForm"
-    )
-    .addEventListener(
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+    setText(
+        "modalTitle",
+        "Edit Product"
+    );
+};
+
+
+// ============================================================
+// SAVE PRODUCT
+// ============================================================
+
+const productForm =
+    $("productForm");
+
+if (productForm) {
+
+    productForm.addEventListener(
         "submit",
         async function (event) {
 
             event.preventDefault();
 
 
-            const key =
-                document
-                    .getElementById(
-                        "editProductKey"
-                    )
-                    .value;
+            const sku =
+                getValue("productSku") ||
+                getValue("sku") ||
+                getValue("skuInput");
+
+            const name =
+                getValue("productName") ||
+                getValue("nameInput");
+
+            const category =
+                getValue("productCategory") ||
+                getValue("categoryInput");
+
+            const quantityValue =
+                getValue("productQuantity") ||
+                getValue("quantityInput");
+
+            const priceValue =
+                getValue("productPrice") ||
+                getValue("priceInput");
+
+            const thresholdValue =
+                getValue("productThreshold") ||
+                getValue("thresholdInput") ||
+                "5";
 
 
-            const product = {
-
-                sku:
-                    document
-                        .getElementById(
-                            "productSku"
-                        )
-                        .value
-                        .trim(),
-
-                name:
-                    document
-                        .getElementById(
-                            "productName"
-                        )
-                        .value
-                        .trim(),
-
-                category:
-                    document
-                        .getElementById(
-                            "productCategory"
-                        )
-                        .value,
-
-                quantity:
-                    Number(
-                        document
-                            .getElementById(
-                                "productQuantity"
-                            )
-                            .value
-                    ),
-
-                price:
-                    Number(
-                        document
-                            .getElementById(
-                                "productPrice"
-                            )
-                            .value
-                    ),
-
-                threshold:
-                    Number(
-                        document
-                            .getElementById(
-                                "productThreshold"
-                            )
-                            .value
-                    ),
-
-                updatedAt:
-                    Date.now()
-
-            };
-
-
-            if (!product.sku) {
+            if (!sku ||
+                !name ||
+                !category ||
+                !quantityValue ||
+                !priceValue) {
 
                 alert(
-                    "Please enter SKU."
+                    "Please complete all product fields."
                 );
 
                 return;
             }
 
 
-            if (!product.name) {
+            const quantity =
+                Number(quantityValue);
+
+            const price =
+                Number(priceValue);
+
+            const threshold =
+                Number(thresholdValue);
+
+
+            if (
+                !Number.isFinite(quantity) ||
+                quantity < 0
+            ) {
 
                 alert(
-                    "Please enter product name."
-                );
-
-                return;
-            }
-
-
-            if (!product.category) {
-
-                alert(
-                    "Please select category."
+                    "Quantity must be a valid number."
                 );
 
                 return;
@@ -1958,86 +1072,89 @@ document
 
 
             if (
-                product.quantity < 0 ||
-                product.price < 0
+                !Number.isFinite(price) ||
+                price < 0
             ) {
 
                 alert(
-                    "Quantity and price cannot be negative."
+                    "Price must be a valid number."
                 );
 
                 return;
             }
 
 
-            const saveBtn =
-                document
-                    .getElementById(
-                        "saveProductBtn"
-                    );
+            const productData = {
+
+                sku,
+                name,
+                category,
+                quantity,
+                price,
+                threshold,
+
+                updatedAt:
+                    new Date().toISOString(),
+
+                updatedBy:
+                    currentUser
+                        ? currentUser.uid
+                        : null
+            };
 
 
             try {
 
-                saveBtn.disabled = true;
-
-                saveBtn.textContent =
-                    "SAVING...";
-
-
-                if (key) {
+                if (editingProductId) {
 
                     await update(
                         ref(
                             db,
-                            `bakeryProducts/${key}`
+                            `bakeryProducts/${editingProductId}`
                         ),
-                        product
+                        productData
                     );
 
 
                     await addActivity(
-                        `Updated product: ${product.name}`
+                        "UPDATE PRODUCT",
+                        `Updated product: ${name}`
                     );
 
                 } else {
 
-                    product.createdAt =
-                        Date.now();
+                    productData.createdAt =
+                        new Date().toISOString();
+
+                    productData.createdBy =
+                        currentUser
+                            ? currentUser.uid
+                            : null;
 
 
-                    const newProductRef =
-                        push(
-                            ref(
-                                db,
-                                "bakeryProducts"
-                            )
-                        );
-
-
-                    await set(
-                        newProductRef,
-                        product
+                    await push(
+                        ref(db, "bakeryProducts"),
+                        productData
                     );
 
 
                     await addActivity(
-                        `Added new product: ${product.name}`
+                        "ADD PRODUCT",
+                        `Added product: ${name}`
                     );
-
                 }
+
+
+                alert(
+                    editingProductId
+                        ? "Product updated successfully!"
+                        : "Product added successfully!"
+                );
 
 
                 closeProductModal();
 
-
                 await loadProducts();
-
-
-                alert(
-                    "Product saved successfully!"
-                );
-
 
             } catch (error) {
 
@@ -2046,36 +1163,26 @@ document
                     error
                 );
 
-
                 alert(
-                    getFirebaseErrorMessage(
-                        error
-                    )
+                    "Unable to save product: " +
+                    error.message
                 );
-
-
-            } finally {
-
-                saveBtn.disabled = false;
-
-                saveBtn.textContent =
-                    "SAVE PRODUCT";
-
             }
-
         }
     );
+}
 
 
-/* =========================================================
-   DELETE PRODUCT
-========================================================= */
+// ============================================================
+// DELETE PRODUCT
+// ============================================================
 
-async function deleteProduct(key) {
+window.deleteProduct = async function (id) {
 
     const product =
-        products[key];
-
+        products.find(
+            item => item.id === id
+        );
 
     if (!product) {
         return;
@@ -2098,170 +1205,182 @@ async function deleteProduct(key) {
         await remove(
             ref(
                 db,
-                `bakeryProducts/${key}`
+                `bakeryProducts/${id}`
             )
         );
 
 
         await addActivity(
+            "DELETE PRODUCT",
             `Deleted product: ${product.name}`
+        );
+
+
+        alert(
+            "Product deleted successfully!"
         );
 
 
         await loadProducts();
 
-
-        alert(
-            "Product deleted successfully."
-        );
-
-
     } catch (error) {
 
         console.error(
-            "Delete error:",
+            "Delete product error:",
             error
         );
 
-
         alert(
-            getFirebaseErrorMessage(
-                error
-            )
+            "Unable to delete product: " +
+            error.message
         );
+    }
+};
 
+
+// ============================================================
+// ACTIVITY LOG
+// ============================================================
+
+async function addActivity(
+    action,
+    description
+) {
+
+    if (!currentUser) {
+        return;
     }
 
-}
 
+    try {
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+        await push(
+            ref(db, "activityLogs"),
+            {
+                action,
+                description,
 
-function updateDashboard() {
+                userId:
+                    currentUser.uid,
 
-    const entries =
-        Object.entries(products);
+                userEmail:
+                    currentUser.email,
 
-
-    const totalProducts =
-        entries.length;
-
-
-    let totalStock = 0;
-
-    let lowStock = 0;
-
-    let estimatedValue = 0;
-
-
-    entries.forEach(
-        ([key, product]) => {
-
-            const quantity =
-                Number(
-                    product.quantity || 0
-                );
-
-
-            const price =
-                Number(
-                    product.price || 0
-                );
-
-
-            const threshold =
-                Number(
-                    product.threshold || 0
-                );
-
-
-            totalStock += quantity;
-
-            estimatedValue +=
-                quantity * price;
-
-
-            if (
-                quantity <= threshold
-            ) {
-
-                lowStock++;
-
+                timestamp:
+                    new Date().toISOString()
             }
-
-        }
-    );
-
-
-    document
-        .getElementById(
-            "totalProducts"
-        )
-        .textContent =
-            totalProducts;
-
-
-    document
-        .getElementById(
-            "totalStock"
-        )
-        .textContent =
-            totalStock;
-
-
-    document
-        .getElementById(
-            "lowStockItems"
-        )
-        .textContent =
-            lowStock;
-
-
-    document
-        .getElementById(
-            "estimatedValue"
-        )
-        .textContent =
-            formatPeso(
-                estimatedValue
-            );
-
-
-    renderDashboardTable();
-
-}
-
-
-/* =========================================================
-   DASHBOARD TABLE
-========================================================= */
-
-function renderDashboardTable() {
-
-    const tbody =
-        document.getElementById(
-            "dashboardTableBody"
         );
 
+    } catch (error) {
 
-    tbody.innerHTML = "";
+        console.warn(
+            "Activity log failed:",
+            error
+        );
+    }
+}
 
 
-    const entries =
-        Object.entries(products)
-            .slice(-5)
-            .reverse();
+// ============================================================
+// LOAD ACTIVITY LOGS
+// ============================================================
+
+let activityLogs = [];
 
 
-    if (entries.length === 0) {
+async function loadActivityLogs() {
 
-        tbody.innerHTML = `
+    return new Promise(resolve => {
+
+        onValue(
+            ref(db, "activityLogs"),
+
+            snapshot => {
+
+                activityLogs = [];
+
+
+                if (snapshot.exists()) {
+
+                    const data =
+                        snapshot.val();
+
+
+                    Object.entries(data).forEach(
+                        ([id, log]) => {
+
+                            activityLogs.push({
+                                id,
+                                ...log
+                            });
+                        }
+                    );
+                }
+
+
+                activityLogs.sort(
+                    (a, b) =>
+                        new Date(
+                            b.timestamp || 0
+                        ) -
+                        new Date(
+                            a.timestamp || 0
+                        )
+                );
+
+
+                renderActivityLogs();
+
+                resolve();
+
+            },
+
+            error => {
+
+                console.error(
+                    "Activity logs error:",
+                    error
+                );
+
+                activityLogs = [];
+
+                renderActivityLogs();
+
+                resolve();
+            },
+
+            {
+                onlyOnce: true
+            }
+        );
+    });
+}
+
+
+// ============================================================
+// RENDER ACTIVITY LOGS
+// ============================================================
+
+function renderActivityLogs() {
+
+    const tableBody =
+        $("activityTableBody") ||
+        $("activityLogsBody");
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    tableBody.innerHTML = "";
+
+
+    if (activityLogs.length === 0) {
+
+        tableBody.innerHTML = `
             <tr>
-                <td colspan="5"
-                    style="text-align:center;padding:25px;">
-                    No inventory records yet.
+                <td colspan="5" style="text-align:center;">
+                    No activity logs yet.
                 </td>
             </tr>
         `;
@@ -2270,501 +1389,417 @@ function renderDashboardTable() {
     }
 
 
-    entries.forEach(
-        ([key, product]) => {
+    activityLogs.forEach(log => {
 
-            const quantity =
-                Number(
-                    product.quantity || 0
-                );
+        const row =
+            document.createElement("tr");
 
 
-            const threshold =
-                Number(
-                    product.threshold || 0
-                );
+        row.innerHTML = `
+            <td>
+                ${formatDate(log.timestamp)}
+            </td>
 
+            <td>
+                ${escapeHtml(log.action || "")}
+            </td>
 
-            const isLow =
-                quantity <= threshold;
+            <td>
+                ${escapeHtml(log.description || "")}
+            </td>
 
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            row.innerHTML = `
-
-                <td>
-                    ${escapeHtml(
-                        product.sku || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHtml(
-                        product.name || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHtml(
-                        product.category || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${quantity}
-                </td>
-
-                <td>
-                    <span class="status ${
-                        isLow
-                            ? "low-stock"
-                            : "in-stock"
-                    }">
-                        ${
-                            isLow
-                                ? "LOW STOCK"
-                                : "IN STOCK"
-                        }
-                    </span>
-                </td>
-
-            `;
-
-
-            tbody.appendChild(row);
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ACTIVITY LOG
-========================================================= */
-
-async function addActivity(message) {
-
-    const user =
-        auth.currentUser;
-
-
-    if (!user) {
-        return;
-    }
-
-
-    const activityRef =
-        push(
-            ref(
-                db,
-                "activityLogs"
-            )
-        );
-
-
-    await set(
-        activityRef,
-        {
-
-            message:
-                message,
-
-            userEmail:
-                user.email || "",
-
-            timestamp:
-                Date.now()
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   LOAD ACTIVITY LOGS
-========================================================= */
-
-async function loadActivityLogs() {
-
-    return new Promise(
-        resolve => {
-
-            const activityRef =
-                ref(
-                    db,
-                    "activityLogs"
-                );
-
-
-            onValue(
-                activityRef,
-                snapshot => {
-
-                    const data =
-                        snapshot.val() || {};
-
-
-                    renderActivityLogs(
-                        data
-                    );
-
-
-                    resolve();
-
-                },
-                {
-                    onlyOnce: true
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RENDER ACTIVITY
-========================================================= */
-
-function renderActivityLogs(data) {
-
-    const list =
-        document.getElementById(
-            "activityList"
-        );
-
-
-    list.innerHTML = "";
-
-
-    const entries =
-        Object.entries(data)
-            .sort(
-                (
-                    [, a],
-                    [, b]
-                ) =>
-                    Number(
-                        b.timestamp || 0
-                    )
-                    -
-                    Number(
-                        a.timestamp || 0
-                    )
-            );
-
-
-    if (entries.length === 0) {
-
-        list.innerHTML = `
-            <div style="
-                text-align:center;
-                padding:30px;
-                color:#92745d;
-            ">
-                No activity logs yet.
-            </div>
+            <td>
+                ${escapeHtml(log.userEmail || "")}
+            </td>
         `;
 
+
+        tableBody.appendChild(row);
+    });
+}
+
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+
+window.showDashboard = async function () {
+
+    showPage("dashboardPage");
+
+    await loadProducts();
+    await loadActivityLogs();
+
+    updateDashboard();
+};
+
+
+window.showInventory = async function () {
+
+    showPage("inventoryPage");
+
+    await loadProducts();
+};
+
+
+window.showActivityLogs = async function () {
+
+    showPage("activityPage");
+
+    await loadActivityLogs();
+};
+
+
+// Alternative names
+window.showDashboardPage =
+    window.showDashboard;
+
+window.showInventoryPage =
+    window.showInventory;
+
+window.showActivityPage =
+    window.showActivityLogs;
+
+
+// ============================================================
+// SIDEBAR NAVIGATION
+// ============================================================
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const target =
+            event.target.closest(
+                "[data-page]"
+            );
+
+        if (!target) {
+            return;
+        }
+
+
+        const page =
+            target.getAttribute(
+                "data-page"
+            );
+
+
+        if (page === "dashboard") {
+            window.showDashboard();
+        }
+
+        else if (page === "inventory") {
+            window.showInventory();
+        }
+
+        else if (
+            page === "activity" ||
+            page === "activityLogs"
+        ) {
+            window.showActivityLogs();
+        }
+    }
+);
+
+
+// ============================================================
+// SEARCH INVENTORY
+// ============================================================
+
+const searchInput =
+    $("searchInput") ||
+    $("inventorySearch") ||
+    $("searchProduct");
+
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        filterInventory
+    );
+}
+
+
+function filterInventory() {
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const categoryFilter =
+        $("categoryFilter");
+
+
+    const category =
+        categoryFilter
+            ? categoryFilter.value
+            : "";
+
+
+    const tableBody =
+        $("inventoryTableBody") ||
+        $("inventoryBody");
+
+
+    if (!tableBody) {
         return;
     }
 
 
-    entries.forEach(
-        ([key, activity]) => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
+    tableBody.innerHTML = "";
 
 
-            item.className =
-                "activity-item";
+    const filtered =
+        products.filter(product => {
+
+            const matchesSearch =
+                !search ||
+                String(product.sku || "")
+                    .toLowerCase()
+                    .includes(search) ||
+                String(product.name || "")
+                    .toLowerCase()
+                    .includes(search) ||
+                String(product.category || "")
+                    .toLowerCase()
+                    .includes(search);
 
 
-            item.innerHTML = `
-
-                <div class="activity-icon">
-                    📋
-                </div>
-
-                <div class="activity-content">
-
-                    <strong>
-                        ${escapeHtml(
-                            activity.message ||
-                            "System activity"
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeHtml(
-                            activity.userEmail || ""
-                        )}
-                        •
-                        ${formatDate(
-                            activity.timestamp
-                        )}
-                    </small>
-
-                </div>
-
-            `;
+            const matchesCategory =
+                !category ||
+                product.category === category;
 
 
-            list.appendChild(item);
+            return (
+                matchesSearch &&
+                matchesCategory
+            );
+        });
 
-        }
-    );
 
+    filtered.forEach(product => {
+
+        const quantity =
+            Number(product.quantity || 0);
+
+        const threshold =
+            Number(product.threshold || 5);
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+            <td>${escapeHtml(product.sku || "")}</td>
+            <td>${escapeHtml(product.name || "")}</td>
+            <td>${escapeHtml(product.category || "")}</td>
+            <td>${quantity}</td>
+            <td>${formatCurrency(product.price)}</td>
+            <td>
+                <span class="status ${
+                    quantity <= threshold
+                        ? "low-stock"
+                        : "in-stock"
+                }">
+                    ${
+                        quantity <= threshold
+                            ? "LOW STOCK"
+                            : "IN STOCK"
+                    }
+                </span>
+            </td>
+            <td>
+                <button
+                    class="edit-btn"
+                    onclick="editProduct('${product.id}')">
+                    Edit
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteProduct('${product.id}')">
+                    Delete
+                </button>
+            </td>
+        `;
+
+
+        tableBody.appendChild(row);
+    });
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+const categoryFilter =
+    $("categoryFilter");
+
+
+if (categoryFilter) {
+
+    categoryFilter.addEventListener(
+        "change",
+        filterInventory
+    );
+}
+
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+window.logout = async function () {
+
+    try {
+
+        await signOut(auth);
+
+        currentUser = null;
+
+        products = [];
+
+        showPage("loginPage");
+
+        clearMessages();
+
+        console.log(
+            "Logged out successfully."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        alert(
+            "Unable to logout: " +
+            error.message
+        );
+    }
+};
+
+
+// ============================================================
+// ESCAPE HTML
+// ============================================================
 
 function escapeHtml(value) {
 
     return String(value ?? "")
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+// ============================================================
+// DATE FORMAT
+// ============================================================
 
-logoutBtn.addEventListener(
-    "click",
-    async function () {
+function formatDate(timestamp) {
 
-        const confirmed =
-            confirm(
-                "Are you sure you want to logout?"
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        try {
-
-            /*
-             * Remove OTP verification claim
-             * before logout.
-             */
-
-            if (auth.currentUser) {
-
-                try {
-
-                    await clearOtpFunction({});
-
-                } catch (error) {
-
-                    console.warn(
-                        "Could not clear OTP claim:",
-                        error
-                    );
-
-                }
-
-            }
-
-
-            await signOut(auth);
-
-
-            otpChallengeActive = false;
-
-
-            clearInterval(
-                otpTimerInterval
-            );
-
-
-            clearInterval(
-                resendTimerInterval
-            );
-
-
-            showOnly(loginPage);
-
-            loginForm.reset();
-
-            clearMessages();
-
-
-        } catch (error) {
-
-            console.error(
-                "Logout error:",
-                error
-            );
-
-        }
-
+    if (!timestamp) {
+        return "-";
     }
-);
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+    const date =
+        new Date(timestamp);
+
+
+    if (Number.isNaN(date.getTime())) {
+        return "-";
+    }
+
+
+    return date.toLocaleString(
+        "en-PH",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+}
+
+
+// ============================================================
+// AUTH STATE
+// ============================================================
 
 onAuthStateChanged(
     auth,
-    async function (user) {
+    async user => {
 
-        if (!user) {
+        if (user) {
 
-            showOnly(loginPage);
+            currentUser = user;
 
-            return;
-        }
-
-
-        try {
-
-            /*
-             * Check custom claim.
-             */
-
-            const tokenResult =
-                await user.getIdTokenResult();
-
-
-            const otpVerified =
-                tokenResult.claims
-                    ?.otpVerified === true;
-
-
-            if (otpVerified) {
-
-                /*
-                 * User already completed OTP.
-                 */
-
-                showApp();
-
-                await loadProducts();
-
-                await loadActivityLogs();
-
-                updateDashboard();
-
-                return;
-            }
-
-
-            /*
-             * User is logged in with password
-             * but OTP is not verified.
-             */
-
-            showOtpPage(
-                user.email || ""
+            console.log(
+                "Authenticated:",
+                user.email
             );
 
+            // Direct dashboard.
+            // NO OTP CHECK.
+            await openDashboard();
 
-            /*
-             * If this was not caused by a normal
-             * login flow, send an OTP.
-             */
+        } else {
 
-            if (!otpChallengeActive) {
+            currentUser = null;
 
-                try {
+            hide("dashboardPage");
+            hide("inventoryPage");
+            hide("activityPage");
+            hide("appPage");
+            hide("mainApp");
 
-                    await sendOtp();
-
-                    setMessage(
-                        otpMessage,
-                        "A verification code was sent to your email.",
-                        "success"
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "Auto OTP error:",
-                        error
-                    );
-
-                }
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Auth state error:",
-                error
-            );
-
-            showOnly(loginPage);
-
+            show("loginPage");
         }
-
     }
 );
 
 
-/* =========================================================
-   CLOSE MODAL WHEN CLICK OUTSIDE
-========================================================= */
+// ============================================================
+// MODAL CLICK OUTSIDE
+// ============================================================
 
-productModal.addEventListener(
+window.addEventListener(
     "click",
     function (event) {
 
+        const modal =
+            $("productModal") ||
+            $("addProductModal");
+
+
         if (
-            event.target ===
-            productModal
+            modal &&
+            event.target === modal
         ) {
 
             closeProductModal();
-
         }
-
     }
 );
 
 
-/* =========================================================
-   INITIAL PAGE
-========================================================= */
+// ============================================================
+// START
+// ============================================================
 
-showOnly(loginPage);
+console.log(
+    "Arbee's Bakery Shop loaded successfully."
+);
+
+console.log(
+    "OTP system: DISABLED"
+);
