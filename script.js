@@ -29,7 +29,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
 
-
 /* =====================================================
    FIREBASE CONFIG
 ===================================================== */
@@ -62,7 +61,6 @@ const firebaseConfig = {
 };
 
 
-
 /* =====================================================
    INITIALIZE FIREBASE
 ===================================================== */
@@ -72,7 +70,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getDatabase(app);
-
 
 
 /* =====================================================
@@ -110,7 +107,6 @@ const registerBtn =
     document.getElementById("registerBtn");
 
 
-
 /* =====================================================
    SHOW LOGIN
 ===================================================== */
@@ -126,9 +122,7 @@ function showLogin() {
     loginMessage.textContent = "";
 
     registerMessage.textContent = "";
-
 }
-
 
 
 /* =====================================================
@@ -146,9 +140,7 @@ function showRegister() {
     loginMessage.textContent = "";
 
     registerMessage.textContent = "";
-
 }
-
 
 
 /* =====================================================
@@ -157,17 +149,15 @@ function showRegister() {
 
 loginForm.addEventListener(
     "submit",
-    async function(event) {
+    async function (event) {
 
         event.preventDefault();
-
 
         const email =
             document
                 .getElementById("loginEmail")
                 .value
                 .trim();
-
 
         const password =
             document
@@ -189,7 +179,8 @@ loginForm.addEventListener(
 
         loginBtn.disabled = true;
 
-        loginBtn.textContent = "Logging in...";
+        loginBtn.textContent =
+            "Logging in...";
 
 
         try {
@@ -214,14 +205,9 @@ loginForm.addEventListener(
                 "success"
             );
 
+        }
 
-            /*
-                onAuthStateChanged() below will
-                automatically show the system.
-            */
-
-
-        } catch (error) {
+        catch (error) {
 
             console.error(
                 "LOGIN ERROR:",
@@ -235,18 +221,19 @@ loginForm.addEventListener(
                 "error"
             );
 
+        }
 
-        } finally {
+        finally {
 
             loginBtn.disabled = false;
 
-            loginBtn.textContent = "Login";
+            loginBtn.textContent =
+                "Login";
 
         }
 
     }
 );
-
 
 
 /* =====================================================
@@ -255,7 +242,7 @@ loginForm.addEventListener(
 
 registerForm.addEventListener(
     "submit",
-    async function(event) {
+    async function (event) {
 
         event.preventDefault();
 
@@ -284,7 +271,6 @@ registerForm.addEventListener(
             document
                 .getElementById("confirmPassword")
                 .value;
-
 
 
         if (!name) {
@@ -331,9 +317,7 @@ registerForm.addEventListener(
 
         try {
 
-            /*
-             * CREATE FIREBASE AUTH ACCOUNT
-             */
+            /* CREATE FIREBASE AUTH ACCOUNT */
 
             const result =
                 await createUserWithEmailAndPassword(
@@ -347,9 +331,7 @@ registerForm.addEventListener(
                 result.user;
 
 
-            /*
-             * SAVE NAME IN FIREBASE AUTH
-             */
+            /* SAVE NAME IN FIREBASE AUTH */
 
             await updateProfile(
                 user,
@@ -359,17 +341,7 @@ registerForm.addEventListener(
             );
 
 
-            /*
-             * SAVE PROFILE IN REALTIME DATABASE
-             *
-             * users
-             *   └── UID
-             *       ├── uid
-             *       ├── name
-             *       ├── email
-             *       ├── role
-             *       └── createdAt
-             */
+            /* SAVE PROFILE IN REALTIME DATABASE */
 
             await set(
                 ref(
@@ -393,9 +365,7 @@ registerForm.addEventListener(
             );
 
 
-            /*
-             * SAVE ACTIVITY
-             */
+            /* SAVE ACTIVITY */
 
             await addActivity(
                 "New account registered",
@@ -414,24 +384,13 @@ registerForm.addEventListener(
 
 
             /*
-             * User is automatically signed in
-             * by Firebase after registration.
-             *
-             * Give Firebase observer time to
-             * display the system.
+             * Firebase automatically signs in
+             * the newly created account.
              */
 
-            setTimeout(
-                () => {
+        }
 
-                    showSystem();
-
-                },
-                700
-            );
-
-
-        } catch (error) {
+        catch (error) {
 
             console.error(
                 "REGISTER ERROR:",
@@ -445,8 +404,9 @@ registerForm.addEventListener(
                 "error"
             );
 
+        }
 
-        } finally {
+        finally {
 
             registerBtn.disabled = false;
 
@@ -459,7 +419,6 @@ registerForm.addEventListener(
 );
 
 
-
 /* =====================================================
    FORGOT PASSWORD
 ===================================================== */
@@ -468,7 +427,7 @@ document
     .getElementById("forgotPassword")
     .addEventListener(
         "click",
-        async function() {
+        async function () {
 
             const email =
                 document
@@ -514,8 +473,9 @@ document
                     "success"
                 );
 
+            }
 
-            } catch (error) {
+            catch (error) {
 
                 console.error(
                     "PASSWORD RESET ERROR:",
@@ -533,7 +493,6 @@ document
 
         }
     );
-
 
 
 /* =====================================================
@@ -556,14 +515,13 @@ document
     );
 
 
-
 /* =====================================================
    FIREBASE AUTH STATE
 ===================================================== */
 
 onAuthStateChanged(
     auth,
-    async function(user) {
+    async function (user) {
 
         if (user) {
 
@@ -575,21 +533,19 @@ onAuthStateChanged(
 
             await loadUserProfile(user);
 
-
             showSystem();
-
 
             loadInventory();
 
             loadActivity();
 
+        }
 
-        } else {
+        else {
 
             console.log(
                 "NO USER LOGGED IN"
             );
-
 
             showLogin();
 
@@ -597,7 +553,6 @@ onAuthStateChanged(
 
     }
 );
-
 
 
 /* =====================================================
@@ -611,9 +566,7 @@ function showSystem() {
     registerPage.classList.add("hidden");
 
     systemPage.classList.remove("hidden");
-
 }
-
 
 
 /* =====================================================
@@ -624,7 +577,7 @@ document
     .getElementById("logoutBtn")
     .addEventListener(
         "click",
-        async function() {
+        async function () {
 
             try {
 
@@ -632,8 +585,9 @@ document
 
                 showLogin();
 
+            }
 
-            } catch (error) {
+            catch (error) {
 
                 console.error(
                     "LOGOUT ERROR:",
@@ -644,7 +598,6 @@ document
 
         }
     );
-
 
 
 /* =====================================================
@@ -660,7 +613,8 @@ async function loadUserProfile(user) {
 
     document
         .getElementById("userName")
-        .textContent = name;
+        .textContent =
+        name;
 
 
     document
@@ -669,7 +623,6 @@ async function loadUserProfile(user) {
         user.email || "";
 
 }
-
 
 
 /* =====================================================
@@ -681,11 +634,11 @@ const navButtons =
 
 
 navButtons.forEach(
-    function(button) {
+    function (button) {
 
         button.addEventListener(
             "click",
-            function() {
+            function () {
 
                 const page =
                     button.dataset.page;
@@ -711,7 +664,6 @@ navButtons.forEach(
 
     }
 );
-
 
 
 function showPage(page) {
@@ -743,7 +695,6 @@ function showPage(page) {
 }
 
 
-
 /* =====================================================
    ADD PRODUCT BUTTONS
 ===================================================== */
@@ -752,7 +703,7 @@ document
     .getElementById("dashboardAddBtn")
     .addEventListener(
         "click",
-        function() {
+        function () {
 
             resetProductForm();
 
@@ -768,7 +719,7 @@ document
     .getElementById("inventoryAddBtn")
     .addEventListener(
         "click",
-        function() {
+        function () {
 
             resetProductForm();
 
@@ -780,12 +731,11 @@ document
     );
 
 
-
 document
     .getElementById("cancelProduct")
     .addEventListener(
         "click",
-        function() {
+        function () {
 
             resetProductForm();
 
@@ -795,7 +745,6 @@ document
 
         }
     );
-
 
 
 function setActiveNav(page) {
@@ -821,7 +770,6 @@ function setActiveNav(page) {
 }
 
 
-
 /* =====================================================
    PRODUCT FORM
 ===================================================== */
@@ -830,12 +778,13 @@ document
     .getElementById("productForm")
     .addEventListener(
         "submit",
-        async function(event) {
+        async function (event) {
 
             event.preventDefault();
 
 
-            const user = auth.currentUser;
+            const user =
+                auth.currentUser;
 
 
             if (!user) {
@@ -845,7 +794,6 @@ document
                 );
 
                 return;
-
             }
 
 
@@ -933,8 +881,9 @@ document
                         user.email
                     );
 
+                }
 
-                } else {
+                else {
 
                     const productRef =
                         push(
@@ -949,6 +898,7 @@ document
                         productRef,
                         {
                             ...product,
+
                             createdAt:
                                 new Date().toISOString()
                         }
@@ -974,8 +924,9 @@ document
 
                 setActiveNav("inventory");
 
+            }
 
-            } catch (error) {
+            catch (error) {
 
                 console.error(
                     "PRODUCT ERROR:",
@@ -991,7 +942,6 @@ document
 
         }
     );
-
 
 
 /* =====================================================
@@ -1024,7 +974,6 @@ function resetProductForm() {
 }
 
 
-
 /* =====================================================
    LOAD INVENTORY
 ===================================================== */
@@ -1040,7 +989,7 @@ function loadInventory() {
 
     onValue(
         productsRef,
-        function(snapshot) {
+        function (snapshot) {
 
             const data =
                 snapshot.val() || {};
@@ -1070,11 +1019,6 @@ function loadInventory() {
 
                         totalProducts++;
 
-                        totalStock +=
-                            Number(
-                                product.quantity || 0
-                            );
-
 
                         const quantity =
                             Number(
@@ -1094,12 +1038,17 @@ function loadInventory() {
                             );
 
 
+                        totalStock += quantity;
+
+
                         const isLow =
                             quantity <= threshold;
 
 
                         if (isLow) {
+
                             lowStock++;
+
                         }
 
 
@@ -1116,15 +1065,21 @@ function loadInventory() {
                         row.innerHTML = `
 
                             <td>
-                                ${escapeHtml(product.sku || "")}
+                                ${escapeHtml(
+                                    product.sku || ""
+                                )}
                             </td>
 
                             <td>
-                                ${escapeHtml(product.name || "")}
+                                ${escapeHtml(
+                                    product.name || ""
+                                )}
                             </td>
 
                             <td>
-                                ${escapeHtml(product.category || "")}
+                                ${escapeHtml(
+                                    product.category || ""
+                                )}
                             </td>
 
                             <td>
@@ -1212,11 +1167,13 @@ function loadInventory() {
                 "₱" +
                 totalValue.toFixed(2);
 
+
+            filterInventory();
+
         }
     );
 
 }
-
 
 
 /* =====================================================
@@ -1224,7 +1181,7 @@ function loadInventory() {
 ===================================================== */
 
 window.editProduct =
-    function(id) {
+    function (id) {
 
         const productRef =
             ref(
@@ -1235,7 +1192,7 @@ window.editProduct =
 
         onValue(
             productRef,
-            function(snapshot) {
+            function (snapshot) {
 
                 const product =
                     snapshot.val();
@@ -1248,7 +1205,6 @@ window.editProduct =
                     );
 
                     return;
-
                 }
 
 
@@ -1256,7 +1212,8 @@ window.editProduct =
                     .getElementById(
                         "editProductId"
                     )
-                    .value = id;
+                    .value =
+                    id;
 
 
                 document
@@ -1328,13 +1285,12 @@ window.editProduct =
     };
 
 
-
 /* =====================================================
    DELETE PRODUCT
 ===================================================== */
 
 window.deleteProduct =
-    async function(id) {
+    async function (id) {
 
         const answer =
             confirm(
@@ -1343,7 +1299,9 @@ window.deleteProduct =
 
 
         if (!answer) {
+
             return;
+
         }
 
 
@@ -1373,8 +1331,9 @@ window.deleteProduct =
                 "Product deleted successfully!"
             );
 
+        }
 
-        } catch (error) {
+        catch (error) {
 
             console.error(
                 "DELETE ERROR:",
@@ -1389,7 +1348,6 @@ window.deleteProduct =
         }
 
     };
-
 
 
 /* =====================================================
@@ -1416,9 +1374,11 @@ async function addActivity(
             activityRef,
             {
 
-                action: action,
+                action:
+                    action,
 
-                email: email || "Unknown",
+                email:
+                    email || "Unknown",
 
                 createdAt:
                     new Date().toISOString()
@@ -1426,7 +1386,9 @@ async function addActivity(
             }
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "ACTIVITY ERROR:",
@@ -1436,7 +1398,6 @@ async function addActivity(
     }
 
 }
-
 
 
 /* =====================================================
@@ -1454,7 +1415,7 @@ function loadActivity() {
 
     onValue(
         activityRef,
-        function(snapshot) {
+        function (snapshot) {
 
             const data =
                 snapshot.val() || {};
@@ -1526,7 +1487,6 @@ function loadActivity() {
 }
 
 
-
 /* =====================================================
    SEARCH INVENTORY
 ===================================================== */
@@ -1559,7 +1519,8 @@ function filterInventory() {
                 "searchInventory"
             )
             .value
-            .toLowerCase();
+            .toLowerCase()
+            .trim();
 
 
     const category =
@@ -1577,7 +1538,7 @@ function filterInventory() {
 
 
     rows.forEach(
-        function(row) {
+        function (row) {
 
             const text =
                 row.textContent
@@ -1611,7 +1572,6 @@ function filterInventory() {
     );
 
 }
-
 
 
 /* =====================================================
@@ -1689,7 +1649,6 @@ function firebaseError(error) {
 }
 
 
-
 /* =====================================================
    MESSAGE HELPER
 ===================================================== */
@@ -1700,7 +1659,8 @@ function showMessage(
     type
 ) {
 
-    element.textContent = text;
+    element.textContent =
+        text;
 
 
     if (type === "success") {
@@ -1727,7 +1687,6 @@ function showMessage(
 }
 
 
-
 /* =====================================================
    HTML ESCAPE
 ===================================================== */
@@ -1736,14 +1695,29 @@ function escapeHtml(value) {
 
     return String(value)
 
-        .replaceAll("&", "&amp;")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
 
-        .replaceAll("<", "&lt;")
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
 
-        .replaceAll(">", "&gt;")
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
 
-        .replaceAll('"', "&quot;")
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
 
-        .replaceAll("'", "&#039;");
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
