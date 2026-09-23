@@ -1,92 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Arbee's Bake Shop - Login</title>
-
-    <link rel="stylesheet" href="style.css">
+    <title>Arbee's Bake Shop - Inventory System</title>
 </head>
 
-<body class="login-body">
+<body>
 
-    <div class="login-container">
+    <!-- ==============================
+         HEADER
+    =============================== -->
 
-        <div class="login-card">
+    <header>
+        <h1>🍰 Arbee's Bake Shop</h1>
+        <p>Inventory Management System</p>
+    </header>
 
-            <div class="bakery-logo">
-                🧁
-            </div>
 
-            <h1>Arbee's Bake Shop</h1>
+    <!-- ==============================
+         LOGIN
+    =============================== -->
 
-            <p class="login-subtitle">
-                Inventory Management System
-            </p>
+    <section id="login">
 
-            <form id="loginForm">
+        <h2>Login</h2>
 
-                <label>Email</label>
+        <form>
 
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    required
-                >
+            <label for="email">
+                Email
+            </label>
 
-                <label>Password</label>
+            <br>
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                >
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
 
-                <button type="submit" class="main-button">
-                    Login
-                </button>
+            <br><br>
 
-            </form>
+            <label for="password">
+                Password
+            </label>
 
-            <p id="loginMessage"></p>
+            <br>
 
-            <div class="register-area">
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
 
-                <p>Don't have an account?</p>
+            <br><br>
 
-                <button
-                    type="button"
-                    class="secondary-button"
-                    onclick="registerAccount()">
+            <button type="submit">
+                Login
+            </button>
 
-                    Create Account
+        </form>
 
-                </button>
+        <br>
 
-            </div>
+        <button type="button">
+            Create Account
+        </button>
+
+    </section>
+
+
+    <!-- ==============================
+         DASHBOARD
+    =============================== -->
+
+    <section id="dashboard">
+
+        <h2>Dashboard</h2>
+
+        <nav>
+
+            <button type="button">
+                Dashboard
+            </button>
+
+            <button type="button">
+                Products
+            </button>
+
+            <button type="button">
+                Stock In / Out
+            </button>
+
+            <button type="button">
+                Logout
+            </button>
+
+        </nav>
+
+        <hr>
+
+        <h3>Inventory Summary</h3>
+
+        <div>
+
+            <article>
+                <h4>Total Products</h4>
+                <p>0</p>
+            </article>
+
+            <article>
+                <h4>Total Stock</h4>
+                <p>0</p>
+            </article>
+
+            <article>
+                <h4>Low Stock</h4>
+                <p>0</p>
+            </article>
+
+            <article>
+                <h4>Out of Stock</h4>
+                <p>0</p>
+            </article>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <!-- ==============================
+         PRODUCTS
+    =============================== -->
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <section id="products">
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+        <h2>Products</h2>
 
-    <!-- Firebase Configuration -->
-    <script src="firebase-config.js"></script>
+        <h3>Add Product</h3>
 
-    <!-- Main JavaScript -->
-    <script src="script.js"></script>
+        <form>
+
+            <label for="productName">
+                Product Name
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Example: Chocolate Cake"
+            >
+
+            <br><br>
+
+            <label for="category">
+                Category
+            </label>
+
+            <br>
+
+            <select id="category">
+
+                <option value="">
+                    Select Category
+                </option>
+
+                <option value="Cake">
+                    Cake
+                </option>
+
+                <option value="Bread">
+                    Bread
+                </option>
+
+                <option value="Pastry">
+                    Pastry
+                </option>
+
+                <option value="Cookies">
+                    Cookies
+                </option>
+
+                <option value="Drinks">
+                    Drinks
+                </option>
+
+                <option value="Others">
+                    Others
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <label for="price">
+                Price
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                id="price"
+                placeholder="0.00"
+                min="0"
+                step="0.01"
+            >
+
+            <br><br>
+
+            <label for="quantity">
+                Quantity
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                id="quantity"
+                placeholder="0"
+                min="0"
+            >
+
+            <br><br>
+
+            <label for="lowStock">
+                Low Stock Level
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                id="lowStock"
+                value="5"
+                min="0"
+            >
+
+            <br><br>
+
+            <button type="submit">
+                Save Product
+            </button>
+
+            <button type="reset">
+                Cancel
+            </button>
+
+        </form>
+
+        <br>
+
+        <h3>Product List</h3>
+
+        <label for="search">
+            Search Product
+        </label>
+
+        <br>
+
+        <input
+            type="search"
+            id="search"
+            placeholder="Search..."
+        >
+
+        <br><br>
+
+        <table border="1">
+
+            <thead>
+
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Low Stock Level</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Chocolate Cake</td>
+
+                    <td>Cake</td>
+
+                    <td>₱500</td>
+
+                    <td>10</td>
+
+                    <td>5</td>
+
+                    <td>
+
+                        <button type="button">
+                            Edit
+                        </button>
+
+                        <button type="button">
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <!-- ==============================
+         STOCK IN / OUT
+    =============================== -->
+
+    <section id="stock">
+
+        <h2>Stock In / Stock Out</h2>
+
+        <form>
+
+            <label for="stockProduct">
+                Product
+            </label>
+
+            <br>
+
+            <select id="stockProduct">
+
+                <option value="">
+                    Select Product
+                </option>
+
+                <option value="chocolate-cake">
+                    Chocolate Cake
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <label for="stockType">
+                Transaction Type
+            </label>
+
+            <br>
+
+            <select id="stockType">
+
+                <option value="">
+                    Select Type
+                </option>
+
+                <option value="stock-in">
+                    Stock In
+                </option>
+
+                <option value="stock-out">
+                    Stock Out
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <label for="stockQuantity">
+                Quantity
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                id="stockQuantity"
+                min="1"
+                placeholder="Enter quantity"
+            >
+
+            <br><br>
+
+            <button type="submit">
+                Save Transaction
+            </button>
+
+        </form>
+
+        <br>
+
+        <h3>Current Stock</h3>
+
+        <table border="1">
+
+            <thead>
+
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Current Stock</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Chocolate Cake</td>
+
+                    <td>Cake</td>
+
+                    <td>10</td>
+
+                    <td>Available</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <!-- ==============================
+         FOOTER
+    =============================== -->
+
+    <footer>
+
+        <hr>
+
+        <p>
+            © 2026 Arbee's Bake Shop
+        </p>
+
+        <p>
+            Inventory Management System
+        </p>
+
+    </footer>
 
 </body>
-
 </html>
