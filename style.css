@@ -86,12 +86,10 @@ body {
 }
 
 
-.auth-logo img {
-    width: 100%;
-    height: 100%;
-
+.arbees-logo {
+    width: 220px;
+    height: auto;
     object-fit: contain;
-
     display: block;
 }
 
