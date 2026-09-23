@@ -1,947 +1,2346 @@
 /* =========================================================
-   RESET
+   FIREBASE IMPORTS
 ========================================================= */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #fff7f0;
-    color: #3f2a1d;
-}
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+import {
+    getDatabase,
+    ref,
+    set,
+    push,
+    onValue,
+    update,
+    remove
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+import {
+    getFunctions,
+    httpsCallable
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-functions.js";
 
 
 /* =========================================================
-   GENERAL
+   FIREBASE CONFIG
 ========================================================= */
 
-.hidden {
-    display: none !important;
-}
+const firebaseConfig = {
 
-button,
-input,
-select {
-    font-family: inherit;
-}
+    apiKey:
+        "AIzaSyCzB9hMQ_TuA46TW-Tcge-3Unq40-Bpibc",
 
-button {
-    cursor: pointer;
-}
+    authDomain:
+        "crudfirebase-b2a1f.firebaseapp.com",
+
+    databaseURL:
+        "https://crudfirebase-b2a1f-default-rtdb.firebaseio.com",
+
+    projectId:
+        "crudfirebase-b2a1f",
+
+    storageBucket:
+        "crudfirebase-b2a1f.firebasestorage.app",
+
+    messagingSenderId:
+        "383674756572",
+
+    appId:
+        "1:383674756572:web:0585f268fb2cc8f5a6b319",
+
+    measurementId:
+        "G-QJXMR8ZQH8"
+};
 
 
 /* =========================================================
-   AUTH PAGE
+   INITIALIZE FIREBASE
 ========================================================= */
 
-.auth-page {
-    min-height: 100vh;
+const app = initializeApp(firebaseConfig);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+const auth = getAuth(app);
 
-    padding: 25px;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            #f4d7b8,
-            transparent 35%
-        ),
-        #fff7f0;
-}
-
-
-.auth-card {
-    width: 100%;
-    max-width: 430px;
-
-    background: #ffffff;
-
-    padding: 35px;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 15px 45px rgba(80, 45, 20, 0.12);
-
-    border: 1px solid #f1dfd0;
-}
-
-
-.logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-
-.brand-logo {
-    display: inline-flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    color: #8b4513;
-}
-
-
-.brand-logo span {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: 3px;
-}
-
-
-.brand-logo small {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: #92745d;
-    margin-top: 3px;
-}
-
-
-.auth-card h1 {
-    text-align: center;
-
-    color: #5f321b;
-
-    margin-bottom: 8px;
-
-    font-size: 28px;
-}
-
-
-.subtitle {
-    text-align: center;
-
-    color: #92745d;
-
-    margin-bottom: 25px;
-
-    font-size: 14px;
-}
+const db = getDatabase(app);
 
 
 /* =========================================================
-   FORM
+   FIREBASE CLOUD FUNCTIONS
 ========================================================= */
 
-.auth-card label,
-.modal-card label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    color: #63432f;
-}
+const functions = getFunctions(
+    app,
+    "us-central1"
+);
 
 
-.auth-card input,
-.modal-card input,
-.modal-card select,
-.inventory-tools input,
-.inventory-tools select {
-
-    width: 100%;
-
-    border: 1px solid #dfc8b5;
-
-    background: #fffdfb;
-
-    border-radius: 10px;
-
-    padding: 13px 14px;
-
-    margin-bottom: 17px;
-
-    outline: none;
-
-    color: #4d3323;
-
-    font-size: 14px;
-
-    transition: 0.2s;
-}
+const sendOtpFunction =
+    httpsCallable(functions, "sendOtp");
 
 
-.auth-card input:focus,
-.modal-card input:focus,
-.modal-card select:focus,
-.inventory-tools input:focus,
-.inventory-tools select:focus {
+const verifyOtpFunction =
+    httpsCallable(functions, "verifyOtp");
 
-    border-color: #a85d24;
 
-    box-shadow:
-        0 0 0 3px rgba(168, 93, 36, 0.10);
-}
+const clearOtpFunction =
+    httpsCallable(functions, "clearOtpVerification");
 
 
 /* =========================================================
-   MAIN BUTTON
+   DOM
 ========================================================= */
 
-.main-btn {
+const loginPage =
+    document.getElementById("loginPage");
 
-    width: 100%;
+const registerPage =
+    document.getElementById("registerPage");
 
-    border: none;
+const otpPage =
+    document.getElementById("otpPage");
 
-    border-radius: 10px;
-
-    padding: 13px 18px;
-
-    background: #8b4513;
-
-    color: white;
-
-    font-weight: 700;
-
-    font-size: 14px;
-
-    transition: 0.2s;
-}
-
-
-.main-btn:hover {
-    background: #71370e;
-
-    transform: translateY(-1px);
-}
-
-
-.main-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
+const appPage =
+    document.getElementById("appPage");
 
 
 /* =========================================================
-   LINKS
+   AUTH ELEMENTS
 ========================================================= */
 
-.forgot-wrap {
-    text-align: right;
+const loginForm =
+    document.getElementById("loginForm");
 
-    margin-top: -7px;
+const registerForm =
+    document.getElementById("registerForm");
 
-    margin-bottom: 18px;
-}
+const otpForm =
+    document.getElementById("otpForm");
 
+const forgotPasswordBtn =
+    document.getElementById("forgotPasswordBtn");
 
-.link-btn {
+const showRegisterBtn =
+    document.getElementById("showRegisterBtn");
 
-    border: none;
+const showLoginBtn =
+    document.getElementById("showLoginBtn");
 
-    background: transparent;
+const cancelOtpBtn =
+    document.getElementById("cancelOtpBtn");
 
-    color: #92745d;
+const resendOtpBtn =
+    document.getElementById("resendOtpBtn");
 
-    font-weight: 700;
-
-    font-size: 13px;
-
-    padding: 3px;
-
-}
-
-
-.link-btn:hover {
-    color: #8b4513;
-
-    text-decoration: underline;
-}
-
-
-.switch-auth {
-    text-align: center;
-
-    margin-top: 20px;
-
-    color: #92745d;
-
-    font-size: 14px;
-}
-
-
-.auth-message {
-    text-align: center;
-
-    margin-top: 15px;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    min-height: 18px;
-}
-
-
-.auth-message.success {
-    color: #26733d;
-}
-
-
-.auth-message.error {
-    color: #c0392b;
-}
-
-
-.auth-message.info {
-    color: #8b4513;
-}
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 
 /* =========================================================
-   OTP
+   MESSAGES
 ========================================================= */
 
-.otp-card {
-    max-width: 450px;
-}
+const loginMessage =
+    document.getElementById("loginMessage");
 
+const registerMessage =
+    document.getElementById("registerMessage");
 
-.otp-icon {
-    text-align: center;
-
-    font-size: 48px;
-
-    margin: 5px 0 10px;
-}
-
-
-.otp-email {
-    background: #fff7f0;
-
-    border: 1px solid #efd5bf;
-
-    color: #8b4513;
-
-    border-radius: 9px;
-
-    padding: 11px;
-
-    text-align: center;
-
-    font-weight: 700;
-
-    margin-bottom: 22px;
-
-    word-break: break-word;
-}
-
-
-.otp-input {
-    text-align: center;
-
-    font-size: 25px !important;
-
-    font-weight: 800;
-
-    letter-spacing: 8px;
-
-    padding: 15px !important;
-}
-
-
-.otp-input::placeholder {
-    letter-spacing: 8px;
-
-    color: #cbb5a3;
-}
-
-
-.otp-timer {
-    text-align: center;
-
-    margin-top: 15px;
-
-    color: #92745d;
-
-    font-size: 13px;
-}
-
-
-.otp-link {
-    display: block;
-
-    margin: 10px auto 0;
-}
-
-
-.cancel-link {
-    color: #b24b3d;
-}
+const otpMessage =
+    document.getElementById("otpMessage");
 
 
 /* =========================================================
-   APP LAYOUT
+   OTP VARIABLES
 ========================================================= */
 
-.app-page {
-    min-height: 100vh;
+let otpTimerInterval = null;
 
-    display: flex;
+let otpSecondsRemaining = 300;
 
-    background: #fff7f0;
-}
+let resendSecondsRemaining = 60;
 
-
-.sidebar {
-    width: 245px;
-
-    min-height: 100vh;
-
-    background: #3e2415;
-
-    color: white;
-
-    display: flex;
-
-    flex-direction: column;
-
-    position: fixed;
-
-    left: 0;
-    top: 0;
-    bottom: 0;
-
-    z-index: 20;
-}
-
-
-.sidebar-logo {
-    padding: 30px 20px;
-
-    border-bottom: 1px solid rgba(255,255,255,0.10);
-}
-
-
-.sidebar-brand {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-}
-
-
-.sidebar-brand span {
-    font-size: 25px;
-
-    font-weight: 900;
-
-    letter-spacing: 3px;
-}
-
-
-.sidebar-brand small {
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    color: #e8c8a9;
-
-    margin-top: 3px;
-}
-
-
-.sidebar nav {
-    padding: 20px 12px;
-}
-
-
-.nav-item {
-    width: 100%;
-
-    border: none;
-
-    background: transparent;
-
-    color: #ead9cc;
-
-    padding: 13px 15px;
-
-    margin-bottom: 7px;
-
-    border-radius: 9px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    text-align: left;
-
-    font-size: 14px;
-
-    transition: 0.2s;
-}
-
-
-.nav-item:hover,
-.nav-item.active {
-    background: #8b4513;
-
-    color: white;
-}
-
-
-.sidebar-bottom {
-    margin-top: auto;
-
-    padding: 12px;
-}
-
-
-.logout-nav:hover {
-    background: #a33d32;
-}
+let otpChallengeActive = false;
 
 
 /* =========================================================
-   MAIN CONTENT
+   PRODUCT DATA
 ========================================================= */
 
-.main-content {
-    margin-left: 245px;
-
-    width: calc(100% - 245px);
-
-    min-height: 100vh;
-
-    padding: 30px;
-}
-
-
-.topbar {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 30px;
-}
-
-
-.topbar h2 {
-    color: #4f2d1d;
-
-    font-size: 27px;
-}
-
-
-.topbar p {
-    color: #92745d;
-
-    font-size: 13px;
-
-    margin-top: 5px;
-}
-
-
-.user-info {
-    display: flex;
-
-    flex-direction: column;
-
-    text-align: right;
-}
-
-
-.user-info strong {
-    color: #5f321b;
-
-    font-size: 14px;
-}
-
-
-.user-info small {
-    color: #92745d;
-
-    margin-top: 4px;
-}
+let products = {};
 
 
 /* =========================================================
-   STATS
+   HELPER
 ========================================================= */
 
-.stats-grid {
-    display: grid;
+function showOnly(page) {
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+    loginPage.classList.add("hidden");
 
-    gap: 18px;
+    registerPage.classList.add("hidden");
 
-    margin-bottom: 22px;
+    otpPage.classList.add("hidden");
+
+    appPage.classList.add("hidden");
+
+    page.classList.remove("hidden");
 }
 
 
-.stat-card {
-    background: white;
+function setMessage(element, message, type = "info") {
 
-    border: 1px solid #efdfd2;
+    element.textContent = message;
 
-    border-radius: 15px;
-
-    padding: 20px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    box-shadow:
-        0 5px 18px rgba(80,45,20,0.05);
+    element.className =
+        `auth-message ${type}`;
 }
 
 
-.stat-icon {
-    width: 48px;
+function clearMessages() {
 
-    height: 48px;
+    setMessage(loginMessage, "");
 
-    border-radius: 12px;
+    setMessage(registerMessage, "");
 
-    background: #fff0e3;
-
-    display: grid;
-
-    place-items: center;
-
-    font-size: 23px;
+    setMessage(otpMessage, "");
 }
 
 
-.stat-card span {
-    color: #92745d;
+function formatPeso(value) {
 
-    font-size: 12px;
+    return Number(value || 0).toLocaleString(
+        "en-PH",
+        {
+            style: "currency",
+            currency: "PHP"
+        }
+    );
 }
 
 
-.stat-card h3 {
-    color: #4f2d1d;
+function formatDate(timestamp) {
 
-    margin-top: 5px;
-
-    font-size: 24px;
-}
-
-
-/* =========================================================
-   PANELS
-========================================================= */
-
-.dashboard-grid {
-    display: grid;
-
-    grid-template-columns:
-        2fr 1fr;
-
-    gap: 20px;
-}
-
-
-.panel {
-    background: white;
-
-    border: 1px solid #efdfd2;
-
-    border-radius: 15px;
-
-    padding: 20px;
-
-    box-shadow:
-        0 5px 18px rgba(80,45,20,0.05);
-}
-
-
-.panel-header {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 17px;
-}
-
-
-.panel-header h3 {
-    color: #55321f;
-
-    font-size: 17px;
-}
-
-
-.small-btn {
-    border: 1px solid #d5b59c;
-
-    background: #fff7f0;
-
-    color: #8b4513;
-
-    border-radius: 7px;
-
-    padding: 7px 12px;
-
-    font-size: 12px;
-
-    font-weight: 700;
-}
-
-
-.small-btn:hover {
-    background: #f3dfcd;
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-.table-container {
-    width: 100%;
-
-    overflow-x: auto;
-}
-
-
-table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 700px;
-}
-
-
-th {
-    text-align: left;
-
-    padding: 12px 10px;
-
-    background: #fff7f0;
-
-    color: #74523c;
-
-    font-size: 12px;
-
-    border-bottom: 1px solid #ead8ca;
-}
-
-
-td {
-    padding: 13px 10px;
-
-    border-bottom: 1px solid #f0e6de;
-
-    color: #5d4332;
-
-    font-size: 13px;
-}
-
-
-tr:hover td {
-    background: #fffbf8;
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-.status {
-    display: inline-block;
-
-    padding: 5px 9px;
-
-    border-radius: 20px;
-
-    font-size: 10px;
-
-    font-weight: 800;
-}
-
-
-.status.in-stock {
-    color: #24733c;
-
-    background: #e6f6eb;
-}
-
-
-.status.low-stock {
-    color: #a54d20;
-
-    background: #fff0df;
-}
-
-
-/* =========================================================
-   QUICK INFO
-========================================================= */
-
-.quick-info {
-    display: flex;
-
-    flex-direction: column;
-}
-
-
-.info-row {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding: 14px 0;
-
-    border-bottom: 1px solid #eee1d8;
-
-    font-size: 13px;
-}
-
-
-.info-row span {
-    color: #92745d;
-}
-
-
-.info-row strong {
-    color: #573522;
-
-    text-align: right;
-}
-
-
-/* =========================================================
-   CONTENT PAGES
-========================================================= */
-
-.content-page {
-    animation: fadeIn 0.2s ease;
-}
-
-
-@keyframes fadeIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(5px);
+    if (!timestamp) {
+        return "Unknown date";
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    return new Date(timestamp).toLocaleString(
+        "en-PH",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+}
+
+
+/* =========================================================
+   FIREBASE ERROR MESSAGE
+========================================================= */
+
+function getFirebaseErrorMessage(error) {
+
+    const code = error?.code || "";
+
+    switch (code) {
+
+        case "auth/invalid-email":
+            return "Invalid email address.";
+
+        case "auth/user-not-found":
+            return "Account not found.";
+
+        case "auth/wrong-password":
+            return "Incorrect password.";
+
+        case "auth/invalid-credential":
+            return "Invalid email or password.";
+
+        case "auth/email-already-in-use":
+            return "This email is already registered.";
+
+        case "auth/weak-password":
+            return "Password must be at least 6 characters.";
+
+        case "auth/network-request-failed":
+            return "Network error. Check your internet connection.";
+
+        case "functions/unauthenticated":
+            return "Please login first.";
+
+        case "functions/resource-exhausted":
+            return "Please wait before requesting another OTP.";
+
+        case "functions/invalid-argument":
+            return error?.message ||
+                "Invalid OTP.";
+
+        default:
+            return error?.message ||
+                "Something went wrong.";
+    }
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        clearMessages();
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
+
+        const loginBtn =
+            document.getElementById("loginBtn");
+
+
+        if (!email || !password) {
+
+            setMessage(
+                loginMessage,
+                "Please enter your email and password.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            loginBtn.disabled = true;
+
+            loginBtn.textContent =
+                "LOGGING IN...";
+
+
+            /*
+             * FIRST SECURITY STEP:
+             * Email + Password
+             */
+
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+
+            /*
+             * SECOND SECURITY STEP:
+             * Send OTP to Gmail
+             */
+
+            await sendOtp();
+
+
+            showOtpPage(email);
+
+
+            setMessage(
+                otpMessage,
+                "OTP sent to your email.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Login / OTP Error:",
+                error
+            );
+
+
+            /*
+             * If OTP sending failed,
+             * logout the authenticated user.
+             */
+
+            try {
+                await signOut(auth);
+            } catch (logoutError) {
+                console.error(logoutError);
+            }
+
+
+            showOnly(loginPage);
+
+
+            setMessage(
+                loginMessage,
+                getFirebaseErrorMessage(error),
+                "error"
+            );
+
+
+        } finally {
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "LOGIN";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SEND OTP
+========================================================= */
+
+async function sendOtp() {
+
+    const result =
+        await sendOtpFunction({});
+
+
+    const data =
+        result.data || {};
+
+
+    otpChallengeActive = true;
+
+
+    startOtpTimer(
+        Number(data.expiresInSeconds || 300)
+    );
+
+
+    startResendTimer(
+        Number(data.resendInSeconds || 60)
+    );
+
+
+    return data;
+}
+
+
+/* =========================================================
+   SHOW OTP PAGE
+========================================================= */
+
+function showOtpPage(email) {
+
+    showOnly(otpPage);
+
+
+    document
+        .getElementById("otpEmailDisplay")
+        .textContent = email;
+
+
+    document
+        .getElementById("otpInput")
+        .value = "";
+
+
+    setMessage(
+        otpMessage,
+        "",
+        "info"
+    );
+
+
+    setTimeout(() => {
+
+        document
+            .getElementById("otpInput")
+            .focus();
+
+    }, 200);
+
+}
+
+
+/* =========================================================
+   OTP TIMER
+========================================================= */
+
+function startOtpTimer(seconds) {
+
+    clearInterval(otpTimerInterval);
+
+
+    otpSecondsRemaining =
+        Number(seconds);
+
+
+    updateOtpTimer();
+
+
+    otpTimerInterval =
+        setInterval(
+            () => {
+
+                otpSecondsRemaining--;
+
+                updateOtpTimer();
+
+
+                if (
+                    otpSecondsRemaining <= 0
+                ) {
+
+                    clearInterval(
+                        otpTimerInterval
+                    );
+
+                    otpChallengeActive = false;
+
+                    setMessage(
+                        otpMessage,
+                        "OTP expired. Please request a new OTP.",
+                        "error"
+                    );
+
+                }
+
+            },
+            1000
+        );
+}
+
+
+function updateOtpTimer() {
+
+    const timer =
+        document.getElementById(
+            "otpTimer"
+        );
+
+
+    if (
+        otpSecondsRemaining <= 0
+    ) {
+
+        timer.textContent =
+            "OTP expired.";
+
+        return;
+    }
+
+
+    const minutes =
+        Math.floor(
+            otpSecondsRemaining / 60
+        );
+
+    const seconds =
+        otpSecondsRemaining % 60;
+
+
+    timer.textContent =
+        `OTP expires in ${
+            String(minutes).padStart(2, "0")
+        }:${
+            String(seconds).padStart(2, "0")
+        }`;
+}
+
+
+/* =========================================================
+   RESEND TIMER
+========================================================= */
+
+let resendTimerInterval = null;
+
+
+function startResendTimer(seconds) {
+
+    clearInterval(
+        resendTimerInterval
+    );
+
+
+    resendSecondsRemaining =
+        Number(seconds);
+
+
+    resendOtpBtn.disabled = true;
+
+    updateResendButton();
+
+
+    resendTimerInterval =
+        setInterval(
+            () => {
+
+                resendSecondsRemaining--;
+
+                updateResendButton();
+
+
+                if (
+                    resendSecondsRemaining <= 0
+                ) {
+
+                    clearInterval(
+                        resendTimerInterval
+                    );
+
+                    resendOtpBtn.disabled =
+                        false;
+
+                    resendOtpBtn.textContent =
+                        "Resend OTP";
+
+                }
+
+            },
+            1000
+        );
+}
+
+
+function updateResendButton() {
+
+    if (
+        resendSecondsRemaining > 0
+    ) {
+
+        resendOtpBtn.textContent =
+            `Resend OTP (${resendSecondsRemaining}s)`;
+
+    } else {
+
+        resendOtpBtn.textContent =
+            "Resend OTP";
+    }
+}
+
+
+/* =========================================================
+   VERIFY OTP
+========================================================= */
+
+otpForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        const otp =
+            document
+                .getElementById("otpInput")
+                .value
+                .trim();
+
+
+        if (!/^\d{6}$/.test(otp)) {
+
+            setMessage(
+                otpMessage,
+                "Enter the 6-digit OTP.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const verifyBtn =
+            document.getElementById(
+                "verifyOtpBtn"
+            );
+
+
+        try {
+
+            verifyBtn.disabled = true;
+
+            verifyBtn.textContent =
+                "VERIFYING...";
+
+
+            const result =
+                await verifyOtpFunction({
+                    otp: otp
+                });
+
+
+            if (
+                !result.data ||
+                result.data.success !== true
+            ) {
+
+                throw new Error(
+                    "OTP verification failed."
+                );
+
+            }
+
+
+            /*
+             * Refresh Firebase ID token
+             * so otpVerified custom claim
+             * becomes available.
+             */
+
+            if (auth.currentUser) {
+
+                await auth.currentUser
+                    .getIdToken(true);
+
+            }
+
+
+            otpChallengeActive = false;
+
+
+            clearInterval(
+                otpTimerInterval
+            );
+
+
+            clearInterval(
+                resendTimerInterval
+            );
+
+
+            setMessage(
+                otpMessage,
+                "Verification successful!",
+                "success"
+            );
+
+
+            /*
+             * NOW OPEN DASHBOARD
+             */
+
+            setTimeout(
+                async () => {
+
+                    showApp();
+
+                    await loadProducts();
+
+                    await loadActivityLogs();
+
+                    updateDashboard();
+
+                },
+                400
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "OTP verification error:",
+                error
+            );
+
+
+            setMessage(
+                otpMessage,
+                getFirebaseErrorMessage(error),
+                "error"
+            );
+
+
+        } finally {
+
+            verifyBtn.disabled = false;
+
+            verifyBtn.textContent =
+                "VERIFY OTP";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESEND OTP
+========================================================= */
+
+resendOtpBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            resendSecondsRemaining > 0
+        ) {
+            return;
+        }
+
+
+        try {
+
+            resendOtpBtn.disabled = true;
+
+            resendOtpBtn.textContent =
+                "SENDING...";
+
+
+            await sendOtp();
+
+
+            setMessage(
+                otpMessage,
+                "A new OTP has been sent.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            resendOtpBtn.disabled = false;
+
+
+            setMessage(
+                otpMessage,
+                getFirebaseErrorMessage(error),
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CANCEL OTP
+========================================================= */
+
+cancelOtpBtn.addEventListener(
+    "click",
+    async function () {
+
+        try {
+
+            if (auth.currentUser) {
+
+                await clearOtpFunction({});
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Clear OTP error:",
+                error
+            );
+
+        }
+
+
+        try {
+
+            await signOut(auth);
+
+        } catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+        }
+
+
+        otpChallengeActive = false;
+
+
+        clearInterval(
+            otpTimerInterval
+        );
+
+
+        clearInterval(
+            resendTimerInterval
+        );
+
+
+        showOnly(loginPage);
+
+        clearMessages();
+
+    }
+);
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+registerForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        clearMessages();
+
+
+        const name =
+            document
+                .getElementById("registerName")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("registerEmail")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("registerPassword")
+                .value;
+
+
+        const confirmPassword =
+            document
+                .getElementById(
+                    "registerConfirmPassword"
+                )
+                .value;
+
+
+        const registerBtn =
+            document.getElementById(
+                "registerBtn"
+            );
+
+
+        if (
+            password !== confirmPassword
+        ) {
+
+            setMessage(
+                registerMessage,
+                "Passwords do not match.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            setMessage(
+                registerMessage,
+                "Password must be at least 6 characters.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            registerBtn.disabled = true;
+
+            registerBtn.textContent =
+                "CREATING ACCOUNT...";
+
+
+            const credential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            const user =
+                credential.user;
+
+
+            /*
+             * Save profile to RTDB
+             */
+
+            await set(
+                ref(
+                    db,
+                    `users/${user.uid}`
+                ),
+                {
+                    name: name,
+                    email: email,
+                    role: "staff",
+                    createdAt: Date.now()
+                }
+            );
+
+
+            /*
+             * Activity log is optional.
+             * If security rules block it before OTP,
+             * the account will still be created.
+             */
+
+            try {
+
+                await addActivity(
+                    `New account registered: ${email}`
+                );
+
+            } catch (activityError) {
+
+                console.warn(
+                    "Registration activity log skipped.",
+                    activityError
+                );
+
+            }
+
+
+            /*
+             * Logout after registration.
+             * User must login and complete OTP.
+             */
+
+            await signOut(auth);
+
+
+            registerForm.reset();
+
+
+            showOnly(loginPage);
+
+
+            document
+                .getElementById("loginEmail")
+                .value = email;
+
+
+            setMessage(
+                loginMessage,
+                "Account created successfully. Please login.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
+
+
+            setMessage(
+                registerMessage,
+                getFirebaseErrorMessage(error),
+                "error"
+            );
+
+        } finally {
+
+            registerBtn.disabled = false;
+
+            registerBtn.textContent =
+                "SIGN UP";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+forgotPasswordBtn.addEventListener(
+    "click",
+    async function () {
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
+
+
+        if (!email) {
+
+            setMessage(
+                loginMessage,
+                "Enter your email first.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            forgotPasswordBtn.disabled =
+                true;
+
+
+            await sendPasswordResetEmail(
+                auth,
+                email
+            );
+
+
+            setMessage(
+                loginMessage,
+                "Password reset email sent. Check your Gmail.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            setMessage(
+                loginMessage,
+                getFirebaseErrorMessage(error),
+                "error"
+            );
+
+
+        } finally {
+
+            forgotPasswordBtn.disabled =
+                false;
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SHOW REGISTER
+========================================================= */
+
+showRegisterBtn.addEventListener(
+    "click",
+    function () {
+
+        clearMessages();
+
+        showOnly(registerPage);
+
+    }
+);
+
+
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
+showLoginBtn.addEventListener(
+    "click",
+    function () {
+
+        clearMessages();
+
+        showOnly(loginPage);
+
+    }
+);
+
+
+/* =========================================================
+   SHOW APP
+========================================================= */
+
+function showApp() {
+
+    showOnly(appPage);
+
+
+    if (auth.currentUser) {
+
+        document
+            .getElementById(
+                "currentUserEmail"
+            )
+            .textContent =
+                auth.currentUser.email || "";
+
     }
 
 }
 
 
-.page-actions {
-    display: flex;
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-    align-items: center;
+document
+    .querySelectorAll(".nav-item[data-page]")
+    .forEach(
+        button => {
 
-    justify-content: space-between;
+            button.addEventListener(
+                "click",
+                function () {
 
-    margin-bottom: 20px;
-}
-
-
-.page-actions h2 {
-    color: #4f2d1d;
-
-    margin-bottom: 5px;
-}
-
-
-.page-actions p {
-    color: #92745d;
-
-    font-size: 13px;
-}
+                    const page =
+                        this.dataset.page;
 
 
-.add-btn {
-    width: auto;
-
-    padding: 12px 18px;
-}
-
-
-.inventory-tools {
-    display: grid;
-
-    grid-template-columns:
-        2fr 1fr;
-
-    gap: 15px;
-
-    margin-bottom: 18px;
-}
+                    document
+                        .querySelectorAll(
+                            ".nav-item[data-page]"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
 
 
-.inventory-tools input,
-.inventory-tools select {
-    margin-bottom: 0;
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    showContentPage(page);
+
+                }
+            );
+
+        }
+    );
+
+
+function showContentPage(page) {
+
+    document
+        .querySelectorAll(".content-page")
+        .forEach(
+            section =>
+                section.classList.add(
+                    "hidden"
+                )
+        );
+
+
+    const selected =
+        document.getElementById(
+            `${page}Page`
+        );
+
+
+    if (selected) {
+
+        selected.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    const titles = {
+
+        dashboard:
+            "Dashboard",
+
+        inventory:
+            "Inventory",
+
+        activity:
+            "Activity Logs"
+
+    };
+
+
+    document
+        .getElementById("pageTitle")
+        .textContent =
+            titles[page] || "Dashboard";
+
+
+    if (page === "dashboard") {
+
+        updateDashboard();
+
+    }
+
+
+    if (page === "inventory") {
+
+        renderInventory();
+
+    }
+
+
+    if (page === "activity") {
+
+        loadActivityLogs();
+
+    }
+
 }
 
 
 /* =========================================================
-   ACTION BUTTONS
+   DASHBOARD VIEW ALL
 ========================================================= */
 
-.action-btn {
-    border: none;
+document
+    .getElementById(
+        "dashboardInventoryBtn"
+    )
+    .addEventListener(
+        "click",
+        function () {
 
-    border-radius: 6px;
+            document
+                .querySelectorAll(
+                    ".nav-item[data-page]"
+                )
+                .forEach(
+                    item =>
+                        item.classList.remove(
+                            "active"
+                        )
+                );
 
-    padding: 6px 9px;
 
-    font-size: 11px;
+            const inventoryNav =
+                document.querySelector(
+                    '.nav-item[data-page="inventory"]'
+                );
 
-    font-weight: 700;
 
-    margin-right: 4px;
+            if (inventoryNav) {
+
+                inventoryNav.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            showContentPage(
+                "inventory"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INVENTORY DATA
+========================================================= */
+
+async function loadProducts() {
+
+    return new Promise(
+        resolve => {
+
+            const productsRef =
+                ref(
+                    db,
+                    "bakeryProducts"
+                );
+
+
+            onValue(
+                productsRef,
+                snapshot => {
+
+                    products =
+                        snapshot.val() || {};
+
+
+                    renderInventory();
+
+                    updateDashboard();
+
+                    resolve();
+
+                },
+                {
+                    onlyOnce: true
+                }
+            );
+
+        }
+    );
 }
 
 
-.edit-btn {
-    background: #fff0d8;
+/* =========================================================
+   RENDER INVENTORY
+========================================================= */
 
-    color: #8b4513;
+function renderInventory() {
+
+    const tbody =
+        document.getElementById(
+            "inventoryTableBody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    const search =
+        (
+            document
+                .getElementById(
+                    "searchProduct"
+                )
+                ?.value || ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    const category =
+        document
+            .getElementById(
+                "categoryFilter"
+            )
+            ?.value || "all";
+
+
+    const entries =
+        Object.entries(products);
+
+
+    const filtered =
+        entries.filter(
+            ([key, product]) => {
+
+                const name =
+                    String(
+                        product.name || ""
+                    ).toLowerCase();
+
+
+                const sku =
+                    String(
+                        product.sku || ""
+                    ).toLowerCase();
+
+
+                const productCategory =
+                    String(
+                        product.category || ""
+                    );
+
+
+                const matchesSearch =
+                    !search ||
+                    name.includes(search) ||
+                    sku.includes(search);
+
+
+                const matchesCategory =
+                    category === "all" ||
+                    productCategory === category;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory
+                );
+
+            }
+        );
+
+
+    if (filtered.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7"
+                    style="text-align:center;padding:30px;">
+                    No products found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    filtered.forEach(
+        ([key, product]) => {
+
+            const quantity =
+                Number(
+                    product.quantity || 0
+                );
+
+
+            const threshold =
+                Number(
+                    product.threshold || 0
+                );
+
+
+            const isLow =
+                quantity <= threshold;
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        product.sku || "-"
+                    )}
+                </td>
+
+                <td>
+                    <strong>
+                        ${escapeHtml(
+                            product.name || "-"
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        product.category || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${quantity}
+                </td>
+
+                <td>
+                    ${formatPeso(
+                        product.price
+                    )}
+                </td>
+
+                <td>
+                    <span class="status ${
+                        isLow
+                            ? "low-stock"
+                            : "in-stock"
+                    }">
+                        ${
+                            isLow
+                                ? "LOW STOCK"
+                                : "IN STOCK"
+                        }
+                    </span>
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        data-edit="${key}"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="action-btn delete-btn"
+                        data-delete="${key}"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+
+    /*
+     * EDIT BUTTON
+     */
+
+    tbody
+        .querySelectorAll(
+            "[data-edit]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openEditProduct(
+                            button.dataset.edit
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * DELETE BUTTON
+     */
+
+    tbody
+        .querySelectorAll(
+            "[data-delete]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteProduct(
+                            button.dataset.delete
+                        );
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
-.delete-btn {
-    background: #ffe5e2;
+/* =========================================================
+   SEARCH
+========================================================= */
 
-    color: #a33d32;
+document
+    .getElementById(
+        "searchProduct"
+    )
+    .addEventListener(
+        "input",
+        renderInventory
+    );
+
+
+document
+    .getElementById(
+        "categoryFilter"
+    )
+    .addEventListener(
+        "change",
+        renderInventory
+    );
+
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+const productModal =
+    document.getElementById(
+        "productModal"
+    );
+
+
+document
+    .getElementById(
+        "openAddProductBtn"
+    )
+    .addEventListener(
+        "click",
+        openAddProduct
+    );
+
+
+document
+    .getElementById(
+        "closeProductModal"
+    )
+    .addEventListener(
+        "click",
+        closeProductModal
+    );
+
+
+document
+    .getElementById(
+        "cancelProductBtn"
+    )
+    .addEventListener(
+        "click",
+        closeProductModal
+    );
+
+
+function openAddProduct() {
+
+    document
+        .getElementById(
+            "modalTitle"
+        )
+        .textContent =
+            "Add Product";
+
+
+    document
+        .getElementById(
+            "productForm"
+        )
+        .reset();
+
+
+    document
+        .getElementById(
+            "editProductKey"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "productThreshold"
+        )
+        .value = 5;
+
+
+    productModal.classList.remove(
+        "hidden"
+    );
+
 }
 
 
-.action-btn:hover {
-    opacity: 0.8;
+function openEditProduct(key) {
+
+    const product =
+        products[key];
+
+
+    if (!product) {
+        return;
+    }
+
+
+    document
+        .getElementById(
+            "modalTitle"
+        )
+        .textContent =
+            "Edit Product";
+
+
+    document
+        .getElementById(
+            "editProductKey"
+        )
+        .value = key;
+
+
+    document
+        .getElementById(
+            "productSku"
+        )
+        .value =
+            product.sku || "";
+
+
+    document
+        .getElementById(
+            "productName"
+        )
+        .value =
+            product.name || "";
+
+
+    document
+        .getElementById(
+            "productCategory"
+        )
+        .value =
+            product.category || "";
+
+
+    document
+        .getElementById(
+            "productQuantity"
+        )
+        .value =
+            product.quantity ?? 0;
+
+
+    document
+        .getElementById(
+            "productPrice"
+        )
+        .value =
+            product.price ?? 0;
+
+
+    document
+        .getElementById(
+            "productThreshold"
+        )
+        .value =
+            product.threshold ?? 5;
+
+
+    productModal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closeProductModal() {
+
+    productModal.classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   SAVE PRODUCT
+========================================================= */
+
+document
+    .getElementById(
+        "productForm"
+    )
+    .addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const key =
+                document
+                    .getElementById(
+                        "editProductKey"
+                    )
+                    .value;
+
+
+            const product = {
+
+                sku:
+                    document
+                        .getElementById(
+                            "productSku"
+                        )
+                        .value
+                        .trim(),
+
+                name:
+                    document
+                        .getElementById(
+                            "productName"
+                        )
+                        .value
+                        .trim(),
+
+                category:
+                    document
+                        .getElementById(
+                            "productCategory"
+                        )
+                        .value,
+
+                quantity:
+                    Number(
+                        document
+                            .getElementById(
+                                "productQuantity"
+                            )
+                            .value
+                    ),
+
+                price:
+                    Number(
+                        document
+                            .getElementById(
+                                "productPrice"
+                            )
+                            .value
+                    ),
+
+                threshold:
+                    Number(
+                        document
+                            .getElementById(
+                                "productThreshold"
+                            )
+                            .value
+                    ),
+
+                updatedAt:
+                    Date.now()
+
+            };
+
+
+            if (!product.sku) {
+
+                alert(
+                    "Please enter SKU."
+                );
+
+                return;
+            }
+
+
+            if (!product.name) {
+
+                alert(
+                    "Please enter product name."
+                );
+
+                return;
+            }
+
+
+            if (!product.category) {
+
+                alert(
+                    "Please select category."
+                );
+
+                return;
+            }
+
+
+            if (
+                product.quantity < 0 ||
+                product.price < 0
+            ) {
+
+                alert(
+                    "Quantity and price cannot be negative."
+                );
+
+                return;
+            }
+
+
+            const saveBtn =
+                document
+                    .getElementById(
+                        "saveProductBtn"
+                    );
+
+
+            try {
+
+                saveBtn.disabled = true;
+
+                saveBtn.textContent =
+                    "SAVING...";
+
+
+                if (key) {
+
+                    await update(
+                        ref(
+                            db,
+                            `bakeryProducts/${key}`
+                        ),
+                        product
+                    );
+
+
+                    await addActivity(
+                        `Updated product: ${product.name}`
+                    );
+
+                } else {
+
+                    product.createdAt =
+                        Date.now();
+
+
+                    const newProductRef =
+                        push(
+                            ref(
+                                db,
+                                "bakeryProducts"
+                            )
+                        );
+
+
+                    await set(
+                        newProductRef,
+                        product
+                    );
+
+
+                    await addActivity(
+                        `Added new product: ${product.name}`
+                    );
+
+                }
+
+
+                closeProductModal();
+
+
+                await loadProducts();
+
+
+                alert(
+                    "Product saved successfully!"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Save product error:",
+                    error
+                );
+
+
+                alert(
+                    getFirebaseErrorMessage(
+                        error
+                    )
+                );
+
+
+            } finally {
+
+                saveBtn.disabled = false;
+
+                saveBtn.textContent =
+                    "SAVE PRODUCT";
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   DELETE PRODUCT
+========================================================= */
+
+async function deleteProduct(key) {
+
+    const product =
+        products[key];
+
+
+    if (!product) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${product.name}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await remove(
+            ref(
+                db,
+                `bakeryProducts/${key}`
+            )
+        );
+
+
+        await addActivity(
+            `Deleted product: ${product.name}`
+        );
+
+
+        await loadProducts();
+
+
+        alert(
+            "Product deleted successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete error:",
+            error
+        );
+
+
+        alert(
+            getFirebaseErrorMessage(
+                error
+            )
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    const entries =
+        Object.entries(products);
+
+
+    const totalProducts =
+        entries.length;
+
+
+    let totalStock = 0;
+
+    let lowStock = 0;
+
+    let estimatedValue = 0;
+
+
+    entries.forEach(
+        ([key, product]) => {
+
+            const quantity =
+                Number(
+                    product.quantity || 0
+                );
+
+
+            const price =
+                Number(
+                    product.price || 0
+                );
+
+
+            const threshold =
+                Number(
+                    product.threshold || 0
+                );
+
+
+            totalStock += quantity;
+
+            estimatedValue +=
+                quantity * price;
+
+
+            if (
+                quantity <= threshold
+            ) {
+
+                lowStock++;
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "totalProducts"
+        )
+        .textContent =
+            totalProducts;
+
+
+    document
+        .getElementById(
+            "totalStock"
+        )
+        .textContent =
+            totalStock;
+
+
+    document
+        .getElementById(
+            "lowStockItems"
+        )
+        .textContent =
+            lowStock;
+
+
+    document
+        .getElementById(
+            "estimatedValue"
+        )
+        .textContent =
+            formatPeso(
+                estimatedValue
+            );
+
+
+    renderDashboardTable();
+
+}
+
+
+/* =========================================================
+   DASHBOARD TABLE
+========================================================= */
+
+function renderDashboardTable() {
+
+    const tbody =
+        document.getElementById(
+            "dashboardTableBody"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    const entries =
+        Object.entries(products)
+            .slice(-5)
+            .reverse();
+
+
+    if (entries.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5"
+                    style="text-align:center;padding:25px;">
+                    No inventory records yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    entries.forEach(
+        ([key, product]) => {
+
+            const quantity =
+                Number(
+                    product.quantity || 0
+                );
+
+
+            const threshold =
+                Number(
+                    product.threshold || 0
+                );
+
+
+            const isLow =
+                quantity <= threshold;
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        product.sku || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        product.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        product.category || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${quantity}
+                </td>
+
+                <td>
+                    <span class="status ${
+                        isLow
+                            ? "low-stock"
+                            : "in-stock"
+                    }">
+                        ${
+                            isLow
+                                ? "LOW STOCK"
+                                : "IN STOCK"
+                        }
+                    </span>
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+
 }
 
 
@@ -949,319 +2348,423 @@ tr:hover td {
    ACTIVITY LOG
 ========================================================= */
 
-.activity-list {
-    display: flex;
+async function addActivity(message) {
 
-    flex-direction: column;
-}
-
-
-.activity-item {
-    display: flex;
-
-    gap: 13px;
-
-    padding: 15px 5px;
-
-    border-bottom: 1px solid #eee1d8;
-}
+    const user =
+        auth.currentUser;
 
 
-.activity-icon {
-    width: 36px;
-
-    height: 36px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background: #fff0e3;
-
-    display: grid;
-
-    place-items: center;
-}
+    if (!user) {
+        return;
+    }
 
 
-.activity-content {
-    flex: 1;
-}
+    const activityRef =
+        push(
+            ref(
+                db,
+                "activityLogs"
+            )
+        );
 
 
-.activity-content strong {
-    display: block;
+    await set(
+        activityRef,
+        {
 
-    color: #573522;
+            message:
+                message,
 
-    font-size: 13px;
+            userEmail:
+                user.email || "",
 
-    margin-bottom: 4px;
-}
+            timestamp:
+                Date.now()
 
+        }
+    );
 
-.activity-content small {
-    color: #92745d;
-
-    font-size: 11px;
 }
 
 
 /* =========================================================
-   MODAL
+   LOAD ACTIVITY LOGS
 ========================================================= */
 
-.modal {
-    position: fixed;
+async function loadActivityLogs() {
 
-    inset: 0;
+    return new Promise(
+        resolve => {
 
-    background: rgba(36, 20, 10, 0.55);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 100;
-}
+            const activityRef =
+                ref(
+                    db,
+                    "activityLogs"
+                );
 
 
-.modal-card {
-    width: 100%;
+            onValue(
+                activityRef,
+                snapshot => {
 
-    max-width: 480px;
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    background: white;
-
-    border-radius: 17px;
-
-    padding: 25px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.2);
-}
+                    const data =
+                        snapshot.val() || {};
 
 
-.modal-header {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 22px;
-}
+                    renderActivityLogs(
+                        data
+                    );
 
 
-.modal-header h2 {
-    color: #573522;
-}
+                    resolve();
 
+                },
+                {
+                    onlyOnce: true
+                }
+            );
 
-.close-btn {
-    border: none;
+        }
+    );
 
-    background: transparent;
-
-    font-size: 28px;
-
-    color: #92745d;
-
-    line-height: 1;
-}
-
-
-.close-btn:hover {
-    color: #8b4513;
-}
-
-
-.modal-buttons {
-    display: grid;
-
-    grid-template-columns: 1fr 1.5fr;
-
-    gap: 10px;
-
-    margin-top: 10px;
-}
-
-
-.cancel-btn {
-    border: 1px solid #d8c1b0;
-
-    background: #fff7f0;
-
-    color: #704d37;
-
-    border-radius: 10px;
-
-    font-weight: 700;
 }
 
 
 /* =========================================================
-   MOBILE
+   RENDER ACTIVITY
 ========================================================= */
 
-@media (max-width: 1000px) {
+function renderActivityLogs(data) {
 
-    .stats-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+    const list =
+        document.getElementById(
+            "activityList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    const entries =
+        Object.entries(data)
+            .sort(
+                (
+                    [, a],
+                    [, b]
+                ) =>
+                    Number(
+                        b.timestamp || 0
+                    )
+                    -
+                    Number(
+                        a.timestamp || 0
+                    )
+            );
+
+
+    if (entries.length === 0) {
+
+        list.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:30px;
+                color:#92745d;
+            ">
+                No activity logs yet.
+            </div>
+        `;
+
+        return;
     }
 
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
+
+    entries.forEach(
+        ([key, activity]) => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "activity-item";
+
+
+            item.innerHTML = `
+
+                <div class="activity-icon">
+                    📋
+                </div>
+
+                <div class="activity-content">
+
+                    <strong>
+                        ${escapeHtml(
+                            activity.message ||
+                            "System activity"
+                        )}
+                    </strong>
+
+                    <small>
+                        ${escapeHtml(
+                            activity.userEmail || ""
+                        )}
+                        •
+                        ${formatDate(
+                            activity.timestamp
+                        )}
+                    </small>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(item);
+
+        }
+    );
 
 }
 
 
-@media (max-width: 760px) {
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
-    .sidebar {
-        width: 70px;
-    }
+function escapeHtml(value) {
 
-    .sidebar-brand span {
-        font-size: 14px;
-
-        letter-spacing: 1px;
-    }
-
-    .sidebar-brand small {
-        display: none;
-    }
-
-    .nav-item {
-        justify-content: center;
-
-        padding: 13px 5px;
-    }
-
-    .nav-item span {
-        display: none;
-    }
-
-    .main-content {
-        margin-left: 70px;
-
-        width: calc(100% - 70px);
-
-        padding: 20px;
-    }
-
-    .topbar {
-        align-items: flex-start;
-
-        gap: 15px;
-    }
-
-    .topbar h2 {
-        font-size: 22px;
-    }
-
-    .user-info {
-        display: none;
-    }
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-@media (max-width: 600px) {
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-    .auth-page {
-        padding: 15px;
+logoutBtn.addEventListener(
+    "click",
+    async function () {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to logout?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            /*
+             * Remove OTP verification claim
+             * before logout.
+             */
+
+            if (auth.currentUser) {
+
+                try {
+
+                    await clearOtpFunction({});
+
+                } catch (error) {
+
+                    console.warn(
+                        "Could not clear OTP claim:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            await signOut(auth);
+
+
+            otpChallengeActive = false;
+
+
+            clearInterval(
+                otpTimerInterval
+            );
+
+
+            clearInterval(
+                resendTimerInterval
+            );
+
+
+            showOnly(loginPage);
+
+            loginForm.reset();
+
+            clearMessages();
+
+
+        } catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+        }
+
     }
+);
 
-    .auth-card {
-        padding: 25px 20px;
 
-        border-radius: 15px;
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    async function (user) {
+
+        if (!user) {
+
+            showOnly(loginPage);
+
+            return;
+        }
+
+
+        try {
+
+            /*
+             * Check custom claim.
+             */
+
+            const tokenResult =
+                await user.getIdTokenResult();
+
+
+            const otpVerified =
+                tokenResult.claims
+                    ?.otpVerified === true;
+
+
+            if (otpVerified) {
+
+                /*
+                 * User already completed OTP.
+                 */
+
+                showApp();
+
+                await loadProducts();
+
+                await loadActivityLogs();
+
+                updateDashboard();
+
+                return;
+            }
+
+
+            /*
+             * User is logged in with password
+             * but OTP is not verified.
+             */
+
+            showOtpPage(
+                user.email || ""
+            );
+
+
+            /*
+             * If this was not caused by a normal
+             * login flow, send an OTP.
+             */
+
+            if (!otpChallengeActive) {
+
+                try {
+
+                    await sendOtp();
+
+                    setMessage(
+                        otpMessage,
+                        "A verification code was sent to your email.",
+                        "success"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Auto OTP error:",
+                        error
+                    );
+
+                }
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Auth state error:",
+                error
+            );
+
+            showOnly(loginPage);
+
+        }
+
     }
+);
 
-    .brand-logo span {
-        font-size: 27px;
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICK OUTSIDE
+========================================================= */
+
+productModal.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            productModal
+        ) {
+
+            closeProductModal();
+
+        }
+
     }
-
-    .auth-card h1 {
-        font-size: 24px;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .inventory-tools {
-        grid-template-columns: 1fr;
-    }
-
-    .page-actions {
-        flex-direction: column;
-
-        align-items: stretch;
-
-        gap: 15px;
-    }
-
-    .add-btn {
-        width: 100%;
-    }
-
-    .main-content {
-        padding: 15px;
-    }
-
-    .otp-input {
-        font-size: 21px !important;
-
-        letter-spacing: 5px;
-    }
-
-}
+);
 
 
-@media (max-width: 430px) {
+/* =========================================================
+   INITIAL PAGE
+========================================================= */
 
-    .sidebar {
-        width: 58px;
-    }
-
-    .main-content {
-        margin-left: 58px;
-
-        width: calc(100% - 58px);
-
-        padding: 12px;
-    }
-
-    .sidebar-logo {
-        padding: 22px 5px;
-    }
-
-    .sidebar-brand span {
-        font-size: 10px;
-    }
-
-    .nav-item {
-        font-size: 18px;
-    }
-
-    .stat-card {
-        padding: 15px;
-    }
-
-    .panel {
-        padding: 14px;
-    }
-
-}
+showOnly(loginPage);
