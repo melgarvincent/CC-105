@@ -1,614 +1,615 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbee's Bake Shop - Inventory System</title>
 
-    <title>Arbee's Bakery Shop</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-    <link rel="stylesheet" href="style.css?v=6">
+body {
+    background: #fff8f0;
+    color: #4b2e20;
+}
 
-    <!-- Firebase -->
-    <script type="module" src="script.js?v=6" defer></script>
+/* LOGIN */
+#loginPage {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #8b4513, #d2691e);
+}
+
+.login-box {
+    width: 360px;
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    text-align: center;
+}
+
+.logo {
+    font-size: 55px;
+}
+
+.login-box h1 {
+    margin-bottom: 8px;
+}
+
+.login-box p {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #8b4513;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background: #6f350f;
+}
+
+#errorMessage {
+    color: red;
+    margin-top: 10px;
+}
+
+/* APP */
+#app {
+    display: none;
+}
+
+header {
+    height: 70px;
+    background: #8b4513;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+header h2 {
+    font-size: 22px;
+}
+
+.logout {
+    background: #fff;
+    color: #8b4513;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.container {
+    padding: 25px;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.nav button {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #ead5c0;
+    color: #4b2e20;
+    cursor: pointer;
+}
+
+.nav button.active,
+.nav button:hover {
+    background: #8b4513;
+    color: white;
+}
+
+/* SECTIONS */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* DASHBOARD CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+.card h3 {
+    color: #777;
+    font-size: 14px;
+}
+
+.card strong {
+    display: block;
+    font-size: 30px;
+    margin-top: 8px;
+}
+
+/* TOOLBAR */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.search {
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    min-width: 250px;
+}
+
+.primary {
+    background: #8b4513;
+    color: white;
+    border: none;
+    padding: 11px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* TABLE */
+.table-box {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background: #f2e1d0;
+}
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.in-stock {
+    background: #d8f5dc;
+    color: #237a2c;
+}
+
+.low-stock {
+    background: #fff0bd;
+    color: #946800;
+}
+
+.out-stock {
+    background: #ffd5d5;
+    color: #a00000;
+}
+
+/* BUTTONS */
+.action {
+    border: none;
+    padding: 6px 9px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 3px;
+}
+
+.edit {
+    background: #e4efff;
+    color: #2464a8;
+}
+
+.delete {
+    background: #ffe0e0;
+    color: #b00000;
+}
+
+/* FORM */
+.form-box {
+    background: white;
+    max-width: 600px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.cancel {
+    padding: 11px 18px;
+    border: none;
+    background: #ddd;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width: 800px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 500px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     LOGIN PAGE
-========================================================= -->
-<section id="loginPage" class="auth-page">
+<!-- LOGIN PAGE -->
+<div id="loginPage">
 
-    <div class="auth-card">
+    <div class="login-box">
 
-        <div class="logo-container">
-            <div class="brand-logo">
-                <span>ARBEES</span>
-                <small>BAKERY SHOP</small>
-            </div>
-        </div>
+        <div class="logo">🧁</div>
 
-        <h1>Welcome Back!</h1>
+        <h1>Arbee's Bake Shop</h1>
+        <p>Inventory Management System</p>
 
-        <p class="subtitle">
-            Login to your account
-        </p>
+        <input
+            type="text"
+            id="username"
+            placeholder="Username"
+        >
 
-        <form id="loginForm">
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+        >
 
-            <label for="loginEmail">
-                Email
-            </label>
+        <button onclick="login()">Login</button>
 
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter your email"
-                required
-            >
-
-            <label for="loginPassword">
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                required
-            >
-
-            <div class="forgot-wrap">
-                <button
-                    type="button"
-                    class="link-btn"
-                    id="forgotPasswordBtn"
-                >
-                    Forgot Password?
-                </button>
-            </div>
-
-            <button
-                type="submit"
-                class="main-btn"
-                id="loginBtn"
-            >
-                LOGIN
-            </button>
-
-        </form>
-
-        <div id="loginMessage" class="auth-message"></div>
-
-        <div class="switch-auth">
-            Don't have an account?
-
-            <button
-                type="button"
-                class="link-btn"
-                id="showRegisterBtn"
-            >
-                Sign Up
-            </button>
-        </div>
+        <div id="errorMessage"></div>
 
     </div>
 
-</section>
+</div>
 
 
-<!-- =========================================================
-     REGISTER PAGE
-========================================================= -->
-<section id="registerPage" class="auth-page hidden">
+<!-- MAIN APPLICATION -->
+<div id="app">
 
-    <div class="auth-card">
+<header>
 
-        <div class="logo-container">
-            <div class="brand-logo">
-                <span>ARBEES</span>
-                <small>BAKERY SHOP</small>
-            </div>
-        </div>
+    <h2>🧁 Arbee's Bake Shop</h2>
 
-        <h1>Create Account</h1>
+    <button class="logout" onclick="logout()">
+        Logout
+    </button>
 
-        <p class="subtitle">
-            Register your account
-        </p>
-
-        <form id="registerForm">
-
-            <label for="registerName">
-                Full Name
-            </label>
-
-            <input
-                type="text"
-                id="registerName"
-                placeholder="Enter your full name"
-                required
-            >
-
-            <label for="registerEmail">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="registerEmail"
-                placeholder="Enter your email"
-                required
-            >
-
-            <label for="registerPassword">
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="registerPassword"
-                placeholder="Create a password"
-                minlength="6"
-                required
-            >
-
-            <label for="registerConfirmPassword">
-                Confirm Password
-            </label>
-
-            <input
-                type="password"
-                id="registerConfirmPassword"
-                placeholder="Confirm your password"
-                minlength="6"
-                required
-            >
-
-            <button
-                type="submit"
-                class="main-btn"
-                id="registerBtn"
-            >
-                SIGN UP
-            </button>
-
-        </form>
-
-        <div id="registerMessage" class="auth-message"></div>
-
-        <div class="switch-auth">
-
-            Already have an account?
-
-            <button
-                type="button"
-                class="link-btn"
-                id="showLoginBtn"
-            >
-                Login
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
+</header>
 
 
-<!-- =========================================================
-     OTP PAGE
-========================================================= -->
-<section id="otpPage" class="auth-page hidden">
+<div class="container">
 
-    <div class="auth-card otp-card">
-
-        <div class="logo-container">
-
-            <div class="brand-logo">
-                <span>ARBEES</span>
-                <small>BAKERY SHOP</small>
-            </div>
-
-        </div>
-
-        <div class="otp-icon">
-            🔐
-        </div>
-
-        <h1>Verify Your Login</h1>
-
-        <p class="subtitle">
-            We sent a 6-digit verification code to:
-        </p>
-
-        <div
-            id="otpEmailDisplay"
-            class="otp-email"
-        >
-            your@email.com
-        </div>
-
-        <form id="otpForm">
-
-            <label for="otpInput">
-                Verification Code
-            </label>
-
-            <input
-                type="text"
-                id="otpInput"
-                class="otp-input"
-                inputmode="numeric"
-                autocomplete="one-time-code"
-                maxlength="6"
-                placeholder="000000"
-                required
-            >
-
-            <button
-                type="submit"
-                class="main-btn"
-                id="verifyOtpBtn"
-            >
-                VERIFY OTP
-            </button>
-
-        </form>
-
-        <div
-            id="otpTimer"
-            class="otp-timer"
-        >
-            OTP expires in 05:00
-        </div>
+    <!-- NAVIGATION -->
+    <div class="nav">
 
         <button
-            type="button"
-            class="link-btn otp-link"
-            id="resendOtpBtn"
-        >
-            Resend OTP
+            class="active"
+            onclick="showSection('dashboard', this)">
+            📊 Dashboard
         </button>
 
         <button
-            type="button"
-            class="link-btn cancel-link"
-            id="cancelOtpBtn"
-        >
-            Cancel / Logout
+            onclick="showSection('products', this)">
+            🧁 Products
         </button>
 
-        <div
-            id="otpMessage"
-            class="auth-message"
-        ></div>
+        <button
+            onclick="showSection('stock', this)">
+            📦 Stock In/Out
+        </button>
 
     </div>
 
-</section>
 
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section active">
 
-<!-- =========================================================
-     MAIN APPLICATION
-========================================================= -->
-<section id="appPage" class="app-page hidden">
+        <h1>Dashboard</h1>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+        <br>
 
-        <div class="sidebar-logo">
-            <div class="sidebar-brand">
-                <span>ARBEES</span>
-                <small>BAKERY SHOP</small>
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Products</h3>
+                <strong id="totalProducts">0</strong>
             </div>
-        </div>
 
-        <nav>
+            <div class="card">
+                <h3>Total Stock</h3>
+                <strong id="totalStock">0</strong>
+            </div>
 
-            <button
-                class="nav-item active"
-                data-page="dashboard"
-            >
-                🏠
-                <span>Dashboard</span>
-            </button>
+            <div class="card">
+                <h3>Low Stock</h3>
+                <strong id="lowStock">0</strong>
+            </div>
 
-            <button
-                class="nav-item"
-                data-page="inventory"
-            >
-                📦
-                <span>Inventory</span>
-            </button>
-
-            <button
-                class="nav-item"
-                data-page="activity"
-            >
-                📋
-                <span>Activity Logs</span>
-            </button>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-
-            <button
-                class="nav-item logout-nav"
-                id="logoutBtn"
-            >
-                🚪
-                <span>Logout</span>
-            </button>
+            <div class="card">
+                <h3>Out of Stock</h3>
+                <strong id="outStock">0</strong>
+            </div>
 
         </div>
 
-    </aside>
+        <div class="table-box">
 
+            <table>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
 
-        <!-- TOPBAR -->
-        <header class="topbar">
+                <tbody id="dashboardTable"></tbody>
 
-            <div>
-                <h2 id="pageTitle">
-                    Dashboard
-                </h2>
+            </table>
 
-                <p id="welcomeText">
-                    Welcome to Arbee's Bakery Shop
-                </p>
-            </div>
+        </div>
 
-            <div class="user-area">
+    </section>
 
-                <div class="user-info">
 
-                    <strong id="currentUserName">
-                        User
-                    </strong>
+    <!-- PRODUCTS -->
+    <section id="products" class="section">
 
-                    <small id="currentUserEmail">
-                        email@gmail.com
-                    </small>
+        <h1>Product Management</h1>
 
-                </div>
+        <br>
 
-            </div>
+        <div class="toolbar">
 
-        </header>
+            <input
+                class="search"
+                id="searchInput"
+                placeholder="🔎 Search products..."
+                onkeyup="displayProducts()"
+            >
 
+            <button
+                class="primary"
+                onclick="openProductForm()">
+                + Add Product
+            </button>
 
-        <!-- =================================================
-             DASHBOARD
-        ================================================= -->
-        <section
-            id="dashboardPage"
-            class="content-page"
-        >
+        </div>
 
-            <div class="stats-grid">
 
-                <div class="stat-card">
+        <!-- PRODUCT FORM -->
 
-                    <div class="stat-icon">
-                        📦
-                    </div>
+        <div
+            id="productForm"
+            class="form-box"
+            style="display:none; margin-bottom:20px;">
 
-                    <div>
-                        <span>Total Products</span>
+            <h2 id="formTitle">Add Product</h2>
 
-                        <h3 id="totalProducts">
-                            0
-                        </h3>
-                    </div>
+            <br>
 
-                </div>
+            <div class="form-group">
 
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        📊
-                    </div>
-
-                    <div>
-                        <span>Total Stock</span>
-
-                        <h3 id="totalStock">
-                            0
-                        </h3>
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        ⚠️
-                    </div>
-
-                    <div>
-                        <span>Low Stock Items</span>
-
-                        <h3 id="lowStockItems">
-                            0
-                        </h3>
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        💰
-                    </div>
-
-                    <div>
-                        <span>Estimated Value</span>
-
-                        <h3 id="estimatedValue">
-                            ₱0.00
-                        </h3>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="dashboard-grid">
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <h3>
-                            Recent Inventory
-                        </h3>
-
-                        <button
-                            class="small-btn"
-                            id="dashboardInventoryBtn"
-                        >
-                            View All
-                        </button>
-
-                    </div>
-
-                    <div class="table-container">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Product</th>
-                                    <th>Category</th>
-                                    <th>Qty</th>
-                                    <th>Status</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="dashboardTableBody">
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <h3>
-                            Quick Information
-                        </h3>
-
-                    </div>
-
-                    <div class="quick-info">
-
-                        <div class="info-row">
-                            <span>Store</span>
-                            <strong>Arbee's Bakery Shop</strong>
-                        </div>
-
-                        <div class="info-row">
-                            <span>System</span>
-                            <strong>Inventory Management</strong>
-                        </div>
-
-                        <div class="info-row">
-                            <span>Account</span>
-                            <strong id="quickAccountRole">
-                                Staff
-                            </strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             INVENTORY
-        ================================================= -->
-        <section
-            id="inventoryPage"
-            class="content-page hidden"
-        >
-
-            <div class="page-actions">
-
-                <div>
-
-                    <h2>
-                        Inventory
-                    </h2>
-
-                    <p>
-                        Manage bakery products and stock.
-                    </p>
-
-                </div>
-
-                <button
-                    class="main-btn add-btn"
-                    id="openAddProductBtn"
-                >
-                    + ADD PRODUCT
-                </button>
-
-            </div>
-
-
-            <div class="inventory-tools">
+                <label>Product Name</label>
 
                 <input
+                    id="productName"
                     type="text"
-                    id="searchProduct"
-                    placeholder="Search product..."
-                >
+                    placeholder="Example: Chocolate Cake">
 
-                <select id="categoryFilter">
+            </div>
 
-                    <option value="all">
-                        All Categories
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select id="productCategory">
+
+                    <option>Bread</option>
+                    <option>Cake</option>
+                    <option>Pastry</option>
+                    <option>Cookies</option>
+                    <option>Others</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Quantity</label>
+
+                <input
+                    id="productQuantity"
+                    type="number"
+                    min="0"
+                    placeholder="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Price (₱)</label>
+
+                <input
+                    id="productPrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00">
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="primary"
+                    onclick="saveProduct()">
+                    Save Product
+                </button>
+
+                <button
+                    class="cancel"
+                    onclick="closeProductForm()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT TABLE -->
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="productTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- STOCK -->
+    <section id="stock" class="section">
+
+        <h1>Stock In / Stock Out</h1>
+
+        <br>
+
+        <div class="form-box">
+
+            <div class="form-group">
+
+                <label>Product</label>
+
+                <select id="stockProduct"></select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Transaction Type</label>
+
+                <select id="stockType">
+
+                    <option value="in">
+                        Stock In
                     </option>
 
-                    <option value="Bread">
-                        Bread
-                    </option>
-
-                    <option value="Pastry">
-                        Pastry
-                    </option>
-
-                    <option value="Cake">
-                        Cake
-                    </option>
-
-                    <option value="Cookies">
-                        Cookies
-                    </option>
-
-                    <option value="Others">
-                        Others
+                    <option value="out">
+                        Stock Out
                     </option>
 
                 </select>
@@ -616,247 +617,680 @@
             </div>
 
 
-            <div class="panel">
+            <div class="form-group">
 
-                <div class="table-container">
+                <label>Quantity</label>
 
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>SKU</th>
-                                <th>Product</th>
-                                <th>Category</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="inventoryTableBody">
-                        </tbody>
-
-                    </table>
-
-                </div>
+                <input
+                    type="number"
+                    id="stockQuantity"
+                    min="1"
+                    placeholder="Enter quantity">
 
             </div>
 
-        </section>
-
-
-        <!-- =================================================
-             ACTIVITY LOGS
-        ================================================= -->
-        <section
-            id="activityPage"
-            class="content-page hidden"
-        >
-
-            <div class="page-actions">
-
-                <div>
-
-                    <h2>
-                        Activity Logs
-                    </h2>
-
-                    <p>
-                        Recent system activities.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div
-                    id="activityList"
-                    class="activity-list"
-                >
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</section>
-
-
-<!-- =========================================================
-     ADD / EDIT PRODUCT MODAL
-========================================================= -->
-<div
-    id="productModal"
-    class="modal hidden"
->
-
-    <div class="modal-card">
-
-        <div class="modal-header">
-
-            <h2 id="modalTitle">
-                Add Product
-            </h2>
 
             <button
-                type="button"
-                class="close-btn"
-                id="closeProductModal"
-            >
-                ×
+                class="primary"
+                onclick="processStock()">
+                Save Transaction
             </button>
 
         </div>
 
+    </section>
 
-        <form id="productForm">
-
-            <input
-                type="hidden"
-                id="editProductKey"
-            >
-
-
-            <label for="productSku">
-                SKU
-            </label>
-
-            <input
-                type="text"
-                id="productSku"
-                placeholder="Example: BREAD-001"
-                required
-            >
-
-
-            <label for="productName">
-                Product Name
-            </label>
-
-            <input
-                type="text"
-                id="productName"
-                placeholder="Example: Spanish Bread"
-                required
-            >
-
-
-            <label for="productCategory">
-                Category
-            </label>
-
-            <select
-                id="productCategory"
-                required
-            >
-
-                <option value="">
-                    Select Category
-                </option>
-
-                <option value="Bread">
-                    Bread
-                </option>
-
-                <option value="Pastry">
-                    Pastry
-                </option>
-
-                <option value="Cake">
-                    Cake
-                </option>
-
-                <option value="Cookies">
-                    Cookies
-                </option>
-
-                <option value="Others">
-                    Others
-                </option>
-
-            </select>
-
-
-            <label for="productQuantity">
-                Quantity
-            </label>
-
-            <input
-                type="number"
-                id="productQuantity"
-                min="0"
-                placeholder="0"
-                required
-            >
-
-
-            <label for="productPrice">
-                Price
-            </label>
-
-            <input
-                type="number"
-                id="productPrice"
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-                required
-            >
-
-
-            <label for="productThreshold">
-                Low Stock Threshold
-            </label>
-
-            <input
-                type="number"
-                id="productThreshold"
-                min="0"
-                value="5"
-                required
-            >
-
-
-            <div class="modal-buttons">
-
-                <button
-                    type="button"
-                    class="cancel-btn"
-                    id="cancelProductBtn"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    type="submit"
-                    class="main-btn"
-                    id="saveProductBtn"
-                >
-                    SAVE PRODUCT
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+let products = JSON.parse(
+    localStorage.getItem("arbeeProducts")
+) || [
+
+    {
+        id: 1,
+        name: "Pandesal",
+        category: "Bread",
+        quantity: 100,
+        price: 3
+    },
+
+    {
+        id: 2,
+        name: "Chocolate Cake",
+        category: "Cake",
+        quantity: 8,
+        price: 450
+    },
+
+    {
+        id: 3,
+        name: "Cheese Bread",
+        category: "Bread",
+        quantity: 12,
+        price: 15
+    },
+
+    {
+        id: 4,
+        name: "Cookies",
+        category: "Cookies",
+        quantity: 35,
+        price: 10
+    },
+
+    {
+        id: 5,
+        name: "Ube Cake",
+        category: "Cake",
+        quantity: 4,
+        price: 500
+    }
+
+];
+
+let editId = null;
+
+
+/* =========================
+   LOGIN
+========================= */
+
+function login() {
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    if (
+        username === "admin" &&
+        password === "admin123"
+    ) {
+
+        document.getElementById("loginPage")
+            .style.display = "none";
+
+        document.getElementById("app")
+            .style.display = "block";
+
+        updateDashboard();
+        displayProducts();
+        updateStockSelect();
+
+    } else {
+
+        document.getElementById("errorMessage")
+            .textContent =
+            "Incorrect username or password.";
+
+    }
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout() {
+
+    document.getElementById("app")
+        .style.display = "none";
+
+    document.getElementById("loginPage")
+        .style.display = "flex";
+
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(sectionId, button) {
+
+    document
+        .querySelectorAll(".section")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
+
+    document
+        .getElementById(sectionId)
+        .classList.add("active");
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+    if (sectionId === "stock") {
+        updateStockSelect();
+    }
+
+}
+
+
+/* =========================
+   SAVE DATA
+========================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "arbeeProducts",
+        JSON.stringify(products)
+    );
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function getStatus(quantity) {
+
+    if (quantity === 0) {
+
+        return `
+            <span class="badge out-stock">
+                Out of Stock
+            </span>
+        `;
+
+    }
+
+    if (quantity <= 10) {
+
+        return `
+            <span class="badge low-stock">
+                Low Stock
+            </span>
+        `;
+
+    }
+
+    return `
+        <span class="badge in-stock">
+            In Stock
+        </span>
+    `;
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard() {
+
+    const totalProducts =
+        products.length;
+
+    const totalStock =
+        products.reduce(
+            (sum, product) =>
+            sum + Number(product.quantity),
+            0
+        );
+
+    const lowStock =
+        products.filter(
+            product =>
+            product.quantity > 0 &&
+            product.quantity <= 10
+        ).length;
+
+    const outStock =
+        products.filter(
+            product =>
+            product.quantity === 0
+        ).length;
+
+
+    document.getElementById("totalProducts")
+        .textContent = totalProducts;
+
+    document.getElementById("totalStock")
+        .textContent = totalStock;
+
+    document.getElementById("lowStock")
+        .textContent = lowStock;
+
+    document.getElementById("outStock")
+        .textContent = outStock;
+
+
+    const table =
+        document.getElementById("dashboardTable");
+
+    table.innerHTML = "";
+
+
+    products.forEach(product => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${product.name}</td>
+
+                <td>${product.category}</td>
+
+                <td>${product.quantity}</td>
+
+                <td>
+                    ${getStatus(product.quantity)}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   DISPLAY PRODUCTS
+========================= */
+
+function displayProducts() {
+
+    const table =
+        document.getElementById("productTable");
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    table.innerHTML = "";
+
+
+    const filtered =
+        products.filter(product =>
+            product.name
+            .toLowerCase()
+            .includes(search)
+        );
+
+
+    filtered.forEach(product => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${product.id}</td>
+
+                <td>${product.name}</td>
+
+                <td>${product.category}</td>
+
+                <td>${product.quantity}</td>
+
+                <td>
+                    ₱${Number(product.price).toFixed(2)}
+                </td>
+
+                <td>
+                    ${getStatus(product.quantity)}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action edit"
+                        onclick="editProduct(${product.id})">
+                        Edit
+                    </button>
+
+                    <button
+                        class="action delete"
+                        onclick="deleteProduct(${product.id})">
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   ADD PRODUCT
+========================= */
+
+function openProductForm() {
+
+    editId = null;
+
+    document.getElementById("formTitle")
+        .textContent = "Add Product";
+
+    document.getElementById("productName")
+        .value = "";
+
+    document.getElementById("productQuantity")
+        .value = "";
+
+    document.getElementById("productPrice")
+        .value = "";
+
+    document.getElementById("productForm")
+        .style.display = "block";
+
+}
+
+
+/* =========================
+   CLOSE FORM
+========================= */
+
+function closeProductForm() {
+
+    document.getElementById("productForm")
+        .style.display = "none";
+
+}
+
+
+/* =========================
+   SAVE PRODUCT
+========================= */
+
+function saveProduct() {
+
+    const name =
+        document.getElementById("productName")
+        .value.trim();
+
+    const category =
+        document.getElementById("productCategory")
+        .value;
+
+    const quantity =
+        Number(
+            document.getElementById("productQuantity")
+            .value
+        );
+
+    const price =
+        Number(
+            document.getElementById("productPrice")
+            .value
+        );
+
+
+    if (
+        name === "" ||
+        quantity < 0 ||
+        price < 0
+    ) {
+
+        alert("Please complete all fields correctly.");
+
+        return;
+
+    }
+
+
+    if (editId === null) {
+
+        const newProduct = {
+
+            id:
+                products.length > 0
+                ? Math.max(...products.map(p => p.id)) + 1
+                : 1,
+
+            name,
+            category,
+            quantity,
+            price
+
+        };
+
+        products.push(newProduct);
+
+    } else {
+
+        const product =
+            products.find(
+                p => p.id === editId
+            );
+
+        product.name = name;
+        product.category = category;
+        product.quantity = quantity;
+        product.price = price;
+
+    }
+
+
+    saveData();
+
+    displayProducts();
+    updateDashboard();
+    updateStockSelect();
+
+    closeProductForm();
+
+}
+
+
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+function editProduct(id) {
+
+    const product =
+        products.find(p => p.id === id);
+
+    if (!product) return;
+
+    editId = id;
+
+    document.getElementById("formTitle")
+        .textContent = "Edit Product";
+
+    document.getElementById("productName")
+        .value = product.name;
+
+    document.getElementById("productCategory")
+        .value = product.category;
+
+    document.getElementById("productQuantity")
+        .value = product.quantity;
+
+    document.getElementById("productPrice")
+        .value = product.price;
+
+    document.getElementById("productForm")
+        .style.display = "block";
+
+}
+
+
+/* =========================
+   DELETE PRODUCT
+========================= */
+
+function deleteProduct(id) {
+
+    const product =
+        products.find(p => p.id === id);
+
+    if (!product) return;
+
+
+    if (
+        confirm(
+            `Delete ${product.name}?`
+        )
+    ) {
+
+        products =
+            products.filter(
+                p => p.id !== id
+            );
+
+        saveData();
+
+        displayProducts();
+        updateDashboard();
+        updateStockSelect();
+
+    }
+
+}
+
+
+/* =========================
+   STOCK SELECT
+========================= */
+
+function updateStockSelect() {
+
+    const select =
+        document.getElementById("stockProduct");
+
+    select.innerHTML = "";
+
+
+    products.forEach(product => {
+
+        select.innerHTML += `
+
+            <option value="${product.id}">
+                ${product.name}
+                (Stock: ${product.quantity})
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   STOCK IN / OUT
+========================= */
+
+function processStock() {
+
+    const productId =
+        Number(
+            document.getElementById("stockProduct")
+            .value
+        );
+
+    const type =
+        document.getElementById("stockType")
+        .value;
+
+    const quantity =
+        Number(
+            document.getElementById("stockQuantity")
+            .value
+        );
+
+
+    if (!quantity || quantity <= 0) {
+
+        alert("Enter a valid quantity.");
+
+        return;
+
+    }
+
+
+    const product =
+        products.find(
+            p => p.id === productId
+        );
+
+
+    if (!product) {
+
+        alert("Product not found.");
+
+        return;
+
+    }
+
+
+    if (type === "in") {
+
+        product.quantity += quantity;
+
+        alert(
+            `${quantity} ${product.name} added to stock.`
+        );
+
+    } else {
+
+        if (quantity > product.quantity) {
+
+            alert(
+                "Not enough stock available."
+            );
+
+            return;
+
+        }
+
+        product.quantity -= quantity;
+
+        alert(
+            `${quantity} ${product.name} removed from stock.`
+        );
+
+    }
+
+
+    document.getElementById("stockQuantity")
+        .value = "";
+
+
+    saveData();
+
+    updateDashboard();
+    displayProducts();
+    updateStockSelect();
+
+}
+
+</script>
 
 </body>
 </html>
