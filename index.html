@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbee's Bakery Shop — Inventory System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       PARTICLE BACKGROUND
+  ════════════════════════════════════════════════ -->
+  <div id="particles-bg">
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       AUTH SCREEN
+  ════════════════════════════════════════════════ -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-brand">
+      <div class="auth-logo">
+        <i class="fas fa-bread-slice"></i>
+      </div>
+      <h1>Arbee's Bakery</h1>
+      <p>Inventory Management System</p>
+    </div>
+
+    <div class="auth-card">
+      <!-- Tab Switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <button class="auth-tab" data-tab="register" onclick="switchTab('register')">
+          <i class="fas fa-user-plus"></i> Register
+        </button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+        <div class="form-header">
+          <h2>Welcome Back <span>🍞</span></h2>
+          <p>Sign in to manage your bakery</p>
+        </div>
+
+        <div id="login-lockout-banner" class="lockout-banner hidden">
+          <i class="fas fa-lock"></i>
+          <span id="lockout-message">Account temporarily locked.</span>
+        </div>
+
+        <div id="login-alert" class="alert-box hidden"></div>
+
+        <div class="form-group">
+          <label for="login-username"><i class="fas fa-user"></i> Username</label>
+          <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username" required />
+          <span class="input-border"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
+            <button type="button" class="toggle-pw" onclick="togglePassword('login-password', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <span class="input-border"></span>
+        </div>
+
+        <div class="form-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="remember-me" />
+            <span class="checkmark"></span> Remember me
+          </label>
+          <a href="#" class="forgot-link" onclick="showForgotModal()">Forgot password?</a>
+        </div>
+
+        <div class="attempt-indicator" id="attempt-indicator"></div>
+
+        <button type="submit" class="btn-auth" id="login-btn">
+          <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Sign In</span>
+          <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i></span>
+        </button>
+
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="switchTab('register')">Register here</a></p>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+        <div class="form-header">
+          <h2>Create Account <span>🥐</span></h2>
+          <p>Join Arbee's Bakery system</p>
+        </div>
+
+        <div id="register-alert" class="alert-box hidden"></div>
+
+        <div class="form-row-two">
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> First Name</label>
+            <input type="text" id="reg-firstname" placeholder="First name" required />
+            <span class="input-border"></span>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> Last Name</label>
+            <input type="text" id="reg-lastname" placeholder="Last name" required />
+            <span class="input-border"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-at"></i> Username</label>
+          <input type="text" id="reg-username" placeholder="Choose a username" required oninput="checkUsernameAvailability(this.value)" />
+          <span class="input-border"></span>
+          <span class="field-hint" id="username-hint"></span>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="reg-email" placeholder="your@email.com" required />
+          <span class="input-border"></span>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-briefcase"></i> Role</label>
+          <div class="select-wrapper">
+            <select id="reg-role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="staff">Staff</option>
+            </select>
+            <i class="fas fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-password" placeholder="Create a strong password" required oninput="checkPasswordStrength(this.value)" />
+            <button type="button" class="toggle-pw" onclick="togglePassword('reg-password', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength" id="pw-strength">
+            <div class="strength-bar"><span id="strength-fill"></span></div>
+            <span id="strength-label"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Confirm Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-confirm" placeholder="Confirm your password" required />
+            <button type="button" class="toggle-pw" onclick="togglePassword('reg-confirm', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <span class="input-border"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agree-terms" required />
+            <span class="checkmark"></span>
+            I agree to the <a href="#" onclick="showTerms()">Terms &amp; Conditions</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-auth" id="register-btn">
+          <span class="btn-text"><i class="fas fa-user-plus"></i> Create Account</span>
+          <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i></span>
+        </button>
+
+        <p class="auth-switch">Already have an account? <a href="#" onclick="switchTab('login')">Login here</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       OTP VERIFICATION SCREEN
+  ════════════════════════════════════════════════ -->
+  <div id="otp-screen" class="otp-screen hidden">
+    <div class="auth-brand otp-brand">
+      <div class="auth-logo otp-logo-pulse">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h1>Arbee's Bakery</h1>
+      <p>Two-Factor Authentication</p>
+    </div>
+
+    <div class="otp-card">
+      <div class="otp-header">
+        <div class="otp-icon-wrap">
+          <i class="fas fa-envelope-open-text"></i>
+        </div>
+        <h2>Check Your Email</h2>
+        <p id="otp-sent-to">We sent a 6-digit code to <strong>your email</strong></p>
+      </div>
+
+      <div id="otp-alert" class="alert-box hidden"></div>
+
+      <!-- 6 individual OTP input boxes -->
+      <div class="otp-inputs" id="otp-inputs">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" />
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+        <span class="otp-dash">—</span>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+      </div>
+
+      <!-- Timer -->
+      <div class="otp-timer-row">
+        <i class="fas fa-clock"></i>
+        <span>Code expires in <strong id="otp-countdown">05:00</strong></span>
+      </div>
+
+      <!-- Verify button -->
+      <button class="btn-auth" id="otp-verify-btn" onclick="verifyOTP()">
+        <span class="btn-text"><i class="fas fa-check-circle"></i> Verify &amp; Access Dashboard</span>
+        <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i></span>
+      </button>
+
+      <!-- Resend -->
+      <div class="otp-resend">
+        Didn't receive the code?
+        <button id="otp-resend-btn" onclick="resendOTP()" disabled>
+          <i class="fas fa-redo"></i> Resend OTP
+        </button>
+      </div>
+
+      <!-- Back to login -->
+      <div class="otp-back">
+        <a href="#" onclick="backToLogin()"><i class="fas fa-arrow-left"></i> Back to Login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN APP
+  ════════════════════════════════════════════════ -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <i class="fas fa-bread-slice"></i>
+          <div class="sidebar-brand">
+            <span class="brand-name">Arbee's</span>
+            <span class="brand-sub">Bakery Shop</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sidebar-avatar">A</div>
+        <div class="user-info">
+          <span class="user-name" id="sidebar-name">Admin</span>
+          <span class="user-role" id="sidebar-role">Administrator</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">MAIN MENU</div>
+        <a href="#" class="nav-item active" data-module="dashboard" onclick="loadModule('dashboard', this)">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-module="products" onclick="loadModule('products', this)">
+          <i class="fas fa-birthday-cake"></i>
+          <span>Products</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-module="inventory" onclick="loadModule('inventory', this)">
+          <i class="fas fa-boxes"></i>
+          <span>Inventory</span>
+          <span class="nav-badge" id="low-stock-badge">0</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-module="categories" onclick="loadModule('categories', this)">
+          <i class="fas fa-tags"></i>
+          <span>Categories</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-module="suppliers" onclick="loadModule('suppliers', this)">
+          <i class="fas fa-truck"></i>
+          <span>Suppliers</span>
+          <div class="nav-indicator"></div>
+        </a>
+
+        <div class="nav-section-label">ACCOUNT</div>
+        <a href="#" class="nav-item" data-module="profile" onclick="loadModule('profile', this)">
+          <i class="fas fa-user-circle"></i>
+          <span>Profile</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-module="settings" onclick="loadModule('settings', this)">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item logout-item" onclick="confirmLogout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+          <div class="nav-indicator"></div>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <i class="fas fa-cookie-bite"></i> v1.0.0 — Arbee's IMS
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="main-content">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <nav class="breadcrumb-nav">
+            <span><i class="fas fa-home"></i></span>
+            <i class="fas fa-chevron-right sep"></i>
+            <span id="breadcrumb-title">Dashboard</span>
+          </nav>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search anything…" id="global-search" oninput="globalSearch(this.value)" />
+          </div>
+          <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">
+            <i class="fas fa-bell"></i>
+            <span class="notif-dot" id="notif-dot"></span>
+          </button>
+          <div class="topbar-avatar" onclick="loadModule('profile', document.querySelector('[data-module=profile]'))" title="Profile">
+            <span id="topbar-avatar-letter">A</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- NOTIFICATION PANEL -->
+      <div class="notif-panel hidden" id="notif-panel">
+        <div class="notif-header">
+          <span>Notifications</span>
+          <button onclick="clearNotifs()">Clear all</button>
+        </div>
+        <div class="notif-list" id="notif-list"></div>
+      </div>
+
+      <!-- MODULE CONTAINER -->
+      <div class="module-container" id="module-container">
+        <!-- dynamically rendered -->
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MODALS
+  ════════════════════════════════════════════════ -->
+
+  <!-- Generic Modal -->
+  <div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal()">
+    <div class="modal-box" id="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay hidden" id="confirm-overlay">
+    <div class="modal-box confirm-modal">
+      <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-message">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-secondary" onclick="closeConfirm()">Cancel</button>
+        <button class="btn-danger" id="confirm-ok-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
